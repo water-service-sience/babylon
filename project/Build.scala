@@ -9,7 +9,8 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     // Add your project dependencies here,
-    jdbc,
+    "net.liftweb" %% "lift-mapper" % "2.5",
+    "mysql" % "mysql-connector-java" % "5.1.23",
     anorm
   )
   def runChildPlayServer = Command.command("run")( state => {
