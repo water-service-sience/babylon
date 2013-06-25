@@ -12,6 +12,11 @@ import net.liftweb.mapper._
 object PostCategory extends PostCategory with LongKeyedMetaMapper[PostCategory]{
 
 
+  def NoneCategory = {
+    PostCategory.findByKey(1)
+  }
+
+
 }
 class PostCategory extends LongKeyedMapper[PostCategory] with IdPK{
 

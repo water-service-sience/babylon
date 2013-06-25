@@ -11,6 +11,19 @@ import net.liftweb.mapper._
 
 object User extends User with LongKeyedMetaMapper[User]{
 
+  def create(username : String , nickname : String, password : String) = {
+    val u = User.createInstance
+    u.nickname := nickname
+    u.password := password
+    u.username := username
+
+    u.save()
+
+    u
+
+  }
+
+
 
 }
 class User extends LongKeyedMapper[User] with IdPK{
