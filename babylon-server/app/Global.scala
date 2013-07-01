@@ -1,4 +1,5 @@
-import models.User
+import controllers.manager.PhotoManager
+import models._
 import net.liftweb.common.{Full, Box}
 import net.liftweb.db.{ DefaultConnectionIdentifier, StandardDBVendor, ProtoDBVendor}
 import net.liftweb.mapper.DB
@@ -16,7 +17,7 @@ import play.{api, Logger}
 object Global extends GlobalSettings {
   lazy val vendor = new StandardDBVendor("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/babylon", Full("babylon"), Full("babylon"))
 
-  def models = List(User)
+  def models = List(User,UploadedImage,UserPost,Comment,Contact,PostCategory,PostStatus)
 
 
   override def onStart(app: api.Application) {
@@ -26,6 +27,9 @@ object Global extends GlobalSettings {
 
     val imageDir = play.Play.application().configuration().getString("image-directory")
     Logger.info("Image dir = " + imageDir)
+    PhotoManager.imageDir = imageDir
+
+
 
 
   }

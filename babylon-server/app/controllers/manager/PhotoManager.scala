@@ -15,7 +15,7 @@ import models.UploadedImage
  */
 object PhotoManager {
 
-  var imageDir = "./images"
+  var imageDir = "./images/"
 
   def saveUploadedFile(userId : Long)(implicit req : Request[AnyContent]) = {
     req.body.asRaw match{
