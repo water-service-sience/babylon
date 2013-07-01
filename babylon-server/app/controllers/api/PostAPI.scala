@@ -5,6 +5,7 @@ import controllers.manager.{Jsonize, PostManager, PhotoManager}
 import play.api.libs.json.Json
 import models.{Comment, User, UserPost}
 import play.api.libs.json.Json.JsValueWrapper
+import play.api.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,7 @@ object PostAPI extends MyController{
 
   def uploadPhoto = Authenticated(implicit req => {
 
+    Logger.debug("Upload photo")
     val uploadedImage = PhotoManager.saveUploadedFile(userId)
 
     Ok(Json.obj("imageId" -> uploadedImage.id.is))

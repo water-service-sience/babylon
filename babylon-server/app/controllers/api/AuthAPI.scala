@@ -14,7 +14,7 @@ import play.api.libs.json.Json
 object AuthAPI extends Controller {
 
 
-  def createUser = Action(implicit req => {
+  def createAccount = Action(implicit req => {
     val json = req.body.asJson.get
     //val username = (json \ "username").as[String]
     val nickname = (json \ "nickname").as[String]

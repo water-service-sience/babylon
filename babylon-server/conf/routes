@@ -5,5 +5,11 @@
 # Home page
 GET     /                           controllers.Application.index
 
+POST    /create/account             controllers.api.AuthAPI.createAccount
+POST    /photo/upload               controllers.api.PostAPI.uploadPhoto
+POST    /post                       controllers.api.PostAPI.post
+POST    /post/update                controllers.api.PostAPI.updatePost
+GET     /post/near                  controllers.api.PostAPI.getPostNearBy( lon : Double = 0,lat : Double = 0)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

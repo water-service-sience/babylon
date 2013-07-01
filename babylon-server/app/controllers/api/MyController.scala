@@ -5,6 +5,7 @@ import scala.util.DynamicVariable
 import models.User
 import scala.Some
 import net.liftweb.common.Full
+import play.api.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +25,7 @@ trait MyController extends Controller {
 
 
   def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(implicit request => {
-    val accessKey = request.headers.get(AccessKeyHeader).get
+    val accessKey = request.headers(AccessKeyHeader)
     User.findByAccessKey(accessKey) match{
       case Full(me) => {
         this.meVar.withValue(me){
@@ -32,6 +33,7 @@ trait MyController extends Controller {
         }
       }
       case _ => {
+        Logger.warn("Wrong access key : " + accessKey)
         Unauthorized("No user")
       }
     }
