@@ -23,7 +23,14 @@ object Global extends GlobalSettings {
     Logger.info("Application has started")
     DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     Schemifier.schemify(true, Schemifier.infoF _, models :_*)
+
+    val imageDir = play.Play.application().configuration().getString("image-directory")
+    Logger.info("Image dir = " + imageDir)
+
+
   }
+
+
 
 }
 

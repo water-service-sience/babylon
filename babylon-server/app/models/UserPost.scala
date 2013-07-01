@@ -38,6 +38,17 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
     findAll(By(UserPost.postUser,userId),OrderBy(UserPost.posted,Descending))
   }
 
+  def findNear(lon : Double,lat : Double, range : Double) = {
+
+    findAll(By(UserPost.hasGpsInfo,true),
+      By_<(UserPost.longitude,lon + range),
+      By_>(UserPost.longitude,lon - range),
+      By_<(UserPost.latitude,lat + range),
+      By_>(UserPost.latitude,lat - range)
+    )
+
+  }
+
 
 }
 class UserPost extends LongKeyedMapper[UserPost] with IdPK{
@@ -66,6 +77,15 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
   }
   object inCharge extends MappedLongForeignKey(this,User){
     override def defaultValue: Long = 0
+  }
+  object hasGpsInfo extends MappedBoolean(this){
+    override def defaultValue: Boolean = false
+  }
+  object longitude extends MappedDouble(this){
+    override def defaultValue: Double = 0.0
+  }
+  object latitude extends MappedDouble(this){
+    override def defaultValue: Double = 0.0
   }
 
 

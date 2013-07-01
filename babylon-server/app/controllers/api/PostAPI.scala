@@ -15,26 +15,23 @@ import play.api.libs.json.Json.JsValueWrapper
  */
 object PostAPI extends MyController{
 
-  def uploadPhoto = Action(implicit req => {
+  def uploadPhoto = Authenticated(implicit req => {
 
     val uploadedImage = PhotoManager.saveUploadedFile(userId)
 
     Ok(Json.obj("imageId" -> uploadedImage.id.is))
   })
 
-  def post = Action( implicit req => {
+  def post = Authenticated( implicit req => {
     val json = req.body.asJson.get
 
-    val imageId = (json \ "imageId").as[Long]
-    val goodness = (json \ "goodness").as[Int]
-
-    val p = PostManager.postNew(userId,imageId,goodness)
+    val p = PostManager.postNew(userId,json)
 
     Ok(Json.obj("postId" -> p.id.is))
 
   })
 
-  def updatePost = Action(implicit req => {
+  def updatePost = Authenticated(implicit req => {
     val json = req.body.asJson.get
     val postId = (json \ "postId").as[Long]
     val post = PostManager.updatePost(userId,postId,json)
@@ -43,7 +40,7 @@ object PostAPI extends MyController{
   })
 
 
-  def getPosted(userId : Long) = Action(implicit req => {
+  def getPosted(userId : Long) = Authenticated(implicit req => {
     val posts = UserPost.findUserPosts(userId)
 
     Ok(Json.arr(posts.map( p => {
@@ -56,7 +53,7 @@ object PostAPI extends MyController{
     }) :_* ))
   })
 
-  def getPostDetail(postId : Long) = Action(implicit req => {
+  def getPostDetail(postId : Long) = Authenticated(implicit req => {
     val post = UserPost.findByKey(postId).get
 
     val u = User.findByKey(userId).get
@@ -69,6 +66,17 @@ object PostAPI extends MyController{
     }
 
     Ok(r)
+
+  })
+
+
+  def getPostNearBy( lon : Double,lat : Double) = Authenticated(implicit req => {
+    val posts = PostManager.findNearPosts(lon,lat)
+
+    Ok( Json.arr( posts.map( p => {
+      Jsonize.restrictInfo(p).asInstanceOf[JsValueWrapper]
+    }) :_* ))
+
 
   })
 

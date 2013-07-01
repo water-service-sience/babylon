@@ -1,7 +1,10 @@
 package controllers.api
 
-import play.api.mvc.Controller
-import play.api.mvc.{AnyContent, Request}
+import play.api.mvc._
+import scala.util.DynamicVariable
+import models.User
+import scala.Some
+import net.liftweb.common.Full
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,8 +15,28 @@ import play.api.mvc.{AnyContent, Request}
  */
 trait MyController extends Controller {
 
-  def userId(implicit req : Request[AnyContent]) = {
-    req.headers.get("USER-ID").map(_.toLong).get
-  }
+  val AccessKeyHeader = "BBLN-ACCESS-KEY"
+
+  var meVar = new DynamicVariable[User](null)
+
+  def me = meVar.value
+  def userId = me.id.is
+
+
+  def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(implicit request => {
+    val accessKey = request.headers.get(AccessKeyHeader).get
+    User.findByAccessKey(accessKey) match{
+      case Full(me) => {
+        this.meVar.withValue(me){
+          func(request)
+        }
+      }
+      case _ => {
+        Unauthorized("No user")
+      }
+    }
+
+
+  })
 
 }

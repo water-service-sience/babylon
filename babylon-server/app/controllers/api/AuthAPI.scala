@@ -16,13 +16,19 @@ object AuthAPI extends Controller {
 
   def createUser = Action(implicit req => {
     val json = req.body.asJson.get
-    val username = (json \ "username").as[String]
+    //val username = (json \ "username").as[String]
     val nickname = (json \ "nickname").as[String]
-    val password = (json \ "password").as[String]
+    //val password = (json \ "password").as[String]
 
-    val u = User.create(username,nickname,password)
+    val u = User.create(nickname)
 
-    Ok(Json.obj("userId" -> u.id.is))
+    Ok(Json.obj(
+      "userId" -> u.id.is,
+      "nickname" -> u.nickname.is,
+      "accessKey" -> u.accessKey.is
+    ))
   })
+
+
 
 }

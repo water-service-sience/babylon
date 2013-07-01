@@ -16,9 +16,26 @@ import net.liftweb.http.js.JE.JsFalse
  */
 object PostManager {
 
-  def postNew(userId : Long, imageId : Long, goodness : Int) = {
+  val readLonLat : Reads[(Double,Double)] = {
+    (JsPath \ "longitude").read[Double] and
+    (JsPath \ "latitude").read[Double] tupled
+  }
 
+  def postNew(userId : Long, json : JsValue) = {
+
+    val imageId = (json \ "imageId").as[Long]
+    val goodness = (json \ "goodness").as[Int]
     val post = UserPost.create(userId,imageId,goodness)
+
+    readLonLat.reads(json) match{
+      case JsSuccess( (lon,lat) ,_ ) => {
+        post.hasGpsInfo := true
+        post.longitude := lon
+        post.latitude := lat
+        post.save()
+      }
+      case _ =>
+    }
 
     post
 
@@ -27,10 +44,7 @@ object PostManager {
   def updatePost(userId : Long, postId : Long , updateInfo : JsValue) = {
     UserPost.findPost(userId,postId) match{
       case Some(post) => {
-
-        updateGps(post,updateInfo)
         updateParams(post,updateInfo)
-
         post
       }
       case None => {
@@ -39,24 +53,6 @@ object PostManager {
     }
   }
 
-  def updateGps(post : UserPost , updateInfo : JsValue) {
-    val lonLatRead : Reads[(Double,Double)] = (JsPath \ "longitude").read[Double] and
-      (JsPath \ "latitude").read[Double] tupled
-
-    lonLatRead.reads(updateInfo) match{
-      case JsSuccess( (lon, lat), path) => {
-        val image = post.image.obj.get
-        image.hasGpsInfo := true
-        image.longitude := lon
-        image.latitude := lat
-        image.save()
-      }
-      case JsError(errors) => {
-
-      }
-    }
-
-  }
 
   def updateParams(post : UserPost, updateInfo : JsValue) {
     val updateInfoRead = (JsPath \ "comment").read[String] and
@@ -78,6 +74,11 @@ object PostManager {
 
 
     c
+  }
+
+  def findNearPosts( lon : Double,lat : Double) = {
+
+    UserPost.findNear(lon,lat,0.1)
   }
 
 }

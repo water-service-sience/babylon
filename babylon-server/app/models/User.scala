@@ -1,5 +1,7 @@
 package models
 import net.liftweb.mapper._
+import util.EncryptUtil
+import java.util.Date
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,15 +13,27 @@ import net.liftweb.mapper._
 
 object User extends User with LongKeyedMetaMapper[User]{
 
-  def create(username : String , nickname : String, password : String) = {
+  def create( nickname : String) = {
     val u = User.createInstance
-    u.nickname := nickname
-    u.password := password
-    u.username := username
 
+    u.nickname := nickname
+    u.accessKey := EncryptUtil.randomString(20)
+    u.username := EncryptUtil.randomString(3)
+    u.password := EncryptUtil.randomString(8)
+    u.lastLogin := new Date
+    u.save()
+
+
+    u.username := "user" + u.id.is + EncryptUtil.randomString(3)
     u.save()
 
     u
+
+  }
+
+  def findByAccessKey(ak : String) = {
+
+    User.find(By(User.accessKey,ak))
 
   }
 
@@ -33,7 +47,9 @@ class User extends LongKeyedMapper[User] with IdPK{
   object username extends MappedString(this,128)
   object password extends MappedString(this,128)
   object nickname extends MappedString(this,128)
+  object accessKey extends MappedString(this,128)
   object lastLogin extends MappedDateTime(this)
+
   object role extends MappedString(this,128)
 
   def isAdmin = {

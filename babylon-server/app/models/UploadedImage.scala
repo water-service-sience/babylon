@@ -34,13 +34,4 @@ class UploadedImage extends LongKeyedMapper[UploadedImage] with IdPK{
   object fileKey extends MappedString(this,128)
   object uploadedUser extends MappedLongForeignKey(this,User)
   object uploaded extends MappedDateTime(this)
-  object hasGpsInfo extends MappedBoolean(this){
-    override def defaultValue: Boolean = false
-  }
-  object longitude extends MappedDouble(this){
-    override def defaultValue: Double = 0.0
-  }
-  object latitude extends MappedDouble(this){
-    override def defaultValue: Double = 0.0
-  }
 }

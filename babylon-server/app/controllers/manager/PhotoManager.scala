@@ -15,16 +15,14 @@ import models.UploadedImage
  */
 object PhotoManager {
 
-  lazy val photoDir = {
-    "/data"
-  }
+  var imageDir = "./images"
 
   def saveUploadedFile(userId : Long)(implicit req : Request[AnyContent]) = {
     req.body.asRaw match{
       case Some(buffer) => {
         val b = buffer.asBytes().get
         val filename = "u" + userId + "/" + EncryptUtil.sha1Digest(b)
-        FileUtil.saveTo(photoDir + filename,b)
+        FileUtil.saveTo(imageDir + filename,b)
 
         UploadedImage.create(userId,filename)
       }

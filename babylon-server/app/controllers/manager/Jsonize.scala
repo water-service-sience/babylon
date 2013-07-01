@@ -18,7 +18,10 @@ object Jsonize {
       "title" -> p.title.is,
       "comment" -> p.comment.is,
       "posted" -> p.posted.is,
-      "comments" -> comments(p)
+      "comments" -> comments(p),
+      "hasGps" -> p.hasGpsInfo.is,
+      "longitude" -> p.longitude.is,
+      "latitude" -> p.latitude.is
     )
   }
 
@@ -28,7 +31,10 @@ object Jsonize {
       "title" -> p.title.is,
       "comment" -> p.comment.is,
       "posted" -> p.posted.is,
-      "comments" -> comments(p)
+      "comments" -> comments(p),
+      "hasGps" -> p.hasGpsInfo.is,
+      "longitude" -> p.longitude.is,
+      "latitude" -> p.latitude.is
     )
   }
   def includeManageInfo(p : UserPost) = {
@@ -38,7 +44,10 @@ object Jsonize {
       "title" -> p.title.is,
       "comment" -> p.comment.is,
       "posted" -> p.posted.is,
-      "comments" -> comments(p)
+      "comments" -> comments(p),
+      "hasGps" -> p.hasGpsInfo.is,
+      "longitude" -> p.longitude.is,
+      "latitude" -> p.latitude.is
     )
   }
   def comments(post : UserPost) = {
@@ -59,5 +68,6 @@ object Jsonize {
     Json.obj("userId" -> u.id.is,
     "nickname" -> u.nickname.is)
   }
+
 
 }
