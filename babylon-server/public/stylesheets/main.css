@@ -1,0 +1,19 @@
+
+
+.background{
+    background-color:#FAECBB;
+}
+.border {
+    background-color:#DBD9B3;
+}
+
+.title {
+    border : 1px solid #DBD9B3;
+    background-color:#FFFFFF;
+}
+
+.grid {
+    border-radius: 5px;
+    border: 5px solid #DBD9B3;
+    background-color:#FFFFFF;
+}

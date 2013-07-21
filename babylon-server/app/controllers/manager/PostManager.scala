@@ -81,4 +81,10 @@ object PostManager {
     UserPost.findNear(lon,lat,0.1)
   }
 
+  def getRecentInquiries(start : Int, count : Int, q : String) = {
+    UserPost.findRecentInquiries(start ,count , q)
+
+  }
+
+
 }

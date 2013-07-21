@@ -49,6 +49,17 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
 
   }
 
+  def findRecentInquiries(start : Int, count : Int, q : String) = {
+    if(q.length > 0){
+
+    }else{
+      //findAll(By(UserPost.category,PostCategory.InquiryCategory.id.is))
+    }
+
+    findAll(OrderBy(UserPost.posted,Descending))
+
+  }
+
 
 }
 class UserPost extends LongKeyedMapper[UserPost] with IdPK{

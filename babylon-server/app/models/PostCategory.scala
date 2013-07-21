@@ -13,9 +13,12 @@ object PostCategory extends PostCategory with LongKeyedMetaMapper[PostCategory]{
 
 
   def NoneCategory = {
-    PostCategory.findByKey(1)
+    PostCategory.findByKey(1).get
   }
 
+  def InquiryCategory = {
+    PostCategory.findByKey(2).get
+  }
 
 }
 class PostCategory extends LongKeyedMapper[PostCategory] with IdPK{
