@@ -37,6 +37,10 @@ object User extends User with LongKeyedMetaMapper[User]{
 
   }
 
+  def findAllManagers() = {
+    findAll(By(User.manager,true))
+  }
+
 
 
 }
@@ -50,10 +54,11 @@ class User extends LongKeyedMapper[User] with IdPK{
   object accessKey extends MappedString(this,128)
   object lastLogin extends MappedDateTime(this)
 
-  object role extends MappedString(this,128)
-
-  def isAdmin = {
-    role.is.split(",").contains("admin")
+  object admin extends MappedBoolean(this)
+  object manager extends MappedBoolean(this){
+    override def dbIndexed_? : Boolean = true
   }
+
+  object role extends MappedString(this,128)
 
 }

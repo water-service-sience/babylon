@@ -59,7 +59,7 @@ object PostAPI extends MyController{
     val post = UserPost.findByKey(postId).get
 
     val u = User.findByKey(userId).get
-    val r = if(u.isAdmin){
+    val r = if(u.admin.get){
       Jsonize.includeManageInfo(post)
     }else if(post.postUser.is == postId){
       Jsonize.allInfo(post)

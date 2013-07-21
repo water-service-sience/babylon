@@ -1,0 +1,39 @@
+@(post : UserPost, form : Form[_],postUpdateForm : Form[_],status : String)
+@import helper.twitterBootstrap._
+
+@main("Top page1") {
+
+
+}{
+
+<div>
+
+    <div>@status</div>
+
+
+
+    @helper.form(action = management.routes.EditPost.editPost(post.id.get)){
+        <div><label for="postId">ID</label><span id="postId">@post.id.get</span></div>
+        <div><label for="customer">問い合わせユーザー</label><span id="customer">@post.postUser.obj.map(_.nickname.is).openOr("No name")</span></div>
+        <div><label for="posted"><span id="posted">@post.posted.get</span></label></div>
+        <div><label for="comment">コメント</label><span id="comment">@post.comment.get</span></div>
+
+        @helper.select(form("category"),Seq("1" -> "hoge","2" -> "fuga"))
+
+    }
+
+    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get)){
+
+        @helper.textarea(postUpdateForm("comment"))
+
+        <input type="submit" label="更新"></input>
+    }
+
+    @helper.form(action = management.routes.EditPost.sendMessage(post.id.get)){
+    }
+
+
+
+</div>
+
+}

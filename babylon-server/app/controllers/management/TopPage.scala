@@ -25,11 +25,18 @@ object TopPage extends Controller {
         "title" -> p.title.is,
         "user" -> Json.obj(
           "id" -> p.postUser.is,
-          "name" -> p.postUser.obj.map(_.nickname.get).openOr("")
+          "name" -> {
+            val s : String = p.postUser.obj.map(_.nickname.get).openOr("")
+            s
+          }
+
         ),
         "category" -> Json.obj(
           "id" -> p.category.is,
-          "name" -> p.category.map(_.name.get).openOr("")
+          "name" -> {
+            val s : String = p.category.map(_.label.get).openOr("")
+            s
+          }
         )
       )
       o
