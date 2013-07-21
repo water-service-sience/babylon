@@ -73,6 +73,9 @@ object PostAPI extends MyController{
 
 
   def getPostNearBy( lon : Double,lat : Double) = Authenticated(implicit req => {
+
+    Logger.debug("Get near by " + lon + " : " + lat)
+
     val posts = PostManager.findNearPosts(lon,lat)
 
     Ok( Json.arr( posts.map( p => {

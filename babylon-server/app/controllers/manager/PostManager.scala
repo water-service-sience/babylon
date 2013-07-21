@@ -62,6 +62,14 @@ object PostManager {
     (updateInfo \ "category").asOpt[Long].foreach(c => post.category := c)
     (updateInfo \ "goodness").asOpt[Int].foreach(c => post.goodness  := c)
     (updateInfo \ "title").asOpt[String].foreach(c => post.title := c)
+    readLonLat.reads(updateInfo) match{
+      case JsSuccess( (lon,lat) ,_ ) => {
+        post.hasGpsInfo := true
+        post.longitude := lon
+        post.latitude := lat
+      }
+      case _ =>
+    }
     post.save()
 
 

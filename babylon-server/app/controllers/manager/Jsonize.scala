@@ -32,6 +32,7 @@ object Jsonize {
       "comment" -> p.comment.is,
       "posted" -> p.posted.is,
       "comments" -> comments(p),
+      "imageFile" -> p.image.obj.get.fileKey.is,
       "hasGps" -> p.hasGpsInfo.is,
       "longitude" -> p.longitude.is,
       "latitude" -> p.latitude.is
