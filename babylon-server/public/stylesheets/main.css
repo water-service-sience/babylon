@@ -17,3 +17,13 @@
     border: 5px solid #DBD9B3;
     background-color:#FFFFFF;
 }
+
+.input {
+    float:left;
+}
+
+.map_area{
+    width : 50%;
+    height : 500px;
+    float : right;
+}

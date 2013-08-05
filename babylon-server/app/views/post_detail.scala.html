@@ -1,32 +1,60 @@
-@(post : UserPost, form : Form[_],postUpdateForm : Form[_],status : String)
+@(post : UserPost, form : Form[_],postUpdateForm : Form[_], statusMessage : String, selections : controllers.management.EditPost.Selections)
 @import helper.twitterBootstrap._
 
 @main("Top page1") {
+    $(document).ready(function() {
+        var mapOptions = {
+            center: new google.maps.LatLng(-34.397, 150.644),
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        mapOptions);
+
+
+    })
+
 
 
 }{
 
 <div>
 
-    <div>@status</div>
+    <div>@statusMessage</div>
 
+    <div class="map_area">
+    <div id="map_canvas" style="width:100%; height:90%;"></div>
+    <div>
+        <span>位置情報</span>
+        <label for="latitude">経度</label><span id="latitude">@post.latitude.get</span>
+        <label for="longitude">緯度</label><span id="longitude">@post.longitude.get</span>
+    </div>
 
+    </div>
 
     @helper.form(action = management.routes.EditPost.editPost(post.id.get)){
+
         <div><label for="postId">ID</label><span id="postId">@post.id.get</span></div>
         <div><label for="customer">問い合わせユーザー</label><span id="customer">@post.postUser.obj.map(_.nickname.is).openOr("No name")</span></div>
+
         <div><label for="posted"><span id="posted">@post.posted.get</span></label></div>
         <div><label for="comment">コメント</label><span id="comment">@post.comment.get</span></div>
 
-        @helper.select(form("category"),Seq("1" -> "hoge","2" -> "fuga"))
 
+
+        @helper.select(form("category"),selections.categories)
+        @helper.select(form("inCharge"),selections.managers)
+
+       <input type="submit" label="変更" />
     }
+
+
 
     @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get)){
 
         @helper.textarea(postUpdateForm("comment"))
 
-        <input type="submit" label="更新"></input>
+        <input type="submit" label="更新" />
     }
 
     @helper.form(action = management.routes.EditPost.sendMessage(post.id.get)){

@@ -12,6 +12,7 @@ POST    /post/update                controllers.api.PostAPI.updatePost
 GET     /post/near                  controllers.api.PostAPI.getPostNearBy( lon : Double = 0,lat : Double = 0)
 
 GET     /management/recent          controllers.management.TopPage.getRecentPosts(start : Int = 0,count : Int = 20,q : String = "")
+POST    /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 GET     /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 POST    /management/post/update/:id controllers.management.EditPost.updatePostStatus(id : Long)
 POST    /management/post/send_message/:id controllers.management.EditPost.sendMessage(id : Long)

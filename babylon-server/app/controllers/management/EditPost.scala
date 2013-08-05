@@ -1,7 +1,7 @@
 package controllers.management
 
 import play.api.mvc.{Action, Controller}
-import models.{PostUpdate, User, UserPost}
+import models.{PostCategory, PostUpdate, User, UserPost}
 import controllers.manager.PostManager
 import play.api.data.Form
 import play.api.data.Forms._
@@ -19,26 +19,45 @@ object EditPost extends Controller {
   // TODO fix
   def editor = User.findByKey(1).get
 
+  def userPostForm = Form(
+    tuple(
+      "category" -> number,
+      "comment" -> text,
+      "posted" -> jodaLocalDate,
+      "inCharge" -> number
+    )
+  )
+
   def postUpdateForm =  Form(
       "comment" -> text
   )
 
-  def editPost(id : Long) = Action({
+  def editPost(id : Long) = Action(implicit req => {
     val post = UserPost.findByKey(id).get
 
-    val form = Form(
-      tuple(
-        "category" -> number,
-        "comment" -> text,
-        "posted" -> jodaLocalDate
+    if(req.method == "POST"){
+      val form = userPostForm.bindFromRequest()
+
+      post.category := form("category").value.get.toLong
+      post.inCharge := form("inCharge").value.get.toLong
+
+      post.save()
+
+      Redirect(routes.EditPost.editPost(id))
+    }else{
+      val form = userPostForm.bind( Map(
+        post.allFields.map(f => f.name -> f.get.toString) :_*
+      ))
+
+      val selections = Selections(
+        PostCategory.findAll().map(pc => pc.id.is.toString -> pc.label.is),
+        User.findAllManagers().map(u => u.id.is.toString -> u.nickname.is)
       )
-    ).bind( Map(
-      post.allFields.map(f => f.name -> f.get.toString) :_*
-    ))
 
 
+      Ok(views.html.post_detail(post,form,postUpdateForm,"",selections))
 
-    Ok(views.html.post_detail(post,form,postUpdateForm,""))
+    }
 
   })
 
@@ -62,4 +81,8 @@ object EditPost extends Controller {
 
     Redirect(routes.EditPost.editPost(id))
   })
+
+  case class Selections(categories : Seq[(String,String)],managers : Seq[(String,String)])
 }
+
+
