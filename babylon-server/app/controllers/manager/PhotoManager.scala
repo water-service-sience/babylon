@@ -34,5 +34,11 @@ object PhotoManager {
 
   }
 
+  def getFileData(fileKey : String) = {
+
+    val b = FileUtil.readFrom(imageDir + fileKey)
+    b
+  }
+
 
 }

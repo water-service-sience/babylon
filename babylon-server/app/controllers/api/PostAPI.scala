@@ -56,7 +56,7 @@ object PostAPI extends MyController{
   })
 
   def getPostDetail(postId : Long) = Authenticated(implicit req => {
-    val post = UserPost.findByKey(postId).get
+    val post = PostManager.getPost(postId)
 
     val u = User.findByKey(userId).get
     val r = if(u.admin.get){
@@ -79,13 +79,29 @@ object PostAPI extends MyController{
     val posts = PostManager.findNearPosts(lon,lat)
 
     Ok( Json.arr( posts.map( p => {
-      Jsonize.restrictInfo(p).asInstanceOf[JsValueWrapper]
+      val v : JsValueWrapper =  Jsonize.restrictInfo(p)
+      v
     }) :_* ))
 
 
   })
 
+  def getOwnPost(year : Int = 0,month : Int = 0) = Authenticated(implicit req => {
+    Logger.debug("Get own posts")
 
+    val posts = PostManager.getOwnPost(year,month)
+    Ok(Json.arr(posts.map( p => {
+      val v : JsValueWrapper = Jsonize.allInfo(p)
+      v
+    }) :_*))
+  })
+
+  def commentTo(postId : Long) = Authenticated(implicit req => {
+
+    val json = req.body.asJson.get
+    val comment = (json \ "comment").as[String]
+    Ok(Jsonize.comment(PostManager.commentTo(me.id.get,postId,comment)))
+  })
 
 
 }

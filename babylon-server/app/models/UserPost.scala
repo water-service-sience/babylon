@@ -99,5 +99,10 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
     override def defaultValue: Double = 0.0
   }
 
+  object unreadUpdates extends MappedInt(this){
+    override def defaultValue: Int = 0
+
+  }
+
 
 }

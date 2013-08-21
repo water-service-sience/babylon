@@ -10,6 +10,9 @@ POST    /photo/upload               controllers.api.PostAPI.uploadPhoto
 POST    /post                       controllers.api.PostAPI.post
 POST    /post/update                controllers.api.PostAPI.updatePost
 GET     /post/near                  controllers.api.PostAPI.getPostNearBy( lon : Double = 0,lat : Double = 0)
+GET     /post/own                   controllers.api.PostAPI.getOwnPost(year : Int = 0,month : Int = 0)
+GET     /post/detail/:postId        controllers.api.PostAPI.getPostDetail(postId : Long)
+POST    /post/comment/:postId       controllers.api.PostAPI.commentTo(postId : Long)
 
 GET     /management/recent          controllers.management.TopPage.getRecentPosts(start : Int = 0,count : Int = 20,q : String = "")
 POST    /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
@@ -21,3 +24,4 @@ POST    /management/post/send_message/:id controllers.management.EditPost.sendMe
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /images/*file               controllers.Application.photo(file)

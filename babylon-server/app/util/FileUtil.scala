@@ -1,7 +1,6 @@
 package util
-import java.io.FileOutputStream
+import java.io.{FileInputStream, FileOutputStream, File}
 
-import java.io.File
 /**
  * Created with IntelliJ IDEA.
  * User: takezoux2
@@ -20,6 +19,14 @@ object FileUtil {
     val output = new FileOutputStream(path)
     output.write(bytes)
     output.close()
+  }
+
+  def readFrom(path : String) = {
+    val input = new FileInputStream(path)
+    val bytes = new Array[Byte](input.available())
+    input.read(bytes)
+    input.close()
+    bytes
   }
 
 }

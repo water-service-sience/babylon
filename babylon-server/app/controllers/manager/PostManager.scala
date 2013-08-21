@@ -6,6 +6,8 @@ import controllers.APIException
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import net.liftweb.http.js.JE.JsFalse
+import java.util.Calendar
+import net.liftweb.mapper.{By_<=, By_>=, By}
 
 /**
  * Created with IntelliJ IDEA.
@@ -92,6 +94,25 @@ object PostManager {
   def getRecentInquiries(start : Int, count : Int, q : String) = {
     UserPost.findRecentInquiries(start ,count , q)
 
+  }
+
+  def getOwnPost(_year : Int,_month : Int) = {
+    val now = Calendar.getInstance()
+    val year = if(_year == 0) now.get(Calendar.YEAR) else _year
+    val month = if(_month == 0) now.get(Calendar.MONTH) else _month - 1
+    val start = Calendar.getInstance()
+    start.set(year,month,1)
+    val end = Calendar.getInstance()
+    end.set(year,month + 1,1)
+
+    UserPost.findAll(By_>=(UserPost.posted,start.getTime),By_<=(UserPost.posted,end.getTime))
+
+
+  }
+
+  def getPost(postId : Long) : UserPost = {
+
+    UserPost.findByKey(postId).get
   }
 
 

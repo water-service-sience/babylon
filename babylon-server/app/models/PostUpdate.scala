@@ -11,6 +11,9 @@ import net.liftweb.mapper._
 
 object PostUpdate extends PostUpdate with LongKeyedMetaMapper[PostUpdate]{
 
+  def findAllOf(up : UserPost) = {
+    findAll(By(PostUpdate.userPost,up.id.get),OrderBy(PostUpdate.edited,Descending))
+  }
 
 }
 class PostUpdate extends LongKeyedMapper[PostUpdate] with IdPK{
@@ -20,6 +23,7 @@ class PostUpdate extends LongKeyedMapper[PostUpdate] with IdPK{
   object userPost extends MappedLongForeignKey(this,UserPost)
   object editor extends MappedLongForeignKey(this,User)
   object comment extends MappedString(this,128)
+  object replyTo extends MappedLongForeignKey(this,PostUpdate)
   object edited extends MappedDateTime(this)
 }
 
