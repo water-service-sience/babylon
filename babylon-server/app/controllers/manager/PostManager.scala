@@ -96,7 +96,7 @@ object PostManager {
 
   }
 
-  def getOwnPost(_year : Int,_month : Int) = {
+  def getOwnPost(userId : Long,_year : Int,_month : Int) = {
     val now = Calendar.getInstance()
     val year = if(_year == 0) now.get(Calendar.YEAR) else _year
     val month = if(_month == 0) now.get(Calendar.MONTH) else _month - 1
@@ -105,7 +105,7 @@ object PostManager {
     val end = Calendar.getInstance()
     end.set(year,month + 1,1)
 
-    UserPost.findAll(By_>=(UserPost.posted,start.getTime),By_<=(UserPost.posted,end.getTime))
+    UserPost.findAll(By(UserPost.postUser,userId), By_>=(UserPost.posted,start.getTime),By_<=(UserPost.posted,end.getTime))
 
 
   }

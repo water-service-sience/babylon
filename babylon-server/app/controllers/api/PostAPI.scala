@@ -89,7 +89,7 @@ object PostAPI extends MyController{
   def getOwnPost(year : Int = 0,month : Int = 0) = Authenticated(implicit req => {
     Logger.debug("Get own posts")
 
-    val posts = PostManager.getOwnPost(year,month)
+    val posts = PostManager.getOwnPost(me.id.get, year,month)
     Ok(Json.arr(posts.map( p => {
       val v : JsValueWrapper = Jsonize.allInfo(p)
       v
