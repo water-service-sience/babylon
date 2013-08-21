@@ -21,7 +21,7 @@ object PhotoManager {
     req.body.asRaw match{
       case Some(buffer) => {
         Logger.debug("User:%s uploaded image.Size = %s".format(userId,buffer.size))
-        val b = buffer.asBytes().get
+        val b = buffer.asBytes(buffer.size.toInt).get
         val filename = "u" + userId + "/" + EncryptUtil.sha1Digest(b)
         FileUtil.saveTo(imageDir + filename,b)
 

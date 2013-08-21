@@ -3,7 +3,7 @@ package controllers.api
 import play.api.mvc.Action
 import controllers.manager.{Jsonize, PostManager, PhotoManager}
 import play.api.libs.json.Json
-import models.{Comment, User, UserPost}
+import models.{PostCategory, Comment, User, UserPost}
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.Logger
 
@@ -101,6 +101,16 @@ object PostAPI extends MyController{
     val json = req.body.asJson.get
     val comment = (json \ "comment").as[String]
     Ok(Jsonize.comment(PostManager.commentTo(me.id.get,postId,comment)))
+  })
+
+  def getCategoryAll = Authenticated(implicit req => {
+
+    val categories = PostCategory.findAll()
+    Ok(Json.arr(categories.map( c => {
+      val v : JsValueWrapper = Jsonize.category(c)
+      v
+    }) :_*))
+
   })
 
 
