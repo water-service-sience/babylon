@@ -110,6 +110,10 @@ object PostManager {
 
   }
 
+  def getAllOwnPosts(userId : Long) = {
+    UserPost.findAll(By(UserPost.postUser,userId))
+  }
+
   def getPost(postId : Long) : UserPost = {
 
     UserPost.findByKey(postId).get

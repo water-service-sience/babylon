@@ -10,7 +10,8 @@ POST    /photo/upload               controllers.api.PostAPI.uploadPhoto
 POST    /post                       controllers.api.PostAPI.post
 POST    /post/update                controllers.api.PostAPI.updatePost
 GET     /post/near                  controllers.api.PostAPI.getPostNearBy( lon : Double,lat : Double)
-GET     /post/own                   controllers.api.PostAPI.getOwnPost(year : Int = 0,month : Int = 0)
+GET     /post/own                   controllers.api.PostAPI.getOwnPost(year : Int ?= 0,month : Int ?= 0)
+GET     /post/own/all               controllers.api.PostAPI.getAllOwnPost
 GET     /post/detail/:postId        controllers.api.PostAPI.getPostDetail(postId : Long)
 POST    /post/comment/:postId       controllers.api.PostAPI.commentTo(postId : Long)
 GET     /post/category/all          controllers.api.PostAPI.getCategoryAll

@@ -96,6 +96,16 @@ object PostAPI extends MyController{
     }) :_*))
   })
 
+  def getAllOwnPost = Authenticated(implicit req => {
+    Logger.debug("Get own posts")
+
+    val posts = PostManager.getAllOwnPosts(me.id.get)
+    Ok(Json.arr(posts.map( p => {
+      val v : JsValueWrapper = Jsonize.allInfo(p)
+      v
+    }) :_*))
+  })
+
   def commentTo(postId : Long) = Authenticated(implicit req => {
 
     val json = req.body.asJson.get
