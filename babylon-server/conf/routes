@@ -17,6 +17,7 @@ POST    /post/comment/:postId       controllers.api.PostAPI.commentTo(postId : L
 GET     /post/category/all          controllers.api.PostAPI.getCategoryAll
 
 
+GET     /management/login           controllers.management.ManagementLogin.login
 GET     /management/recent          controllers.management.TopPage.getRecentPosts(start : Int = 0,count : Int = 20,q : String = "")
 POST    /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 GET     /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)

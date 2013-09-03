@@ -45,16 +45,17 @@
         @helper.select(form("category"),selections.categories)
         @helper.select(form("inCharge"),selections.managers)
 
-       <input type="submit" label="変更" />
+       <input type="submit" value="変更" />
     }
 
+    管理者からのコメント
 
 
     @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get)){
 
         @helper.textarea(postUpdateForm("comment"))
 
-        <input type="submit" label="更新" />
+        <input type="submit" value="管理者からのコメントを送る" />
     }
 
     @helper.form(action = management.routes.EditPost.sendMessage(post.id.get)){

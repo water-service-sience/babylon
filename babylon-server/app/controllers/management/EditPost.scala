@@ -28,6 +28,10 @@ object EditPost extends Controller {
     )
   )
 
+  def sendAdminMessageForm = Form(
+      "comment" -> text
+  )
+
   def postUpdateForm =  Form(
       "comment" -> text
   )
@@ -80,6 +84,15 @@ object EditPost extends Controller {
     val post = UserPost.findByKey(id).get
 
     Redirect(routes.EditPost.editPost(id))
+  })
+
+  def sentAdminMessage( id : Long) = Action(implicit req => {
+    val post = UserPost.findByKey(id).get
+    val comment = sendAdminMessageForm.bindFromRequest.get
+
+    val postUpdate = PostUpdate.create
+    Redirect(routes.EditPost.editPost(id))
+
   })
 
   case class Selections(categories : Seq[(String,String)],managers : Seq[(String,String)])
