@@ -1,11 +1,14 @@
 package controllers.management
 
 import play.api.mvc.{Action, Controller}
-import models.{PostCategory, PostUpdate, User, UserPost}
+import models._
 import controllers.manager.PostManager
 import play.api.data.Form
 import play.api.data.Forms._
 import java.util.Date
+import play.api.Logger
+
+import play.api.libs.json.{JsValue, Json}
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,88 +17,171 @@ import java.util.Date
  * Time: 17:29
  * To change this template use File | Settings | File Templates.
  */
-object EditPost extends Controller {
+object EditPost extends ManagerBase {
 
-  // TODO fix
-  def editor = User.findByKey(1).get
 
-  def userPostForm = Form(
-    tuple(
-      "category" -> number,
-      "comment" -> text,
-      "posted" -> jodaLocalDate,
-      "inCharge" -> number
-    )
-  )
 
-  def sendAdminMessageForm = Form(
+  def sendPrivateMessageForm = Form(
       "adminComment" -> text
   )
 
   def postUpdateForm =  Form(
-      "comment" -> text
+    tuple(
+      "comment" -> text,
+      "inCharge" -> number,
+      "category" -> number,
+      "postStatus" -> number
+    )
   )
 
-  def editPost(id : Long) = Action(implicit req => {
+  def editPost(id : Long) = AdminAuth(implicit req => {
     val post = UserPost.findByKey(id).get
 
-    if(req.method == "POST"){
-      val form = userPostForm.bindFromRequest()
+    val form = postUpdateForm.bind( Map(
+      post.allFields.map(f => f.name -> {Option(f.get).map(_.toString).getOrElse("")}) :_*
+    ))
 
-      post.category := form("category").value.get.toLong
-      post.inCharge := form("inCharge").value.get.toLong
+    val histories = getUpdateHistories(post)
 
-      post.save()
+    val selections = Selections(
+      PostCategory.findAll().map(pc => pc.id.is.toString -> pc.label.get),
+      User.findAllManagers().map(u => u.id.is.toString -> u.nickname.get),
+      PostStatus.findAll().map(ps => ps.id.is.toString -> ps.label.get)
+    )
 
-      Redirect(routes.EditPost.editPost(id))
-    }else{
-      val form = userPostForm.bind( Map(
-        post.allFields.map(f => f.name -> f.get.toString) :_*
-      ))
-
-      val selections = Selections(
-        PostCategory.findAll().map(pc => pc.id.is.toString -> pc.label.is),
-        User.findAllManagers().map(u => u.id.is.toString -> u.nickname.is)
-      )
+    val message = req.session.get("message").getOrElse("")
 
 
-      Ok(views.html.post_detail(post,form,postUpdateForm,sendAdminMessageForm,"",selections))
+    Ok(views.html.post_detail(post,histories,
+      form,postUpdateForm,sendPrivateMessageForm,message,selections)).
+      withSession(req.session - "message")
 
+
+  })
+
+  def updatePostStatus(id : Long) = AdminAuth(implicit req => {
+    val post = UserPost.findByKey(id).get
+
+    var updateSomething = false
+
+    val form = postUpdateForm.bindFromRequest
+
+    val inCharge = form("inCharge").value.get.toLong
+    val category = form("category").value.get.toLong
+    val postStatus = form("postStatus").value.get.toLong
+    val comment = form("comment").value.get
+
+    var detail = Json.obj()
+
+    val pu = PostUpdate.create(post,me)
+    pu.actionDetail := ""
+
+    pu.actionType := ActionType.ChangeStatus
+
+    if(postStatus != post.postStatus.get){
+      val old = post.postStatus.get
+      post.postStatus := postStatus
+      updateSomething = true
+      detail = detail + ("postStatus" -> Json.obj("from" -> old,"to" -> postStatus))
     }
 
+    if(category != post.category.get){
+      val old = post.category.get
+      post.category := category
+      updateSomething = true
+      detail = detail + ("category" -> Json.obj("from" -> old,"to" -> category))
+    }
+
+    if(inCharge != post.inCharge.get){
+      val old = post.inCharge.get
+      post.inCharge := inCharge
+      updateSomething = true
+      detail = detail + ("inCharge" -> Json.obj("from" -> old,"to" -> inCharge))
+    }
+
+    if(comment != null && comment.length > 0){
+      pu.comment := comment
+      updateSomething = true
+      detail = detail ++ Json.obj("comment" -> comment)
+    }
+
+    if(updateSomething){
+      pu.actionDetail := Json.stringify(detail)
+      post.updated := new Date()
+      pu.save()
+      post.save()
+
+      logger.debug("Update post status")
+      Redirect(routes.EditPost.editPost(id)).withSession(session + ("message" -> "Update post status") )
+    }else{
+      Redirect(routes.EditPost.editPost(id)).withSession(session + ("message" -> "No updates") )
+    }
+
+
   })
 
-  def updatePostStatus(id : Long) = Action(implicit req => {
+
+  def sendPrivateMessage( id : Long) = AdminAuth(implicit req => {
     val post = UserPost.findByKey(id).get
+    val comment = sendPrivateMessageForm.bindFromRequest.get
 
-    val comment = postUpdateForm.bindFromRequest.get
+    val am = PrivateMessage.create(post,me.id.get,comment)
+    am.save()
 
-    val pu = PostUpdate.create
-    pu.editor := editor.id.get
-    pu.userPost := id
-    pu.comment := comment
-    pu.edited := new Date
-    pu.save()
+    val pu = PostUpdate.create(post,me)
+    pu.actionDetail := Json.stringify(Json.obj("private_message" -> comment))
+    pu.actionType := ActionType.SendPrivateMessage
+    pu.save
 
-    Redirect(routes.EditPost.editPost(id))
-  })
+    logger.debug("Update admin message")
 
-  def sendMessage(id : Long) = Action({
-    val post = UserPost.findByKey(id).get
-
-    Redirect(routes.EditPost.editPost(id))
-  })
-
-  def sentAdminMessage( id : Long) = Action(implicit req => {
-    val post = UserPost.findByKey(id).get
-    val comment = sendAdminMessageForm.bindFromRequest.get
-
-    val postUpdate = PostUpdate.create
-    Redirect(routes.EditPost.editPost(id))
+    Redirect(routes.EditPost.editPost(id)).withSession( req.session + ("message" -> "Send private message"))
 
   })
 
-  case class Selections(categories : Seq[(String,String)],managers : Seq[(String,String)])
+  def getUpdateHistories(post : UserPost) = {
+    val updates = PostUpdate.findAllOf(post)
+
+    updates.map( u => {
+      val detail = Json.parse(u.actionDetail.get)
+
+      val builder = new StringBuilder()
+      if( (detail \ "category").asOpt[JsValue].isDefined){
+        val from = (detail \ "category" \ "from").as[Long]
+        val to = (detail \ "category" \ "to").as[Long]
+        builder.append(s"カテゴリーを'${PostCategory.label(from)}'から'${PostCategory.label(to)}'に変更")
+      }
+
+      (detail \ "inCharge").asOpt[JsValue].foreach( v => {
+        val from = (v \ "from").as[Long]
+        val to = (v \ "to").as[Long]
+
+        def uname(id : Long) = User.findByKey(id).map(_.nickname.get).getOrElse("なし")
+        builder.append(s"担当を'${uname(from)}'から'${uname(to)}'へ変更")
+      })
+
+      (detail \ "postStatus").asOpt[JsValue].foreach( v => {
+        val from = (v \ "from").as[Long]
+        val to = (v \ "to").as[Long]
+
+        def plabel(id : Long) = PostStatus.findByKey(id).map(_.label.get).getOrElse("None")
+        builder.append(s"担当を'${plabel(from)}'から'${plabel(to)}'へ変更")
+      })
+
+      (detail \ "private_message").asOpt[String].foreach( v => {
+        builder.append(s"プライベートメッセージ送信")
+      })
+
+
+
+      UpdateHistory(u.editor.obj.get,u.comment.get,builder.toString() ,u.edited.get)
+    })
+  }
+
+  case class UpdateHistory(editor : User,comment : String,action : String, updated : Date)
+
+
+  case class Selections(categories : Seq[(String,String)],managers : Seq[(String,String)],postStatuses : Seq[(String,String)])
 }
 
 

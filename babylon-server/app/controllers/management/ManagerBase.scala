@@ -1,6 +1,8 @@
 package controllers.management
 
 import play.api.mvc._
+import play.api.Logger
+import models.User
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +12,8 @@ import play.api.mvc._
  * To change this template use File | Settings | File Templates.
  */
 trait ManagerBase extends Controller {
+
+  lazy val logger = Logger.apply(getClass)
 
   val SessionUserId = "S_UserID"
 
@@ -23,13 +27,20 @@ trait ManagerBase extends Controller {
 
   }
 
+  def me(implicit req : Request[_]) = {
+    User.findByKey(userId.toLong).get
+  }
+
+
   def AdminAuth(func : Request[AnyContent] => Result) : Action[AnyContent] = Action(implicit request => {
     if(!isLogin){
+      logger.debug("Not login")
       Redirect(routes.LoginPage.login)
     }else{
       func(request)
     }
 
   })
+
 
 }

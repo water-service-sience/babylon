@@ -24,13 +24,19 @@
 
 
 
-        <table id="mytable" class="tablesorter">
+        <table id="mytable" class="tablesorter table table-hover">
             <thead>
-                <tr><th>id</th><th>title</th></tr>
+                <tr><th>ID</th><th>問い合わせ</th><th>担当</th><th>カテゴリ</th><th>ステータス</th></tr>
             </thead>
             <tbody>
 
-                <tr ng-repeat="i in inquiries" ><td><a href="/management/post/detail/{{i.id}}">{{i.id}}</a></td><td>{{i.title}}</td></tr>
+                <tr ng-repeat="i in inquiries" >
+                    <td><a href="/management/post/detail/{{i.id}}">{{i.id}} 編集</a></td>
+                    <td>{{i.user.name}}</td>
+                    <td>{{i.inCharge}}</td>
+                    <td>{{i.category}}</td>
+                    <td>{{i.postStatus}}</td>
+                </tr>
 
             </tbody>
         </table>

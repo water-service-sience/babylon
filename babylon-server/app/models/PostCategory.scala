@@ -11,6 +11,9 @@ import net.liftweb.mapper._
 
 object PostCategory extends PostCategory with LongKeyedMetaMapper[PostCategory]{
 
+  def label(id : Long) = {
+    findByKey(id).map(_.label.get).getOrElse("None")
+  }
 
   def NoneCategory = {
     PostCategory.findByKey(1).get

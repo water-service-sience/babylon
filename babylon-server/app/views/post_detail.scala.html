@@ -1,4 +1,5 @@
-@(post : UserPost, form : Form[_],postUpdateForm : Form[_],sendAdminMessageForm : Form[_],
+@(post : UserPost,histories : List[controllers.management.EditPost.UpdateHistory],
+  form : Form[_],postUpdateForm : Form[_],sendPrivateMessageForm : Form[_],
   statusMessage : String, selections : controllers.management.EditPost.Selections)
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 
@@ -20,14 +21,14 @@
 
 @main("Top page1",scripts){
 
-@if(@statusMessage.length > 0){
+@if(statusMessage.length > 0){
     <div class="alert">@statusMessage</div>
 }
 
 <div class="row-fluid">
 
     <div class="span6">
-    @helper.form(action = management.routes.EditPost.editPost(post.id.get),'class -> "form-horizontal"){
+    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get),'class -> "form-horizontal"){
         @UIParts.labelInForm("postId","ID",post.id.get.toString)
         @UIParts.labelInForm("customer","問い合わせユーザー",post.postUser.obj.map(_.nickname.is).openOr("No name"))
         @UIParts.labelInForm("posted","投稿",post.posted.get.toString)
@@ -36,33 +37,35 @@
 
         @helper.select(form("category"),selections.categories)
         @helper.select(form("inCharge"),selections.managers)
-
-        <div class="control-group">
-            <div class="controls">
-            <input type="submit" value="変更" class="btn"/>
-            </div>
-        </div>
-    }
-
-        <hr />
-    管理者からのコメント
-
-
-    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get),'class -> "form-horizontal"){
+        @helper.select(form("postStatus"),selections.postStatuses)
 
         @helper.textarea(postUpdateForm("comment"))
 
         <div class="control-group">
             <div class="controls">
-            <input type="submit" value="状態を更新"  class="btn"/>
+            <input type="submit" value="更新"  class="btn"/>
             </div>
         </div>
     }
+    <hr />
+    <div>更新履歴</div>
+
+        @for(h <- histories){
+            <div class="well">
+                <div class="badge">更新者</div><span>@h.editor.nickname.is</span>
+                <div>@h.comment</div>
+                <div>@h.action</div>
+            </div>
+        }
+
+
+    <div>
 
     <hr />
-    @helper.form(action = management.routes.EditPost.sendMessage(post.id.get),'class -> "form-horizontal"){
+        管理者からのコメント
+    @helper.form(action = management.routes.EditPost.sendPrivateMessage(post.id.get),'class -> "form-horizontal"){
 
-        @helper.textarea(sendAdminMessageForm("adminComment"))
+        @helper.textarea(sendPrivateMessageForm("adminComment"))
 
         <div class="control-group">
             <div class="controls">
@@ -72,19 +75,21 @@
 
     }
 
+
+    </div>
+
+
     </div>
     <div class="span6 map_area">
         <div id="map_canvas" style="width:100%; height:90%;"></div>
         <div class="well well-small">
             <span>位置情報</span>
-            <span class="badge">経度</span><span id="latitude">@post.latitude.get</span>
-            <span class="badge">緯度</span><span id="longitude">@post.longitude.get</span>
+            <span class="badge">緯度</span><span id="latitude">@post.latitude.get</span>
+            <span class="badge">経度</span><span id="longitude">@post.longitude.get</span>
         </div>
 
     </div>
 
-    <hr />
-    <div>更新履歴</div>
 
 </div>
 

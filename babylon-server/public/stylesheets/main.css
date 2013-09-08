@@ -1,10 +1,10 @@
 
 
 .background{
-    background-color:#FAECBB;
+    background-color:#99FFFF;
 }
 .border {
-    background-color:#DBD9B3;
+    background-color:#00BFBF;
 }
 
 .title {
@@ -14,8 +14,8 @@
 
 .grid {
     border-radius: 5px;
-    border: 5px solid #DBD9B3;
-    background-color:#FFFFFF;
+    border: 5px solid #00BFBF;
+    background-color:#eeFFFF;
 }
 
 

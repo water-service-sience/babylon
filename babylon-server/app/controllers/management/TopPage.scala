@@ -26,7 +26,9 @@ object TopPage extends ManagerBase {
     Ok(Json.arr(posts.map(p => {
       val o : JsValueWrapper = Json.obj(
         "id" -> p.id.is,
-        "title" -> p.title.is,
+        "inCharge" -> (p.inCharge.map(_.nickname.get).getOrElse("No one")).toString,
+        "category" -> p.category.map(_.label.get).getOrElse("no category").toString,
+        "postStatus" -> p.postStatus.map(_.label.get).getOrElse("no status").toString,
         "user" -> Json.obj(
           "id" -> p.postUser.is,
           "name" -> {
@@ -34,13 +36,6 @@ object TopPage extends ManagerBase {
             s
           }
 
-        ),
-        "category" -> Json.obj(
-          "id" -> p.category.is,
-          "name" -> {
-            val s : String = p.category.map(_.label.get).openOr("")
-            s
-          }
         )
       )
       o

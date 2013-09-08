@@ -33,7 +33,28 @@
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span3 grid">サイドバー</div>
+            <div class="span3 grid">
+                <div class="label label-info">メニュー</div>
+                <ul class="unstyled">
+                    <li>
+                        <div class="badge badge-info">問い合わせ</div>
+                        <ul>
+                            <li><a href="@management.routes.TopPage.index">一覧</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="badge badge-info">全投稿</div>
+                        <ul>
+                            <li>一覧</li>
+                            <li>地図</li>
+                        </ul>
+                    </li>
+                    <li>個人設定</li>
+                    <li>プロジェクト設定</li>
+
+                </ul>
+
+            </div>
             <div class="span9 grid">@content</div>
         </div>
         <div id="footer">

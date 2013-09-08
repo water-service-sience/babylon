@@ -56,7 +56,7 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
       //findAll(By(UserPost.category,PostCategory.InquiryCategory.id.is))
     }
 
-    findAll(OrderBy(UserPost.posted,Descending))
+    findAll(OrderBy(UserPost.updated,Descending))
 
   }
 
@@ -83,7 +83,7 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
     override def defaultValue: Long = 1
 
   }
-  object userPostStatus extends MappedLongForeignKey(this,PostStatus) {
+  object postStatus extends MappedLongForeignKey(this,PostStatus) {
     override def defaultValue: Long = 1
   }
   object inCharge extends MappedLongForeignKey(this,User){
@@ -101,7 +101,10 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
 
   object unreadUpdates extends MappedInt(this){
     override def defaultValue: Int = 0
+  }
 
+  object updated extends MappedDateTime(this){
+    override def defaultValue = new Date
   }
 
 

@@ -26,7 +26,7 @@ GET     /management/recent          controllers.management.TopPage.getRecentPost
 POST    /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 GET     /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 POST    /management/post/update/:id controllers.management.EditPost.updatePostStatus(id : Long)
-POST    /management/post/send_message/:id controllers.management.EditPost.sendMessage(id : Long)
+POST    /management/post/send_admin_message/:id controllers.management.EditPost.sendPrivateMessage(id : Long)
 
 
 
