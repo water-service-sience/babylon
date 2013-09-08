@@ -1,0 +1,25 @@
+@(errorMessage : String,userForm : Form[_])
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@main_simple("Registration") {
+
+
+
+@if(errorMessage.length > 0){
+    <div class="alert alert-error">@errorMessage</div>
+}
+@helper.form(action = management.routes.RegisterPage.p_register,'class -> "form-horizontal"){
+
+@helper.inputText(userForm("username"))
+@helper.inputPassword(userForm("password1"))
+@helper.inputPassword(userForm("password2"))
+@helper.checkbox(userForm("isAdmin"))
+
+@UIParts.submitButton("新規作成");
+
+        <a href="@management.routes.LoginPage.login">ログイン</a>
+
+
+}
+
+}

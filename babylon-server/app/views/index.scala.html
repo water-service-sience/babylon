@@ -1,17 +1,24 @@
 @(message: String)
 
-@main("Top page1") {
+@scripts = {
+
+<script type="text/javascript">
+
     function TopPageController($scope, $http) {
         $http.get('/management/recent').success(function(data) {
-            $scope.inquiries = data;
+        $scope.inquiries = data;
         });
 
-    }
+        }
 
-    $(document).ready(function(){
+        $(document).ready(function(){
         $("#mytable").tablesorter();
     });
-}{
+</script>
+
+}
+
+@main("Top page1",scripts) {
 
     <div ng-controller="TopPageController">
 

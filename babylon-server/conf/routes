@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                           controllers.management.TopPage.index
 
 POST    /create/account             controllers.api.AuthAPI.createAccount
 POST    /photo/upload               controllers.api.PostAPI.uploadPhoto
@@ -17,12 +17,17 @@ POST    /post/comment/:postId       controllers.api.PostAPI.commentTo(postId : L
 GET     /post/category/all          controllers.api.PostAPI.getCategoryAll
 
 
-GET     /management/login           controllers.management.ManagementLogin.login
+GET     /management/login           controllers.management.LoginPage.login
+POST    /management/login           controllers.management.LoginPage.p_login
+GET     /management/logout          controllers.management.LoginPage.logout
+POST    /management/register        controllers.management.RegisterPage.p_register
+GET     /management/register        controllers.management.RegisterPage.register
 GET     /management/recent          controllers.management.TopPage.getRecentPosts(start : Int = 0,count : Int = 20,q : String = "")
 POST    /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 GET     /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 POST    /management/post/update/:id controllers.management.EditPost.updatePostStatus(id : Long)
 POST    /management/post/send_message/:id controllers.management.EditPost.sendMessage(id : Long)
+
 
 
 

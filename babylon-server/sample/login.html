@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app xmlns="http://www.w3.org/1999/html">
+<meta charset="UTF-8" />
+<head>
+    <title>@title</title>
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/main.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap-responsive.min.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/style.css">
+    <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
+    <script src="../public/javascripts/jquery-1.9.0.min.js"type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
+    <script src="../public/javascripts/jquery.metadata.js" type="text/javascript"></script>
+    <script src="../public/javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript"
+            src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAOlbgQmpqNMxLAv5QJ-xkLucjdnd7jl5o&sensor=false">
+    </script>
+    <script type="text/javascript"><!--
+            @script
+        --></script>
+</head>
+<body>
+
+<div class="container-fluid background">
+    <div id="header title">
+        Login
+    </div>
+    <div class="row-fluid">
+        <div class="span3 grid">サイドバー</div>
+        <div class="span9 grid">
+
+
+            <form action="/management/post/detail/11" method="POST"  class="form-horizontal">
+
+
+                <div class="control-group">
+                    <label class="control-label label" for="postId">ID</label>
+                    <div class="controls">
+                        <span id="postId">11</span>
+                    </div>
+                </div>
+
+                <div class="control-group ">
+                    <label class="control-label" for="username">username</label>
+                    <div class="controls">
+
+                        <input type="text" id="username" name="username" placeholder="username"/>
+                        <!--<span class="help-block">Numeric</span>-->
+                        <span class="errors"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="作成"  class="btn"/>
+                    </div>
+                </div>
+
+
+
+            </form>
+
+
+
+
+        </div>
+    </div>
+    <div id="footer">
+        フッター
+    </div>
+</div>
+</body>
+</html>

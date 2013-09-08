@@ -29,7 +29,7 @@ object EditPost extends Controller {
   )
 
   def sendAdminMessageForm = Form(
-      "comment" -> text
+      "adminComment" -> text
   )
 
   def postUpdateForm =  Form(
@@ -59,7 +59,7 @@ object EditPost extends Controller {
       )
 
 
-      Ok(views.html.post_detail(post,form,postUpdateForm,"",selections))
+      Ok(views.html.post_detail(post,form,postUpdateForm,sendAdminMessageForm,"",selections))
 
     }
 

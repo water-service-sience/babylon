@@ -41,6 +41,10 @@ object User extends User with LongKeyedMetaMapper[User]{
     findAll(By(User.manager,true))
   }
 
+  def findByUsername(username : String) = {
+    User.find(By(User.username,username))
+  }
+
 
 
 }

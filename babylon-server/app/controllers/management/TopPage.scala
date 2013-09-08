@@ -12,12 +12,16 @@ import play.api.libs.json.Json.JsValueWrapper
  * Time: 1:48
  * To change this template use File | Settings | File Templates.
  */
-object TopPage extends Controller {
+object TopPage extends ManagerBase {
 
-  def getRecentPosts(start : Int = 0, count : Int = 20, q : String = "") = Action({
+  def index = AdminAuth(implicit req => {
+
+    Ok(views.html.index("Your new application is ready."))
+  })
+
+  def getRecentPosts(start : Int = 0, count : Int = 20, q : String = "") = AdminAuth(req => {
 
     val posts = PostManager.getRecentInquiries(start,count,q)
-
 
     Ok(Json.arr(posts.map(p => {
       val o : JsValueWrapper = Json.obj(

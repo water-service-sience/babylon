@@ -1,7 +1,9 @@
-@(post : UserPost, form : Form[_],postUpdateForm : Form[_], statusMessage : String, selections : controllers.management.EditPost.Selections)
-@import helper.twitterBootstrap._
+@(post : UserPost, form : Form[_],postUpdateForm : Form[_],sendAdminMessageForm : Form[_],
+  statusMessage : String, selections : controllers.management.EditPost.Selections)
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 
-@main("Top page1") {
+@scripts = {
+<script type="text/javascript">
     $(document).ready(function() {
         var mapOptions = {
             center: new google.maps.LatLng(-34.397, 150.644),
@@ -10,58 +12,79 @@
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
-
-
     })
 
+</script>
+}
 
 
-}{
+@main("Top page1",scripts){
 
-<div>
+@if(@statusMessage.length > 0){
+    <div class="alert">@statusMessage</div>
+}
 
-    <div>@statusMessage</div>
+<div class="row-fluid">
 
-    <div class="map_area">
-    <div id="map_canvas" style="width:100%; height:90%;"></div>
-    <div>
-        <span>位置情報</span>
-        <label for="latitude">経度</label><span id="latitude">@post.latitude.get</span>
-        <label for="longitude">緯度</label><span id="longitude">@post.longitude.get</span>
-    </div>
-
-    </div>
-
-    @helper.form(action = management.routes.EditPost.editPost(post.id.get)){
-
-        <div><label for="postId">ID</label><span id="postId">@post.id.get</span></div>
-        <div><label for="customer">問い合わせユーザー</label><span id="customer">@post.postUser.obj.map(_.nickname.is).openOr("No name")</span></div>
-
-        <div><label for="posted"><span id="posted">@post.posted.get</span></label></div>
-        <div><label for="comment">コメント</label><span id="comment">@post.comment.get</span></div>
-
+    <div class="span6">
+    @helper.form(action = management.routes.EditPost.editPost(post.id.get),'class -> "form-horizontal"){
+        @UIParts.labelInForm("postId","ID",post.id.get.toString)
+        @UIParts.labelInForm("customer","問い合わせユーザー",post.postUser.obj.map(_.nickname.is).openOr("No name"))
+        @UIParts.labelInForm("posted","投稿",post.posted.get.toString)
+        @UIParts.labelInForm("comment","コメント",post.comment.get)
 
 
         @helper.select(form("category"),selections.categories)
         @helper.select(form("inCharge"),selections.managers)
 
-       <input type="submit" value="変更" />
+        <div class="control-group">
+            <div class="controls">
+            <input type="submit" value="変更" class="btn"/>
+            </div>
+        </div>
     }
 
+        <hr />
     管理者からのコメント
 
 
-    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get)){
+    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get),'class -> "form-horizontal"){
 
         @helper.textarea(postUpdateForm("comment"))
 
-        <input type="submit" value="管理者からのコメントを送る" />
+        <div class="control-group">
+            <div class="controls">
+            <input type="submit" value="状態を更新"  class="btn"/>
+            </div>
+        </div>
     }
 
-    @helper.form(action = management.routes.EditPost.sendMessage(post.id.get)){
+    <hr />
+    @helper.form(action = management.routes.EditPost.sendMessage(post.id.get),'class -> "form-horizontal"){
+
+        @helper.textarea(sendAdminMessageForm("adminComment"))
+
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" value="管理者からのコメントを送る"  class="btn"/>
+            </div>
+        </div>
+
     }
 
+    </div>
+    <div class="span6 map_area">
+        <div id="map_canvas" style="width:100%; height:90%;"></div>
+        <div class="well well-small">
+            <span>位置情報</span>
+            <span class="badge">経度</span><span id="latitude">@post.latitude.get</span>
+            <span class="badge">緯度</span><span id="longitude">@post.longitude.get</span>
+        </div>
 
+    </div>
+
+    <hr />
+    <div>更新履歴</div>
 
 </div>
 

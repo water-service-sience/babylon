@@ -11,21 +11,21 @@ import play.api.mvc._
  */
 trait ManagerBase extends Controller {
 
-  val CookieUserId = "C_UserID"
+  val SessionUserId = "S_UserID"
 
   def userId(implicit req : Request[_]) = {
-    val userId = req.cookies(CookieUserId)
-    userId.value.toString
+    val userId = req.session.get(SessionUserId)
+    userId.getOrElse("")
   }
 
   def isLogin(implicit req : Request[_]) = {
-    req.cookies.get(CookieUserId).isDefined
+    req.session.get(SessionUserId).isDefined
 
   }
 
   def AdminAuth(func : Request[AnyContent] => Result) : Action[AnyContent] = Action(implicit request => {
     if(!isLogin){
-      Redirect(routes.ManagementLogin.login)
+      Redirect(routes.LoginPage.login)
     }else{
       func(request)
     }

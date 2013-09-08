@@ -1,0 +1,35 @@
+@(errorMessage : String, loginForm : Form[_])
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+
+@main_simple("LoginPage") {
+
+
+
+<div class="well">
+@if(errorMessage.length > 0){
+    <div class="alert alert-error">
+        @errorMessage
+    </div>
+}
+
+    @helper.form(action = management.routes.LoginPage.p_login,'class -> "form-horizontal"){
+
+    @helper.inputText(loginForm("username"))
+    @helper.inputPassword(loginForm("password"))
+
+
+    <div class="control-group">
+        <div class="controls">
+            <input type="submit" value="ログイン" class="btn"/>
+        </div>
+    </div>
+    }
+
+    <a href="@management.routes.RegisterPage.register.url">新規作成</a>
+
+</div>
+
+
+
+
+}
