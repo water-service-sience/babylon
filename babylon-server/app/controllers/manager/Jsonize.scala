@@ -32,7 +32,7 @@ object Jsonize {
       "unreadMessages" -> p.unreadMessages.is,
       "privateMessages" -> privateMessages(p),
       "category" -> {
-        val j : JsValue = p.category.map(category(_)).openOr( Json.obj("id" -> 0,"lable" -> "None"))
+        val j : JsValue = p.category.map(category(_)).openOr( Json.obj("id" -> 0,"label" -> "None"))
         j
       }
     )
