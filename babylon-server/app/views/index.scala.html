@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
     function TopPageController($scope, $http) {
-        $http.get('/management/recent').success(function(data) {
+        $http.get("@management.routes.TopPage.getRecentPosts()").success(function(data) {
         $scope.inquiries = data;
         });
 
