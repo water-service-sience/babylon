@@ -6,13 +6,19 @@
 @scripts = {
 <script type="text/javascript">
     $(document).ready(function() {
+        var latLon = new google.maps.LatLng(@post.latitude.get, @post.longitude.get)
         var mapOptions = {
-            center: new google.maps.LatLng(-34.397, 150.644),
-            zoom: 8,
+            center: latLon,
+            zoom: 14,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
+        var marker = new google.maps.Marker({
+            position: latLon,
+            map: map,
+            title: 'Here!'
+        });
     })
 
 </script>
@@ -87,6 +93,8 @@
             <span class="badge">緯度</span><span id="latitude">@post.latitude.get</span>
             <span class="badge">経度</span><span id="longitude">@post.longitude.get</span>
         </div>
+
+        <img src="@routes.Application.photo(post.image.obj.get.fileKey.is)" style="width:100%;"/>
 
     </div>
 

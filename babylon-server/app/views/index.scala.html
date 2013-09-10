@@ -31,7 +31,7 @@
             <tbody>
 
                 <tr ng-repeat="i in inquiries" >
-                    <td><a href="/management/post/detail/{{i.id}}">{{i.id}} 編集</a></td>
+                    <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0")}{{i.id}}">{{i.id}} 編集</a></td>
                     <td>{{i.user.name}}</td>
                     <td>{{i.inCharge}}</td>
                     <td>{{i.category}}</td>
