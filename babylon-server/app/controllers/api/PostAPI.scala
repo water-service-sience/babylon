@@ -29,7 +29,7 @@ object PostAPI extends MyController{
 
     val p = PostManager.postNew(userId,json)
 
-    Ok(Json.obj("postId" -> p.id.is))
+    Ok(Jsonize.allInfo(p));
 
   })
 
@@ -38,7 +38,7 @@ object PostAPI extends MyController{
     val postId = (json \ "postId").as[Long]
     val post = PostManager.updatePost(userId,postId,json)
 
-    Ok(Json.obj("postId" -> post.id.is))
+    Ok(Jsonize.allInfo(post))
   })
 
 
@@ -50,7 +50,7 @@ object PostAPI extends MyController{
         "postId" -> p.id.is,
         "title" -> p.title.is,
         "comment" -> p.comment.is,
-        "posted" -> p.posted.is
+        "posted" -> p.posted.get
       ).asInstanceOf[JsValueWrapper]
     }) :_* ))
   })
@@ -109,8 +109,10 @@ object PostAPI extends MyController{
   def commentTo(postId : Long) = Authenticated(implicit req => {
 
     val json = req.body.asJson.get
+    val post = PostManager.getPost(postId)
     val comment = (json \ "comment").as[String]
-    Ok(Jsonize.comment(PostManager.commentTo(me.id.get,postId,comment)))
+    val c = PostManager.commentTo(me.id.get,postId,comment)
+    Ok(Jsonize.allInfo(post))
   })
 
   def getCategoryAll = Authenticated(implicit req => {

@@ -125,13 +125,20 @@ object EditPost extends ManagerBase {
     val post = UserPost.findByKey(id).get
     val comment = sendPrivateMessageForm.bindFromRequest.get
 
+
+
     val am = PrivateMessage.create(post,me.id.get,comment)
     am.save()
 
     val pu = PostUpdate.create(post,me)
     pu.actionDetail := Json.stringify(Json.obj("private_message" -> comment))
     pu.actionType := ActionType.SendPrivateMessage
+
     pu.save
+
+    post.unreadMessages := post.unreadMessages.get + 1
+    post.updated := new Date
+    post.save()
 
     logger.debug("Update admin message")
 

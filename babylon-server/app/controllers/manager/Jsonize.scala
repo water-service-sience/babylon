@@ -18,6 +18,7 @@ object Jsonize {
       "id" -> p.id.is,
       "postId" -> p.id.is,
       "userId" -> p.postUser.get,
+      "user" -> user(p.postUser.obj.get),
       "title" -> p.title.is,
       "comment" -> p.comment.is,
       "posted" -> p.posted.is,
@@ -27,8 +28,9 @@ object Jsonize {
       "hasGps" -> p.hasGpsInfo.is,
       "longitude" -> p.longitude.is,
       "latitude" -> p.latitude.is,
-      "unreadUpdates" -> p.unreadUpdates.is,
-      "updates" -> updates(p),
+      "unreadComments" -> p.unreadComments.is,
+      "unreadMessages" -> p.unreadMessages.is,
+      "privateMessages" -> privateMessages(p),
       "category" -> {
         val j : JsValue = p.category.map(category(_)).openOr( Json.obj("id" -> 0,"lable" -> "None"))
         j
@@ -85,6 +87,21 @@ object Jsonize {
     postUpdates.map(postUpdate _)
   }
 
+  def privateMessages( p : UserPost) = {
+    val pms = PrivateMessage.getAllAdminComments(p.id.get)
+    pms.map(privateMessage(_))
+  }
+
+  def privateMessage( am : PrivateMessage) = {
+
+    Json.obj(
+      "privateMessageId" -> am.id.get,
+      "sender" -> user(am.commentUser.obj.get),
+      "message" -> am.comment.get,
+      "sent" -> am.commented.get
+    )
+
+  }
 
   def postUpdate( pu : PostUpdate) = {
     Json.obj(
