@@ -123,5 +123,23 @@ object Jsonize {
     Json.obj("id" -> cat.id.get,"label" -> cat.label.is)
   }
 
+  def land(land : Land) = {
+    Json.obj(
+      "id" -> land.id.get,
+      "name" -> land.name.get,
+      "latitude" -> land.latitude.get,
+      "longitude" -> land.longitude.get
+    )
+
+  }
+
+  def contact( c : Contact) = {
+    Json.obj(
+      "id" -> c.id.get,
+      "contact" -> c.contact.get,
+      "contactType" -> c.contactType.get
+    )
+  }
+
 
 }

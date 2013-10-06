@@ -17,7 +17,9 @@ import play.{api, Logger}
 object Global extends GlobalSettings {
   lazy val vendor = new StandardDBVendor("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/babylon", Full("babylon"), Full("babylon"))
 
-  def models = List(User,UploadedImage,UserPost,Comment,Contact,PostCategory,PostStatus,PostUpdate,PrivateMessage)
+  def models = List(User,UploadedImage,UserPost,Comment,
+    Land,
+    Contact,PostCategory,PostStatus,PostUpdate,PrivateMessage)
 
 
   override def onStart(app: api.Application) {
