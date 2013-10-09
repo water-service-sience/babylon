@@ -1,6 +1,6 @@
 package controllers.management
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{AnyContent, Request, Action, Controller}
 import controllers.manager.PostManager
 import play.api.libs.json.Json
 import play.api.libs.json.Json.JsValueWrapper
@@ -14,9 +14,15 @@ import play.api.libs.json.Json.JsValueWrapper
  */
 object TopPage extends ManagerBase {
 
-  def index = AdminAuth(implicit req => {
+  def getParam(key : String)(implicit req : Request[AnyContent]) = {
+    req.getQueryString(key)
+  }
 
-    Ok(views.html.index("Your new application is ready."))
+  def searchInquiry = AdminAuth(implicit req => {
+
+
+    Ok(views.html.index("Your new application is ready.",
+      PostManager.getRecentInquiries(0,20,"")))
   })
 
   def getRecentPosts(start : Int = 0, count : Int = 20, q : String = "") = AdminAuth(req => {

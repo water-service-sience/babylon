@@ -2,15 +2,12 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import controllers.manager.PhotoManager
+import controllers.manager.{PostManager, PhotoManager}
 import java.util.Date
 import java.text.SimpleDateFormat
 
 object Application extends Controller {
-  
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
-  }
+
 
   def photo(path : String) = Action {
     val photo = PhotoManager.getFileData(path)

@@ -1,41 +1,42 @@
-@(message: String)
+@(message: String,posts : List[UserPost])
 
 @scripts = {
 
-<script type="text/javascript">
-
-    function TopPageController($scope, $http) {
-        $http.get("@management.routes.TopPage.getRecentPosts()").success(function(data) {
-        $scope.inquiries = data;
-        });
-
-        }
-
-        $(document).ready(function(){
-        $("#mytable").tablesorter();
-    });
-</script>
 
 }
 
 @main("Top page1",scripts) {
 
+    <form class="form-search" action="#">
+
+        <div class="control-group">
+            <label class="control-label" for="search_word"></label>
+            <div class="controls">
+                <input type="text" id="search_word" class="search-query">
+                <input type="submit" value="検索" class="btn" />
+            </div>
+        </div>
+
+
+    </form>
+
     <div ng-controller="TopPageController">
 
         <table id="mytable" class="tablesorter table table-hover">
             <thead>
-                <tr><th>ID</th><th>問い合わせ</th><th>担当</th><th>カテゴリ</th><th>ステータス</th></tr>
+                <tr><th>ID</th><th>問い合わせ</th><th>担当</th><th>カテゴリ</th><th>ステータス</th><th>編集</th></tr>
             </thead>
             <tbody>
-
-                <tr ng-repeat="i in inquiries" >
-                    <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0")}{{i.id}}">{{i.id}} 編集</a></td>
-                    <td>{{i.user.name}}</td>
-                    <td>{{i.inCharge}}</td>
-                    <td>{{i.category}}</td>
-                    <td>{{i.postStatus}}</td>
+@for( post <- posts){
+                <tr >
+                    <td>@{post.id.get}</td>
+                    <td>@post.postUser.obj.get.nickname.get</td>
+                    <td>@post.inCharge.obj.map(_.nickname.get).getOrElse("non")</td>
+                    <td>@post.category.obj.get.label</td>
+                    <td>@post.postStatus.obj.get.label</td>
+                    <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0") + post.id.get}">編集</a></td>
                 </tr>
-
+}
             </tbody>
         </table>
 

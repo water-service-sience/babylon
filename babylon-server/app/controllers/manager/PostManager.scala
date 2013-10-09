@@ -121,3 +121,8 @@ object PostManager {
 
 
 }
+
+case class SearchQuery(start : Int ,
+                       count : Int,
+                       query : Option[String]
+                        )
