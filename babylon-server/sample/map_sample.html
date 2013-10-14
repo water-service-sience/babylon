@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html ng-app xmlns="http://www.w3.org/1999/html">
+<meta charset="UTF-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<head>
+    <title>@title</title>
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/main.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap-responsive.min.css">
+    <link rel="stylesheet" media="screen" href="../public/stylesheets/style.css">
+    <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
+    <script src="../public/javascripts/jquery-1.9.0.min.js"type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
+    <script src="../public/javascripts/jquery.metadata.js" type="text/javascript"></script>
+    <script src="../public/javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+    <style>
+        #map-canvas {
+            height: 500px;
+            width : 500px;
+            margin: 0px;
+            padding: 0px
+        }
+        #image {
+            position : absolute;
+            width : 100px;
+            height : 100px;
+            left : 10px;
+            top : 30px;
+        }
+        #image_area {
+            position : relative;
+        }
+
+    </style>
+    <script type="text/javascript">
+        var map = null;
+        function initialize(){
+            var mapOptions = {
+                zoom: 17,
+                center: new google.maps.LatLng(35.715492,139.759569),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+
+            $("#image").hide();
+            addMarkers();
+        };
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function addMarkers(){
+            var myLatlng = new google.maps.LatLng(35.715492,139.759569);
+            var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'Hello World!'
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                $("#image").fadeIn();
+
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+<div class="container-fluid background">
+    <div id="header title">
+        Login
+    </div>
+    <div class="row-fluid">
+        <div class="span3 grid">サイドバー</div>
+        <div class="span9 grid" id="image_area">
+
+
+            <div id="map-canvas">
+
+            </div>
+
+
+
+            <img id="image" src="http://image.blogmura.com/user/44/218478/s_69xp1pxv.gif" />
+
+        </div>
+    </div>
+    <div id="footer">
+        フッター
+    </div>
+</div>
+</body>
+</html>

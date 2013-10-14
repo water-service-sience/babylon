@@ -18,9 +18,60 @@
     background-color:#eeFFFF;
 }
 
+.title2 {
+    background-color:#7ffff4;
+    border-radius:10px;
+    padding-left : 20px;
+}
+
+
+
+.event-site {
+    background-color:#f5f5ff;
+}
+
+.menu {
+    display : inline-block;
+    padding-left : 5px;
+}
+.menu li{
+    background-color : #fdfdfd;
+}
+.menu a {
+    border : 1px solid #e0e0f4;
+}
+
+.site {
+    width : 480px;
+    #border : 1px solid black;
+    #border-radius : 10px;
+    #padding : 10px;
+    display : inline-block;
+    #background-color:white;
+}
+
+.image-monitoring {
+    width : 100%;
+    border : 1px solid gray;
+    border-radius : 3px;
+    padding : 3px;
+}
+
+.label-subtitle {
+    background-color : #4169e1;
+}
 
 .map_area{
     width : 50%;
     height : 500px;
     float : right;
+}
+
+.panel-link{
+    background-color : #faf0e6;
+
+}
+
+.babylon-thumbnail {
+    width : 180px;
 }
