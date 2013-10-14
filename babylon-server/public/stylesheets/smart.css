@@ -13,8 +13,11 @@
   }
 
   .site {
-    width : 300px;
+    width : 100%;
   }
+    .babylon-thumbnail {
+        width : 32%;
+    }
 }
 
 
@@ -34,7 +37,7 @@
   }
 
     .babylon-thumbnail {
-        width : 24%;
+        width : 32%;
     }
 
 }

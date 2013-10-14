@@ -38,7 +38,7 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
     findAll(By(UserPost.postUser,userId),OrderBy(UserPost.posted,Descending))
   }
 
-  def findNear(lon : Double,lat : Double, range : Double) = {
+  def findNear(lon : Double,lat : Double, range : Double) : List[UserPost] = {
 
     findAll(By(UserPost.hasGpsInfo,true),
       By_<(UserPost.longitude,lon + range),
@@ -48,6 +48,21 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
     )
 
   }
+
+  def findNear(categoryIds : List[Long], lon : Double,lat : Double,range : Double , start : Int) = {
+
+    findAll(
+      ByList(UserPost.category,categoryIds),
+      By(UserPost.hasGpsInfo,true),
+      By_<(UserPost.longitude,lon + range),
+      By_>(UserPost.longitude,lon - range),
+      By_<(UserPost.latitude,lat + range),
+      By_>(UserPost.latitude,lat - range),
+      StartAt(start),
+      MaxRows(20)
+    )
+  }
+
 
   def findRecentInquiries(start : Int, count : Int, q : String) = {
     if(q.length > 0){
@@ -60,7 +75,10 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
 
   }
 
+  def findLatest(categoryId : Long, index : Int) = {
 
+    find(By(UserPost.category,categoryId),OrderBy(UserPost.posted,Descending),StartAt(index),MaxRows(1)).headOption
+  }
 }
 class UserPost extends LongKeyedMapper[UserPost] with IdPK{
 

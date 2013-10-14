@@ -23,6 +23,14 @@ object PostCategory extends PostCategory with LongKeyedMetaMapper[PostCategory]{
     PostCategory.findByKey(2).get
   }
 
+  def createNewCategory(label : String) = {
+    val c = createInstance
+    c.label := label
+    c.save()
+
+    c
+  }
+
 }
 class PostCategory extends LongKeyedMapper[PostCategory] with IdPK{
 

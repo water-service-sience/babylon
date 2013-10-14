@@ -32,8 +32,8 @@
                     <td>@{post.id.get}</td>
                     <td>@post.postUser.obj.get.nickname.get</td>
                     <td>@post.inCharge.obj.map(_.nickname.get).getOrElse("non")</td>
-                    <td>@post.category.obj.get.label</td>
-                    <td>@post.postStatus.obj.get.label</td>
+                    <td>@post.category.obj.map(_.label).getOrElse("none")</td>
+                    <td>@post.postStatus.obj.map(_.label).getOrElse("none")</td>
                     <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0") + post.id.get}">編集</a></td>
                 </tr>
 }

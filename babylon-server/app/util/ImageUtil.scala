@@ -14,13 +14,15 @@ import java.awt.image.BufferedImage
  */
 object ImageUtil {
 
-  def resizeTo(bytes : Array[Byte],extension : String, width : Int , height : Int) = {
+  def resizeTo(bytes : Array[Byte],extension : String, width : Int , _height : Int) = {
 
     val image = ImageIO.read(new ByteArrayInputStream(bytes))
-
-    val scaleX = width.toFloat / image.getWidth()
-    val scaleY = height / image.getHeight
-
+    val height = if(_height > 0){
+      _height
+    }else{
+      val scale = width.toFloat / image.getWidth()
+      (_height * scale).toInt
+    }
     val scaled = image.getScaledInstance(width,height,Image.SCALE_FAST)
 
     val buffered = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB)

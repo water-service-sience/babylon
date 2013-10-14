@@ -32,9 +32,14 @@ GET     /management/post/detail/:id controllers.management.EditPost.editPost(id 
 POST    /management/post/update/:id controllers.management.EditPost.updatePostStatus(id : Long)
 POST    /management/post/send_admin_message/:id controllers.management.EditPost.sendPrivateMessage(id : Long)
 
+GET     /management/category/list   controllers.management.EditCategory.list(id : Long ?= 0)
+POST    /management/category/update controllers.management.EditCategory.update
 
+GET     /event/post/near            controllers.PostList.nearPosts(categoryIds : String,longitude : Double,latitude : Double,range : Double ?= 1.0,start : Int ?= 0)
+GET     /event/map                  controllers.PostList.map
 
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /images/*file               controllers.Application.photo(file)
+GET     /thumbs/cat/:categoryId/latest/:index  controllers.Application.latestThumbnail(categoryId : Int,index : Int)

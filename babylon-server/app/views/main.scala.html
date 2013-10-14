@@ -18,22 +18,22 @@
         <script type="text/javascript"
                 src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAOlbgQmpqNMxLAv5QJ-xkLucjdnd7jl5o&sensor=false">
         </script>
+        <script type="text/javascript">
         @scripts
-        <script type="text/javascript"><!--
-        --></script>
+        </script>
     </head>
     <body>
 
     <div class="container-fluid background">
         <div id="header title">
-            <div class="row-fluid">
-                <div class="span3">@title</div>
-                <div class="span8"></div>
-                <div class="span1"><a href="@management.routes.LoginPage.logout">ログアウト</a></div>
+            <div class="row">
+                <div class="col-md-3 col-sm-3">@title</div>
+                <div class="col-md-8 col-sm-8"></div>
+                <div class="col-md-1 col-sm-1"><a href="@management.routes.LoginPage.logout">ログアウト</a></div>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span3 grid">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 grid">
                 <div class="label label-info">メニュー</div>
                 <ul class="unstyled">
                     <li>
@@ -50,12 +50,25 @@
                         </ul>
                     </li>
                     <li>個人設定</li>
-                    <li>プロジェクト設定</li>
+                    <li>
+                        <div class="badge badge-info">プロジェクト設定</div>
+                        <ul>
+                            <li><a href="@management.routes.EditCategory.list(0)">カテゴリ</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <div class="badge badge-info">その他</div>
+                        <ul>
+                            <li><a href="@{routes.Assets.at("invanuma.html")}">印旛沼フェア</a></li>
+                        </ul>
+                    </li>
+
 
                 </ul>
 
             </div>
-            <div class="span9 grid">@content</div>
+            <div class="col-md-9 col-sm-9 grid">@content</div>
         </div>
         <div id="footer">
             水管理サービス

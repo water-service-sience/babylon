@@ -4,16 +4,18 @@
 <html ng-app="" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" media="screen" href="../public/stylesheets/bootstrap-theme.min.css">
-    <link rel="stylesheet" media="screen" href="../public/stylesheets/style.css">
-    <link rel="stylesheet" media="screen" href="../public/stylesheets/main.css">
-    <link rel="stylesheet" media="screen" href="../public/stylesheets/smart.css">
+    <link rel="stylesheet" media="screen" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" href="stylesheets/bootstrap-theme.min.css">
+    <link rel="stylesheet" media="screen" href="stylesheets/style.css">
+    <link rel="stylesheet" media="screen" href="stylesheets/main.css">
+    <link rel="stylesheet" media="screen" href="stylesheets/smart.css">
     <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
-    <script src="../public/javascripts/jquery-1.9.0.min.js"type="text/javascript"></script>
+    <script src="javascripts/jquery-1.9.0.min.js"type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
-    <script src="../public/javascripts/jquery.metadata.js" type="text/javascript"></script>
-    <script src="../public/javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.metadata.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+
+    <title>印旛沼フェア 農業水利サービス</title>
 
     <script type="text/javascript">
 
@@ -25,6 +27,9 @@
         function setTodayImages(){
 
             var today = new Date();
+            if(today.getHours() < 14){
+                today.setDate(today.getDate() - 1);
+            }
             var ts = "" + (today.getYear() + 1900) + (today.getMonth() + 1) + today.getDate();
             $("#image-imbanuma1").attr("src",
         "http://data01.x-ability.jp/FieldRouter/vbox0115/image/image0-webcam0-" + ts + "1215.jpg");
@@ -42,7 +47,7 @@
 
 </head>
 <body class="event-site">
-    <h1 class="title2"><span>水サービス科学</span></h1>
+    <h1 class="title2"><span>農業水利サービス</span></h1>
 
     <div id="field-server" class="element">
 
@@ -62,14 +67,14 @@
                 <span>印旛沼1</span>
             </div>
             <div class="panel-body">
-                <a href="http://x-ability.jp/FieldRouter/vbox0115/">
+                <a href="http://data01.x-ability.jp/FieldRouter/vbox0115/">
                     <img id="image-imbanuma1" class="image image-monitoring" />
                 </a>
 
                 <div class="btn-group btn-group-lg">
                     <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox0115&device=image0&addr=webcam0" class="btn btn-default">カレンダー</a>
-                    <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0115&device=inba1&date=20131010&full=full" class="btn btn-default">モニタリンググラフ</a>
-                    <a href="https://maps.google.com/maps?q=35.7423333333333,140.206" class="btn btn-default">位置</a>
+                    <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0115&device=inba1&date=20131010&full=full" class="btn btn-default">センサーグラフ</a>
+                    <a href="https://maps.google.com/maps?q=35.732,140.217166666667" class="btn btn-default">位置</a>
                 </div>
             </div>
         </div>
@@ -78,13 +83,13 @@
                 <span>印旛沼2</span>
             </div>
             <div class="panel-body">
-                <a href="http://x-ability.jp/FieldRouter/vbox0116/">
+                <a href="http://data01.x-ability.jp/FieldRouter/vbox0116/">
                     <img id="image-imbanuma2" class="image image-monitoring" />
                 </a>
 
                 <div class="btn-group btn-group-lg">
                     <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox0116&device=image0&addr=webcam0" class="btn btn-default">カレンダー</a>
-                    <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0116&device=inba2&date=20131010&full=full" class="btn btn-default">モニタリンググラフ</a>
+                    <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0116&device=inba2&date=20131010&full=full" class="btn btn-default">センサーグラフ</a>
                     <a href="https://maps.google.com/maps?q=35.7423333333333,140.206" class="btn btn-default">位置</a>
                 </div>
             </div>
@@ -100,7 +105,7 @@
 
                 <div class="btn-group btn-group-lg">
                     <a href="http://x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox0094&device=image0&addr=webcam0" class="btn btn-default">カレンダー</a>
-                    <a href="http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0094&device=HandaMet" class="btn btn-default">モニタリンググラフ</a>
+                    <a href="http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbox0094&device=HandaMet" class="btn btn-default">センサーグラフ</a>
                     <a href="https://maps.google.com/maps?q=34.9071666666667,136.8725" class="btn btn-default">位置</a>
                 </div>
             </div>
@@ -125,18 +130,16 @@
             </p>
 
             <div>
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/0" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/1" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/2" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/3" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/4" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/6/latest/5" class="img-thumbnail babylon-thumbnail" />
             </div>
 
             <div class="btn-group btn-group-lg">
-                <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox0116&device=image0&addr=webcam0" class="btn btn-default">地図</a>
+                <a href="../event/map" class="btn btn-default">地図</a>
             </div>
         </div>
     </div>
@@ -158,18 +161,16 @@
                 この会場周辺の田んぼで見つけた生き物たちです。
             </p>
             <div>
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
-                <img src="../public/images/farm1.jpg" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/0" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/1" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/2" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/3" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/4" class="img-thumbnail babylon-thumbnail" />
+                <img src="../thumbs/cat/7/latest/5" class="img-thumbnail babylon-thumbnail" />
             </div>
 
             <div class="btn-group btn-group-lg">
-                <a href="http://data01.x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox0116&device=image0&addr=webcam0" class="btn btn-default">地図</a>
+                <a href="../event/map" class="btn btn-default">地図</a>
             </div>
 
         </div>
@@ -187,7 +188,8 @@
             <div class="panel-body">
                 <div class="list-group">
                     <a class="list-group-item" href="http://inba-numa.com/fair/index.html">印旛沼流域環境体験フェア</a>
-                    <a class="list-group-item" href="http://www.iai.ga.a.u-tokyo.ac.jp/mizo/mizolab.html">溝口研究室</a>
+                    <a class="list-group-item" href="http://www.suiri.en.a.u-tokyo.ac.jp/ss/newhomepage.htm">農業水利サービス</a>
+                    <!-- <a class="list-group-item" href="http://www.iai.ga.a.u-tokyo.ac.jp/mizo/mizolab.html">溝口研究室</a> -->
                     <a class="list-group-item" href="http://www.x-ability.jp/~swampred/index.php?dfw=fns2">フィールドサーバー</a>
                 </div>
             </div>

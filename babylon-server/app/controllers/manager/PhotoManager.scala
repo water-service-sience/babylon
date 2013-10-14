@@ -3,7 +3,7 @@ package controllers.manager
 import play.api.mvc.{AnyContent, Request}
 import controllers.APIException
 import play.api.{Logger, Configuration}
-import util.{EncryptUtil, FileUtil}
+import util.{ImageUtil, EncryptUtil, FileUtil}
 import models.UploadedImage
 
 /**
@@ -24,6 +24,8 @@ object PhotoManager {
         val b = buffer.asBytes(buffer.size.toInt).get
         val filename = "u" + userId + "/" + EncryptUtil.sha1Digest(b)
         FileUtil.saveTo(imageDir + filename,b)
+        val thumb = ImageUtil.resizeTo(b,"JPG",240,-1)
+        FileUtil.saveTo(imageDir + filename + "_s",thumb)
 
         UploadedImage.create(userId,filename)
       }
@@ -34,10 +36,18 @@ object PhotoManager {
 
   }
 
+  def getThumbnailData(fileKey : String) = {
+    val b = FileUtil.readFrom(imageDir + FileUtil.getThumbnailKey(fileKey)) orElse
+      FileUtil.readFrom(imageDir + fileKey)
+
+    b.get
+
+  }
+
   def getFileData(fileKey : String) = {
 
     val b = FileUtil.readFrom(imageDir + fileKey)
-    b
+    b.get
   }
 
 
