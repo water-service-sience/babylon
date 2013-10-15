@@ -45,12 +45,15 @@
 
 @media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2){
 
+    body {
+        font-size : 28px;
+    }
     .title2 {
         text-align : center;
     }
 
     h2 {
-        font-size : 20px;
+        font-size : 40px;
     }
 
 
@@ -60,6 +63,10 @@
 
     .babylon-thumbnail {
         width : 32%;
+    }
+
+    .btn {
+        font-size : 36px;
     }
 
 
