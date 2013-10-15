@@ -43,38 +43,4 @@
 }
 
 
-@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2){
 
-    body {
-        font-size : 46px;
-    }
-    .title2 {
-        text-align : center;
-    }
-
-    h1 {
-        font-size : 72px;
-    }
-    h2 {
-        font-size : 60px;
-    }
-
-
-    .site {
-        width : 100%;
-    }
-
-    .babylon-thumbnail {
-        width : 32%;
-    }
-
-    .btn-group-lg>.btn {
-        font-size : 46px;
-    }
-
-    .lead {
-        font-size : 42px;
-    }
-
-
-}
