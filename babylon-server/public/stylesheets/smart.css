@@ -46,7 +46,7 @@
 @media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2){
 
     body {
-        font-size : 56px;
+        font-size : 46px;
     }
     .title2 {
         text-align : center;
@@ -68,8 +68,8 @@
         width : 32%;
     }
 
-    .btn {
-        font-size : 72px;
+    .btn-group-lg>.btn {
+        font-size : 60px;
     }
 
 
