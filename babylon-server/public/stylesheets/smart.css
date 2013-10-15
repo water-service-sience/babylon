@@ -41,3 +41,26 @@
     }
 
 }
+
+
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2){
+
+    .title2 {
+        text-align : center;
+    }
+
+    h2 {
+        font-size : 20px;
+    }
+
+
+    .site {
+        width : 100%;
+    }
+
+    .babylon-thumbnail {
+        width : 32%;
+    }
+
+
+}
