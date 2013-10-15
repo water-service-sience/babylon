@@ -21,7 +21,7 @@ object ImageUtil {
       _height
     }else{
       val scale = width.toDouble / image.getWidth().toDouble
-      (_height * scale).toInt
+      (image.getHeight * scale).toInt
     }
     val scaled = image.getScaledInstance(width,height,Image.SCALE_FAST)
 
