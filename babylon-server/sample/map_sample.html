@@ -55,7 +55,12 @@
             });
             google.maps.event.addListener(marker, 'click', function() {
                 $("#balloon").show();
+                console.log("iefeiklak");
             });
+        }
+
+        function onCloseWindow(){
+            $("#balloon").hide();
         }
 
         $(function(){
@@ -64,14 +69,34 @@
     </script>
 </head>
     <body>
+
         <div id="map-canvas">
 
         </div>
 
-        <div id="balloon">
-          HogeHoge
-        </div>
+        <div id="balloon" class="panel panel-success">
+            <div class="panel-heading">
+                <span>Title</span>
+                <div class="pull-right">
+                    <span class="glyphicon glyphicon-remove-circle" onclick="onCloseWindow()" ></span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-1 col-sm-1 col-md-1">
 
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10">
+                        <img id="thumb" src="../public/images/no_image.jpg" />
+
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-md-1">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </body>
 </html>

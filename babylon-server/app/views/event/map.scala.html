@@ -27,30 +27,32 @@
         <script type="text/javascript">
             var map = null;
             function initialize(){
-            var mapOptions = {
-            zoom: 17,
-            center: new google.maps.LatLng(35.715492,139.759569),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
+                var mapOptions = {
+                    zoom: 17,
+                    center: new google.maps.LatLng(35.715492,139.759569),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
 
 
-            $("#balloon").hide();
-            addMarkers();
-            };
+                $("#balloon").hide();
+                     addMarkers();
+            }
+
             google.maps.event.addDomListener(window, 'load', initialize);
 
             function addMarkers(){
-            var myLatlng = new google.maps.LatLng(35.715492,139.759569);
-            var marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            title: 'Hello World!'
-            });
-            google.maps.event.addListener(marker, 'click', function() {
-            $("#balloon").show();
-            });
+                var myLatlng = new google.maps.LatLng(35.715492,139.759569);
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: 'Hello World!'
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                    $("#balloon").show();
+                    console.log("Show balloon");
+                });
             }
 
             $(function(){
@@ -73,7 +75,7 @@
 
 
     <div id="balloon">
-        HogeHoge      fewaf
+        <img src="../assets/images/no_image.jpg" />
     </div>
 
 
