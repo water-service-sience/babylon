@@ -51,6 +51,7 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
 
   def findNear(categoryIds : List[Long], lon : Double,lat : Double,range : Double , start : Int) = {
 
+    println("Get " + categoryIds)
     findAll(
       ByList(UserPost.category,categoryIds),
       By(UserPost.hasGpsInfo,true),

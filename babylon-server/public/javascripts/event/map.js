@@ -139,6 +139,7 @@ $(function(){
     $("#balloon").hide();
 
     var v = getUrlVars();
-    category = v["category"] | 1;
+    category = v["category"];
+    if(category == null) category = 1;
 
 });
