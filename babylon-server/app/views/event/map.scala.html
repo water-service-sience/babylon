@@ -9,6 +9,7 @@
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/bootstrap-theme.min.css">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/style.css">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/main.css">
+        <link rel="stylesheet" media="screen" href="../assets/stylesheets/map.css">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/smart.css">
         <link rel="shortcut icon" type="image/png" href="../../images/favicon.png">
         <script src="../assets/javascripts/jquery-1.9.0.min.js"type="text/javascript"></script>
@@ -16,68 +17,43 @@
         <script src="../assets/javascripts/jquery.metadata.js" type="text/javascript"></script>
         <script src="../assets/javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
 
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+        <script src="../assets/javascripts/event/map.js" type="text/javascript"></script>
+
         <title>印旛沼フェア 農業水利サービス</title>
 
-        <script type="text/javascript">
-
-
-        </script>
-
-        <script type="text/javascript">
-            var map = null;
-            function initialize(){
-                var mapOptions = {
-                    zoom: 17,
-                    center: new google.maps.LatLng(35.715492,139.759569),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-
-
-                $("#balloon").hide();
-                     addMarkers();
-            }
-
-            google.maps.event.addDomListener(window, 'load', initialize);
-
-            function addMarkers(){
-                var myLatlng = new google.maps.LatLng(35.715492,139.759569);
-                var marker = new google.maps.Marker({
-                    position: myLatlng,
-                    map: map,
-                    title: 'Hello World!'
-                });
-                google.maps.event.addListener(marker, 'click', function() {
-                    $("#balloon").show();
-                    console.log("Show balloon");
-                });
-            }
-
-            $(function(){
-            });
-
-        </script>
     </head>
     <body>
 
-    <div class="row">
+    <div class="mapContainer">
+        <div id="map-canvas">
 
-        <div class="col-md-12 col-sm-12">
-
-            <div id="map-canvas">
-
-            </div>
         </div>
 
+
+        <div id="balloon" class="panel panel-success">
+            <div class="panel-heading">
+                <span id="image-title">Title</span>
+                <div class="pull-right">
+                    <span class="glyphicon glyphicon-remove-circle" onclick="onCloseWindow()" ></span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-1 col-sm-1 col-md-1">
+
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10">
+                        <img id="thumb"  />
+
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-md-1">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-
-
-    <div id="balloon">
-        <img src="../assets/images/no_image.jpg" />
-    </div>
-
-
     </body>
 </html>
