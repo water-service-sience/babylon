@@ -5,6 +5,7 @@
 <html ng-app="" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/bootstrap.min.css">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/bootstrap-theme.min.css">
         <link rel="stylesheet" media="screen" href="../assets/stylesheets/style.css">
@@ -33,9 +34,18 @@
 
         <div id="balloon" class="panel panel-success">
             <div class="panel-heading">
-                <span id="image-title">Title</span>
-                <div class="pull-right">
-                    <span class="glyphicon glyphicon-remove-circle" onclick="onCloseWindow()" ></span>
+
+                <div class="row">
+                    <div class="col-xs-8 col-sm-10 col-md-10">
+                        <h2 id="image-title">Title</h2>
+
+                    </div>
+                    <div class="col-xs-4 col-sm-2 col-md-2">
+                        <button type="button" class="btn btn-default btn-lg" onclick="onCloseWindow()">
+                            <span id="close-icon" class="glyphicon glyphicon-remove-circle"  ></span>Close
+                        </button>
+
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
