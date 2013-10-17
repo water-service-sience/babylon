@@ -59,7 +59,7 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
       By_<(UserPost.latitude,lat + range),
       By_>(UserPost.latitude,lat - range),
       StartAt(start),
-      MaxRows(20)
+      MaxRows(30)
     )
   }
 

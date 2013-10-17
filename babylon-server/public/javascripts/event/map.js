@@ -94,7 +94,7 @@ var category = 1;
 
 function forceGetPostsAt(lat,lon,range){
 
-    console.log("Begin to get");
+    console.log("Get at (" + lat + ":" + lon + ") range "+ range);
     lastLat = lat;
     lastLon = lon;
 
