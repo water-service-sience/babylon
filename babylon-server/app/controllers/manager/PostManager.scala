@@ -7,7 +7,9 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import net.liftweb.http.js.JE.JsFalse
 import java.util.Calendar
-import net.liftweb.mapper.{By_<=, By_>=, By}
+import net.liftweb.mapper._
+import play.api.libs.json.JsSuccess
+import scala.Some
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +29,16 @@ object PostManager {
 
     val imageId = (json \ "imageId").as[Long]
     val goodness = (json \ "goodness").as[Int]
+
     val post = UserPost.create(userId,imageId,goodness)
+
+    (json \ "comment").asOpt[String].foreach( comment => {
+      post.comment := comment
+    })
+    (json \ "category").asOpt[Int].foreach(category => {
+      post.category := category
+    })
+    post.save()
 
     readLonLat.reads(json) match{
       case JsSuccess( (lon,lat) ,_ ) => {
@@ -105,13 +116,17 @@ object PostManager {
     val end = Calendar.getInstance()
     end.set(year,month + 1,1)
 
-    UserPost.findAll(By(UserPost.postUser,userId), By_>=(UserPost.posted,start.getTime),By_<=(UserPost.posted,end.getTime))
+    UserPost.findAll(By(UserPost.postUser,userId),
+      By_>=(UserPost.posted,start.getTime),
+      By_<=(UserPost.posted,end.getTime),
+      OrderBy(UserPost.posted,Descending))
 
 
   }
 
   def getAllOwnPosts(userId : Long) = {
-    UserPost.findAll(By(UserPost.postUser,userId))
+    UserPost.findAll(By(UserPost.postUser,userId),
+      OrderBy(UserPost.posted,Descending))
   }
 
   def getPost(postId : Long) : UserPost = {
