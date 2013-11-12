@@ -40,7 +40,7 @@ object LoginPage extends ManagerBase {
       }else if(user.get.password.get != password){
         Ok(views.html.login("User not found or wrong password..",form))
       }else{
-        Redirect(routes.TopPage.searchInquiry).withSession(SessionUserId -> user.get.id.get.toString)
+        Redirect(routes.TopPage.topPage).withSession(SessionUserId -> user.get.id.get.toString)
       }
     }else{
 

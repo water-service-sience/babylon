@@ -2,6 +2,7 @@
 
 .background{
     background-color:#99FFFF;
+    padding : 0% 2% 0% 2%;
 }
 .border {
     background-color:#00BFBF;
@@ -95,6 +96,12 @@
 
 #balloon #thumb {
     width : 100%;
+}
+
+.round-panel {
+    border : 1px solid gray;
+    border-radius : 5px;
+    padding : 2px;
 }
 
 

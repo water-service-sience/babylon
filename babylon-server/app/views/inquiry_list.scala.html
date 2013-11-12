@@ -1,0 +1,74 @@
+@(message: String,posts : List[UserPost])
+
+@scripts = {
+
+
+}
+
+@main("InquiryList",scripts) {
+
+    <form class="form-horizontal">
+        <div class="control-group">
+            <div class="controls row">
+                <div class="col-sm-6">
+                    <input type="text" id="search_word" class="form-control search-query">
+                </div>
+                <div class="col-sm-6">
+                    <input type="submit" value="検索" class="btn btn-success" />
+                    <a data-toggle="collapse" data-parent="#accordion" href="#detail_search">詳細検索</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="detail_search" class="collapse">
+            <div class="control-group">
+                <label class="control-label" for="category">カテゴリー</label>
+                <select id="category" name="category" multiple class="form-control" size="4">
+                    <option>問い合わせ</option>
+                    <option>作業記録</option>
+                    <option>あああ</option>
+                    <option>e</option>
+                    <option>f</option>
+                    <option>g</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="in_charge">担当</label>
+                <select id="in_charge" name="in_charge">
+                    <option>選択なし</option>
+                    <option>自分</option>
+                    <option>山田太郎</option>
+                </select>
+            </div>
+            <div>
+                <input type="date" name="begin" />
+            </div>
+        </div>
+
+
+    </form>
+
+    <div ng-controller="TopPageController">
+
+        <table id="mytable" class="tablesorter table table-hover">
+            <thead>
+                <tr><th>ID</th><th>問い合わせ</th><th>担当</th><th>カテゴリ</th><th>ステータス</th><th>編集</th></tr>
+            </thead>
+            <tbody>
+@for( post <- posts){
+                <tr >
+                    <td>@{post.id.get}</td>
+                    <td>@post.postUser.obj.get.nickname.get</td>
+                    <td>@post.inCharge.obj.map(_.nickname.get).getOrElse("non")</td>
+                    <td>@post.category.obj.map(_.label).getOrElse("none")</td>
+                    <td>@post.postStatus.obj.map(_.label).getOrElse("none")</td>
+                    <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0") + post.id.get}">編集</a></td>
+                </tr>
+}
+            </tbody>
+        </table>
+
+
+    </div>
+
+}

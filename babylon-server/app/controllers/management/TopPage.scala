@@ -14,14 +14,17 @@ import play.api.libs.json.Json.JsValueWrapper
  */
 object TopPage extends ManagerBase {
 
+  def topPage = AdminAuth(implicit req => {
+    Ok(views.html.index())
+  })
+
   def getParam(key : String)(implicit req : Request[AnyContent]) = {
     req.getQueryString(key)
   }
 
   def searchInquiry = AdminAuth(implicit req => {
 
-
-    Ok(views.html.index("Your new application is ready.",
+    Ok(views.html.inquiry_list("Your new application is ready.",
       PostManager.getRecentInquiries(0,20,"")))
   })
 

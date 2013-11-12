@@ -49,14 +49,16 @@ object EditPost extends ManagerBase {
       PostStatus.findAll().map(ps => ps.id.is.toString -> ps.label.get)
     )
 
+    val privateMessages = PrivateMessage.getAllAdminComments(post.id.get)
+
     val message = req.session.get("message").getOrElse("")
+    val selectedTab = req.session.get("selectedTab").getOrElse("info")
 
-
-    Ok(views.html.post_detail(post,histories,
-      form,postUpdateForm,sendPrivateMessageForm,message,selections)).
-      withSession(req.session - "message")
-
-
+    Ok(views.html.post_detail(post,histories,privateMessages,
+      form,postUpdateForm,sendPrivateMessageForm,message,
+      selectedTab,
+      selections)).
+      withSession(req.session - "message" - "selectedTab")
   })
 
   def updatePostStatus(id : Long) = AdminAuth(implicit req => {
@@ -112,9 +114,13 @@ object EditPost extends ManagerBase {
       post.save()
 
       logger.debug("Update post status")
-      Redirect(routes.EditPost.editPost(id)).withSession(session + ("message" -> "Update post status") )
+      Redirect(routes.EditPost.editPost(id)).withSession(session +
+        ("message" -> "Update post status") +
+        ("selectedTab" -> "info"))
     }else{
-      Redirect(routes.EditPost.editPost(id)).withSession(session + ("message" -> "No updates") )
+      Redirect(routes.EditPost.editPost(id)).withSession(session +
+        ("message" -> "No updates") +
+        ("selectedTab" -> "info"))
     }
 
 
@@ -125,25 +131,33 @@ object EditPost extends ManagerBase {
     val post = UserPost.findByKey(id).get
     val comment = sendPrivateMessageForm.bindFromRequest.get
 
+    if(comment == null || comment.length == 0){
+      Redirect(routes.EditPost.editPost(id)).withSession(
+        req.session +
+          ("message" -> "Please input comment") +
+          ("selectedTab" -> "message"))
+    }else{
 
+      val am = PrivateMessage.create(post,me.id.get,comment)
+      am.save()
 
-    val am = PrivateMessage.create(post,me.id.get,comment)
-    am.save()
+      val pu = PostUpdate.create(post,me)
+      pu.actionDetail := Json.stringify(Json.obj("private_message" -> comment))
+      pu.actionType := ActionType.SendPrivateMessage
 
-    val pu = PostUpdate.create(post,me)
-    pu.actionDetail := Json.stringify(Json.obj("private_message" -> comment))
-    pu.actionType := ActionType.SendPrivateMessage
+      pu.save
 
-    pu.save
+      post.unreadMessages := post.unreadMessages.get + 1
+      post.updated := new Date
+      post.save()
 
-    post.unreadMessages := post.unreadMessages.get + 1
-    post.updated := new Date
-    post.save()
+      logger.debug("Update admin message")
 
-    logger.debug("Update admin message")
-
-    Redirect(routes.EditPost.editPost(id)).withSession( req.session + ("message" -> "Send private message"))
-
+      Redirect(routes.EditPost.editPost(id)).withSession(
+        req.session +
+          ("message" -> "Send private message") +
+          ("selectedTab" -> "message"))
+    }
   })
 
   def getUpdateHistories(post : UserPost) = {

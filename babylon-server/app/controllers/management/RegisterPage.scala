@@ -52,7 +52,7 @@ object RegisterPage extends ManagerBase {
           u.admin := isAdmin
           u.save()
 
-          Redirect(routes.TopPage.searchInquiry).withSession(SessionUserId -> u.id.get.toString)
+          Redirect(routes.TopPage.topPage).withSession(SessionUserId -> u.id.get.toString)
         }
       }
     }else{

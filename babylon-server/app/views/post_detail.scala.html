@@ -1,12 +1,16 @@
-@(post : UserPost,histories : List[controllers.management.EditPost.UpdateHistory],
+@(post : UserPost,
+  histories : List[controllers.management.EditPost.UpdateHistory],
+  messages : List[PrivateMessage],
   form : Form[_],postUpdateForm : Form[_],sendPrivateMessageForm : Form[_],
-  statusMessage : String, selections : controllers.management.EditPost.Selections)
+  statusMessage : String,
+  selectedTab : String,
+  selections : controllers.management.EditPost.Selections)
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 
 @scripts = {
-<script type="text/javascript">
     $(document).ready(function() {
-        var latLon = new google.maps.LatLng(@post.latitude.get, @post.longitude.get)
+
+        var latLon = new google.maps.LatLng(@post.latitude.get, @post.longitude.get);
         var mapOptions = {
             center: latLon,
             zoom: 14,
@@ -19,86 +23,136 @@
             map: map,
             title: 'Here!'
         });
+
+        $('#post_tab a[href="#@selectedTab"]').tab('show')
+
     })
 
-</script>
 }
 
 
 @main("Top page1",scripts){
 
 @if(statusMessage.length > 0){
-    <div class="alert">@statusMessage</div>
+    <div class="alert alert-success">@statusMessage</div>
 }
+<ul class="nav nav-tabs" id="post_tab">
+    <li class="active"><a href="#info" data-toggle="tab">情報</a></li>
+    <li><a href="#message" data-toggle="tab">メッセージ</a></li>
+    <li><a href="#map" data-toggle="tab">地図</a></li>
+    <li><a href="#photo" data-toggle="tab">写真</a></li>
+    <li><a href="#update_history" data-toggle="tab">更新履歴</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="info">
 
-<div class="row">
-
-    <div class="col-md-6 col-sm-6">
-    @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get),'class -> "form-horizontal"){
+        @helper.form(action = management.routes.EditPost.updatePostStatus(post.id.get),'class -> "form-horizontal"){
         @UIParts.labelInForm("postId","ID",post.id.get.toString)
         @UIParts.labelInForm("customer","問い合わせユーザー",post.postUser.obj.map(_.nickname.is).openOr("No name"))
         @UIParts.labelInForm("posted","投稿",post.posted.get.toString)
         @UIParts.labelInForm("comment","コメント",post.comment.get)
+        @helper.select(form("category"),selections.categories,'class -> "form-control")
+        @helper.select(form("inCharge"),selections.managers,'class -> "form-control")
+        @helper.select(form("postStatus"),selections.postStatuses,'class -> "form-control")
 
+        @helper.textarea(postUpdateForm("comment"),'class -> "form-control")
 
-        @helper.select(form("category"),selections.categories)
-        @helper.select(form("inCharge"),selections.managers)
-        @helper.select(form("postStatus"),selections.postStatuses)
-
-        @helper.textarea(postUpdateForm("comment"))
-
-        <div class="control-group">
-            <div class="controls">
-            <input type="submit" value="更新"  class="btn"/>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="更新"  class="btn btn-success"/>
             </div>
         </div>
-    }
-    <hr />
-    <div>更新履歴</div>
+        }
+    </div>
+    <div class="tab-pane" id="message">
 
-        @for(h <- histories){
-            <div class="well">
-                <div class="badge">更新者</div><span>@h.editor.nickname.is</span>
-                <div>@h.comment</div>
-                <div>@h.action</div>
+        @helper.form(action = management.routes.EditPost.sendPrivateMessage(post.id.get),'class -> "form-horizontal"){
+
+        @helper.textarea(sendPrivateMessageForm("adminComment"),'class -> "form-control")
+
+        <div class="control-group row">
+            <div class="controls col-sm-offset-2 col-sm-10">
+                <input type="submit" value="管理者からのコメントを送る"  class="btn btn-success"/>
             </div>
+        </div>
         }
 
+        <div class="row">
 
-    <div>
+        <div class="list-group col-sm-offset-2 col-sm-10">
+        @for(m <- messages){
+            <div class="list-item round-panel">
+                <div>
+                    <strong>@m.commentUser.obj.map(_.nickname.get).getOrElse("????")</strong>
+                    <span class="pull-right">@m.commented.get</span>
+                </div>
+                <div>
+                    @m.comment.get
+                </div>
 
-    <hr />
-        管理者からのコメント
-    @helper.form(action = management.routes.EditPost.sendPrivateMessage(post.id.get),'class -> "form-horizontal"){
-
-        @helper.textarea(sendPrivateMessageForm("adminComment"))
-
-        <div class="control-group">
-            <div class="controls">
-                <input type="submit" value="管理者からのコメントを送る"  class="btn"/>
             </div>
+        }
         </div>
-
-    }
-
-
+        </div>
     </div>
 
+    <div class="tab-pane" id="map">
 
-    </div>
-    <div class="col-md-6 col-sm-6 map_area">
-        <div id="map_canvas" style="width:100%; height:90%;"></div>
+        <div id="map_canvas" style="width:80%; height:400px;"></div>
         <div class="well well-small">
             <span>位置情報</span>
             <span class="badge">緯度</span><span id="latitude">@post.latitude.get</span>
             <span class="badge">経度</span><span id="longitude">@post.longitude.get</span>
         </div>
+    </div>
+    <div class="tab-pane" id="photo">
 
         <img src="@routes.Application.photo(post.image.obj.get.fileKey.is)" style="width:100%;"/>
+
+    </div>
+    <div class="tab-pane" id="update_history">
+
+        <div class="panel panel-success">
+            <div class="panel-body">
+                <div class="list-group">
+
+                    @for(h <- histories){
+                    <div class="list-item round-panel">
+                        <div class="row">
+                            <div class="col-sm-2">更新者</div>
+                            <div class="col-sm-10">@h.editor.nickname.is</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">更新日時</div>
+                            <div class="col-sm-10">@h.updated</div>
+                        </div>
+                        @if(h.comment.length > 0){
+                        <div class="row">
+                            <div class="col-sm-2">コメント</div>
+
+                            <div class="col-sm-10">@h.comment</div>
+                        </div>
+                        }
+                        <div class="row">
+                            <div class="col-sm-offset-2 col-sm-10">@h.action</div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
 
     </div>
 
 
 </div>
+
+
 
 }
