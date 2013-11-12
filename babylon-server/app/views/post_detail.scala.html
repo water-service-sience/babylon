@@ -8,20 +8,25 @@
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 
 @scripts = {
+    var map = null;
     $(document).ready(function() {
-
-        var latLon = new google.maps.LatLng(@post.latitude.get, @post.longitude.get);
-        var mapOptions = {
-            center: latLon,
-            zoom: 14,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-        mapOptions);
-        var marker = new google.maps.Marker({
-            position: latLon,
-            map: map,
-            title: 'Here!'
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            if(map == null && ("" + e.target.href).indexOf("#map") > 0){
+                console.log("Load map");
+                var latLon = new google.maps.LatLng(@post.latitude.get, @post.longitude.get);
+                var mapOptions = {
+                    center: latLon,
+                    zoom: 14,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("map_canvas"),
+                mapOptions);
+                var marker = new google.maps.Marker({
+                    position: latLon,
+                    map: map,
+                    title: 'Here!'
+                });
+            }
         });
 
         $('#post_tab a[href="#@selectedTab"]').tab('show')
@@ -89,16 +94,15 @@
                 <div>
                     @m.comment.get
                 </div>
-
             </div>
         }
         </div>
         </div>
     </div>
 
-    <div class="tab-pane" id="map">
+    <div class="tab-pane" id="map" >
 
-        <div id="map_canvas" style="width:80%; height:400px;"></div>
+        <div id="map_canvas" style="width:80%; height:400px;left:0px;"></div>
         <div class="well well-small">
             <span>位置情報</span>
             <span class="badge">緯度</span><span id="latitude">@post.latitude.get</span>
@@ -115,7 +119,6 @@
         <div class="panel panel-success">
             <div class="panel-body">
                 <div class="list-group">
-
                     @for(h <- histories){
                     <div class="list-item round-panel">
                         <div class="row">
