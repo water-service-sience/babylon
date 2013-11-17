@@ -1,0 +1,21 @@
+@(user : User,posts : List[UserPost])
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@scripts = {
+
+
+}
+
+@main("UserMenu",scripts) {
+
+
+    <span>ID</span>@user.id.get
+
+    <ul>
+        @for(p <- posts){
+            <li>@p.id.get @p.comment.get</li>
+        }
+    </ul>
+
+
+}

@@ -1,0 +1,35 @@
+@(query : String,users : List[User])
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@scripts = {
+
+
+}
+
+@main("SearchUser",scripts) {
+
+
+
+    @helper.form(action = management.routes.UserPage.searchUser(""), 'class -> "form-horizontal"){
+
+        <input type="text" name="q" value="@query" />
+        <input type="submit" value="検索" class="btn btn-success" />
+
+    }
+
+
+    <table class="table table-bordered table-striped">
+        <thead>
+          <tr><th>ID</th><th>ニックネーム</th><th>メニュー</th></tr>
+        </thead>
+        <tbody>
+        @for(u <- users){
+          <tr><td>@u.id.get</td><td>@u.nickname.get</td><td><a href="@management.routes.UserPage.userMenu(u.id.get)">メニュー</a></td></tr>
+        }
+        </tbody>
+
+
+    </table>
+
+
+}

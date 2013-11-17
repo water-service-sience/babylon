@@ -1,0 +1,23 @@
+@(errorMessage : String, addPostForm : Form[_])
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@scripts = {
+
+
+}
+
+@main("AddInquiry",scripts) {
+
+    <div>@errorMessage</div>
+
+    @helper.form(action = management.routes.EditPost._addPost, 'class -> "form-horizontal"){
+
+        @helper.inputText(addPostForm("postUserId"))
+        @helper.inputText(addPostForm("category"))
+        @helper.textarea(addPostForm("comment"))
+
+        @UIParts.submitButton("登録")
+    }
+
+
+}

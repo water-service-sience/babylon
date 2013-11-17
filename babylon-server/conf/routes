@@ -31,7 +31,12 @@ POST    /management/post/detail/:id controllers.management.EditPost.editPost(id 
 GET     /management/post/detail/:id controllers.management.EditPost.editPost(id : Long)
 POST    /management/post/update/:id controllers.management.EditPost.updatePostStatus(id : Long)
 POST    /management/post/send_admin_message/:id controllers.management.EditPost.sendPrivateMessage(id : Long)
+GET     /management/inquiry/add     controllers.management.EditPost.addPost(message ?= "")
+POST    /management/inquiry/add     controllers.management.EditPost._addPost()
 GET     /management/inquiry/list    controllers.management.TopPage.searchInquiry
+GET     /management/user/search     controllers.management.UserPage.searchUser(q ?= "")
+GET     /management/user/:userId    controllers.management.UserPage.userMenu(userId : Long)
+
 
 GET     /management/category/list   controllers.management.EditCategory.list(id : Long ?= 0)
 POST    /management/category/update controllers.management.EditCategory.update

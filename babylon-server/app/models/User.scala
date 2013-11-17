@@ -45,6 +45,9 @@ object User extends User with LongKeyedMetaMapper[User]{
     User.find(By(User.username,username))
   }
 
+  def searchUser(query : String) = {
+    User.findAll(Like(User.username,"%" + query + "%"))
+  }
 
 
 }

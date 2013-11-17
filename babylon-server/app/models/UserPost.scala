@@ -34,9 +34,16 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
     }
   }
 
-  def findUserPosts(userId : Long) = {
+  def findUserPosts(userId : Long) : List[UserPost] = {
     findAll(By(UserPost.postUser,userId),
       OrderBy(UserPost.posted,Descending))
+  }
+  def findUserPosts(userId : Long, start : Int , count : Int) = {
+    findAll(By(UserPost.postUser,userId),
+      MaxRows(count),
+      StartAt(start),
+      OrderBy(UserPost.posted,Descending)
+    )
   }
 
   def findNear(lon : Double,lat : Double, range : Double) : List[UserPost] = {

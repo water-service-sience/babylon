@@ -19,7 +19,13 @@ import play.api.libs.json.{JsValue, Json}
  */
 object EditPost extends ManagerBase {
 
-
+  def addPostForm = Form(
+    tuple(
+      "postUserId" -> number,
+      "comment" -> text,
+      "category" -> number
+    )
+  )
 
   def sendPrivateMessageForm = Form(
       "adminComment" -> text
@@ -33,6 +39,26 @@ object EditPost extends ManagerBase {
       "postStatus" -> number
     )
   )
+
+  def addPost(message : String = "") = AdminAuth(implicit req => {
+    val form = addPostForm.bind(Map.empty[String,String])
+
+    Ok(views.html.inquiry.add_inquiry(message,form))
+  })
+
+  def _addPost() = AdminAuth(implicit req => {
+
+    val (userId,comment,category) = addPostForm.bindFromRequest().get
+
+    val post = UserPost.create(userId,0,50)
+    post.category := category
+    post.comment := comment
+    post.save()
+
+    Redirect(routes.EditPost.addPost("Success to save"))
+
+
+  })
 
   def editPost(id : Long) = AdminAuth(implicit req => {
     val post = UserPost.findByKey(id).get
