@@ -11,7 +11,6 @@ import net.liftweb.mapper._
 
 object Contact extends Contact with LongKeyedMetaMapper[Contact]{
 
-
   def findAllFor(user : User) = {
     findAll(By(Contact.user,user.id.get))
   }
@@ -32,6 +31,19 @@ object Contact extends Contact with LongKeyedMetaMapper[Contact]{
     })
 
     generated
+  }
+
+  def createContact(userId : Long, contactType:Int,contact:  String) = {
+
+    val co = Contact.createInstance
+    co.user := userId
+    co.contactType := contactType.toString
+    co.contact := contact
+    co.save()
+
+    co
+
+
   }
 
 }

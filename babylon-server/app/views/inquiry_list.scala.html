@@ -50,23 +50,8 @@
 
     <div ng-controller="TopPageController">
 
-        <table id="mytable" class="tablesorter table table-hover">
-            <thead>
-                <tr><th>ID</th><th>問い合わせ</th><th>担当</th><th>カテゴリ</th><th>ステータス</th><th>編集</th></tr>
-            </thead>
-            <tbody>
-@for( post <- posts){
-                <tr >
-                    <td>@{post.id.get}</td>
-                    <td>@post.postUser.obj.get.nickname.get</td>
-                    <td>@post.inCharge.obj.map(_.nickname.get).getOrElse("non")</td>
-                    <td>@post.category.obj.map(_.label).getOrElse("none")</td>
-                    <td>@post.postStatus.obj.map(_.label).getOrElse("none")</td>
-                    <td><a href="@{management.routes.EditPost.editPost(0).url.stripSuffix("0") + post.id.get}">編集</a></td>
-                </tr>
-}
-            </tbody>
-        </table>
+        @views.html.ui.inquiry_table("mytable",posts,Some("top"))
+
 
 
     </div>

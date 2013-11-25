@@ -1,5 +1,7 @@
 package controllers
 
+import models.UserPost
+
 /**
  * Created with IntelliJ IDEA.
  * User: takezoux2
@@ -16,5 +18,6 @@ object UIParts {
   def submitButton(label : String) = {
     views.html.ui.submit_button(label)
   }
+
 
 }

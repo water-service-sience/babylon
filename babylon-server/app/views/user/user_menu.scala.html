@@ -1,4 +1,10 @@
-@(user : User,posts : List[UserPost])
+@(user : User,posts : List[UserPost],
+  contacts : List[Contact],
+  addContact : Form[_],
+  contactTypes : List[(String,String)]
+
+)
+
 
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 @scripts = {
@@ -9,13 +15,53 @@
 @main("UserMenu",scripts) {
 
 
-    <span>ID</span>@user.id.get
+    <div class="row">
 
-    <ul>
-        @for(p <- posts){
-            <li>@p.id.get @p.comment.get</li>
+        <div class="col-sm-2">
+            ID
+        </div>
+        <div class="col-sm-10">
+            @user.id.get
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-2">
+            ニックネーム
+        </div>
+        <div class="col-sm-10">
+            @user.nickname.get
+        </div>
+    </div>
+
+    <h3>連絡先</h3>
+
+    <div class="list-group">
+        @for(contact <- contacts){
+        <div class="list-item row">
+
+            <div class="col-sm-3">@contact.contactType</div>
+            <div class="col-sm-6">@contact.contact.get</div>
+            <div class="col-sm-3">編集</div>
+        </div>
         }
-    </ul>
+    </div>
+
+    @helper.form(action = management.routes.UserPage.addContact(user.id.get), 'class -> "form-inline"){
+        @helper.select(addContact("contactType"),contactTypes,'class -> "form-control")
+        @helper.inputText(addContact("contact"))
+
+        <input type="submit" class="btn btn-success" value="追加"/>
+
+    }
+
+
+    <h3>過去の問い合わせ</h3>
+
+    @views.html.ui.inquiry_table("postTable",posts)
+
 
 
 }
