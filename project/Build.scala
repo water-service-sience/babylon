@@ -10,7 +10,8 @@ object ApplicationBuild extends Build {
   val libraryDeps = Seq(
     // Add your project dependencies here,
     "net.liftweb" %% "lift-mapper" % "2.5",
-    "mysql" % "mysql-connector-java" % "5.1.23"
+    "mysql" % "mysql-connector-java" % "5.1.23",
+    "org.json4s" %% "json4s-native" % "3.2.6"
   )
 
   val appDependencies = Seq(

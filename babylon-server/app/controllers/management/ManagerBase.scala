@@ -3,6 +3,7 @@ package controllers.management
 import play.api.mvc._
 import play.api.Logger
 import jp.utokyo.babylon.db.User
+import org.json4s.JValue
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +32,13 @@ trait ManagerBase extends Controller {
     User.findByKey(userId.toLong).get
   }
 
+  implicit def jValueToResult(v : JValue) : Result = {
+    Ok(
+      org.json4s.native.JsonMethods.pretty(
+        org.json4s.native.JsonMethods.render(v)
+      )
+    )
+  }
 
   def AdminAuth(func : Request[AnyContent] => Result) : Action[AnyContent] = Action(implicit request => {
     if(!isLogin){

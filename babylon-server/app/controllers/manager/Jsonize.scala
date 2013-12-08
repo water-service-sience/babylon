@@ -3,6 +3,7 @@ package controllers.manager
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json.JsValueWrapper
 import jp.utokyo.babylon.db._
+import net.liftweb.mapper.Mapper
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +13,7 @@ import jp.utokyo.babylon.db._
  * To change this template use File | Settings | File Templates.
  */
 object Jsonize {
+
 
   def allInfo(p : UserPost) = {
     Json.obj(
