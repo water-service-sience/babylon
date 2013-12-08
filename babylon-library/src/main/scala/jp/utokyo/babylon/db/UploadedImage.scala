@@ -1,6 +1,5 @@
-package models
+package jp.utokyo.babylon.db
 
-import java.util.Date
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +9,8 @@ import java.util.Date
  * To change this template use File | Settings | File Templates.
  */
 import net.liftweb.mapper._
+import java.util.Date
+import java.util.Date
 
 object UploadedImage extends UploadedImage with LongKeyedMetaMapper[UploadedImage]{
 

@@ -1,13 +1,13 @@
 package controllers
 
 import play.api._
+import controllers.manager.PhotoManager
 import play.api.mvc._
-import controllers.manager.{PostManager, PhotoManager}
 import java.util.Date
 import java.text.SimpleDateFormat
 import controllers.management.EditPost
-import models.UserPost
-import util.FileUtil
+import jp.utokyo.babylon.util.FileUtil
+import jp.utokyo.babylon.db._
 
 object Application extends Controller {
 

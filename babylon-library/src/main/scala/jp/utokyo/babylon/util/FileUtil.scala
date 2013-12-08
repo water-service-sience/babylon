@@ -1,7 +1,8 @@
-package util
-import java.io.{FileNotFoundException, FileInputStream, FileOutputStream, File}
+package jp.utokyo.babylon.util
+
 import net.liftweb.util.LRU
 import net.liftweb.common.Full
+import java.io.{FileNotFoundException, FileInputStream, FileOutputStream, File}
 
 /**
  * Created with IntelliJ IDEA.

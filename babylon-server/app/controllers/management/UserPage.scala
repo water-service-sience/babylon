@@ -1,10 +1,10 @@
 package controllers.management
 
-import models.{Contact, UserPost, User}
 import net.liftweb.common.Full
 import play.api.data.Form
 import play.api.data.Forms._
 import net.liftweb.common.Full
+import jp.utokyo.babylon.db.{UserPost, User, Contact}
 
 /**
  * Created with IntelliJ IDEA.

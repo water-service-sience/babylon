@@ -1,9 +1,9 @@
 package controllers.api
 
-import models.{Contact, Land}
 import play.api.libs.json.Json
 import controllers.manager.Jsonize
 import play.api.libs.json.Json.JsValueWrapper
+import jp.utokyo.babylon.db.{Land, Contact}
 
 /**
  * Created with IntelliJ IDEA.

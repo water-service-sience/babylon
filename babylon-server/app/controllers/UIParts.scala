@@ -1,6 +1,6 @@
 package controllers
 
-import models.UserPost
+import jp.utokyo.babylon.db.UserPost
 
 /**
  * Created with IntelliJ IDEA.

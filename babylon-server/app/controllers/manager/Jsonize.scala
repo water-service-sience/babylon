@@ -1,8 +1,8 @@
 package controllers.manager
 
-import models._
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json.JsValueWrapper
+import jp.utokyo.babylon.db._
 
 /**
  * Created with IntelliJ IDEA.

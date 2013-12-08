@@ -1,8 +1,8 @@
 package controllers.api
 
 import play.api.mvc.{Action, Controller}
-import models.User
 import play.api.libs.json.Json
+import jp.utokyo.babylon.db.User
 
 /**
  * Created with IntelliJ IDEA.

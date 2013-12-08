@@ -1,41 +1,19 @@
+
 package models
 
 /**
- * Created with IntelliJ IDEA.
- * User: takezoux2
- * Date: 13/06/24
- * Time: 3:01
- * To change this template use File | Settings | File Templates.
+ * Created by takezoux2 on 13/12/09.
  */
-import net.liftweb.mapper._
-import java.util.Date
 
-object PrivateMessage extends PrivateMessage with LongKeyedMetaMapper[PrivateMessage]{
+object PrivateMessage{
 
-  def create(post : UserPost,userId : Long, comment : String) = {
-    val c = createInstance
-    c.userPost := post.id.is
-    c.commentUser := userId
-    c.comment := comment
+  implicit def toDBModel(post : PrivateMessage) = {post.dbModel}
+  implicit def fromDbModel(dbModel : jp.utokyo.babylon.db.PrivateMessage) = PrivateMessage(dbModel)
+  implicit def fromDbModelList(dbModels : List[jp.utokyo.babylon.db.PrivateMessage]) = dbModels.map(PrivateMessage(_))
 
-    c.save()
-
-    c
-  }
-
-  def getAllAdminComments(postId : Long) = {
-    findAll(By(PrivateMessage.userPost,postId),OrderBy(PrivateMessage.commented,Descending))
-  }
 
 }
-class PrivateMessage extends LongKeyedMapper[PrivateMessage] with IdPK{
 
-  def getSingleton = PrivateMessage
-
-  object userPost extends MappedLongForeignKey(this,UserPost)
-  object commentUser extends MappedLongForeignKey(this,User)
-  object comment extends MappedText(this)
-  object commented extends MappedDateTime(this){
-    override def defaultValue = new Date()
-  }
+case class PrivateMessage(dbModel : jp.utokyo.babylon.db.PrivateMessage) {
+  
 }

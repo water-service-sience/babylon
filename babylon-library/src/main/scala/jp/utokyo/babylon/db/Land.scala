@@ -1,4 +1,4 @@
-package models
+package jp.utokyo.babylon.db
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,9 +7,10 @@ package models
  * Time: 3:01
  * To change this template use File | Settings | File Templates.
  */
+
 import net.liftweb.mapper._
-import java.util.Date
 import net.liftweb.common.Full
+import java.util.Date
 
 object Land extends Land with LongKeyedMetaMapper[Land]{
 

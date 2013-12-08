@@ -1,9 +1,10 @@
-package util
+package jp.utokyo.babylon.util
 
-import java.awt.Image
 import javax.imageio.ImageIO
 import java.io.{ByteArrayOutputStream, ByteArrayInputStream}
+import java.awt.Image
 import java.awt.image.BufferedImage
+
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,6 +1,5 @@
 package controllers.manager
 
-import models.{Comment, UserPost}
 import net.liftweb.json.JsonAST.JObject
 import controllers.APIException
 import play.api.libs.json._
@@ -10,6 +9,7 @@ import java.util.Calendar
 import net.liftweb.mapper._
 import play.api.libs.json.JsSuccess
 import scala.Some
+import jp.utokyo.babylon.db.{UserPost, Comment}
 
 /**
  * Created with IntelliJ IDEA.

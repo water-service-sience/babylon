@@ -1,4 +1,4 @@
-package util
+package jp.utokyo.babylon.util
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,8 +7,8 @@ package util
  * Time: 0:33
  * To change this template use File | Settings | File Templates.
  */
-import java.security.MessageDigest
 import scala.util.Random
+import java.security.MessageDigest
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,10 +1,10 @@
 package controllers.management
 
 import play.api.mvc.{Action, Controller}
-import models.User
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
+import jp.utokyo.babylon.db.User
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package models
+package jp.utokyo.babylon.db
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,6 +8,7 @@ package models
  * To change this template use File | Settings | File Templates.
  */
 import net.liftweb.mapper._
+import java.util.Date
 
 object PostStatus extends PostStatus with LongKeyedMetaMapper[PostStatus]{
 

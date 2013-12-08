@@ -2,8 +2,8 @@ package controllers.management
 
 import play.api.data.Form
 import play.api.data.Forms._
-import models.PostCategory
 import net.liftweb.common.Full
+import jp.utokyo.babylon.db.PostCategory
 
 /**
  * Created with IntelliJ IDEA.

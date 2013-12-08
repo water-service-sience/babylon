@@ -3,9 +3,9 @@ package controllers.api
 import play.api.mvc.Action
 import controllers.manager.{Jsonize, PostManager, PhotoManager}
 import play.api.libs.json.Json
-import models.{PostCategory, Comment, User, UserPost}
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.Logger
+import jp.utokyo.babylon.db.{UserPost, User, PostCategory}
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package models
+package jp.utokyo.babylon.db
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,10 +7,11 @@ package models
  * Time: 3:01
  * To change this template use File | Settings | File Templates.
  */
+
 import net.liftweb.mapper._
 import java.util.Date
 
-object Comment extends Comment with LongKeyedMetaMapper[Comment]{
+object PrivateMessage extends PrivateMessage with LongKeyedMetaMapper[PrivateMessage]{
 
   def create(post : UserPost,userId : Long, comment : String) = {
     val c = createInstance
@@ -23,20 +24,17 @@ object Comment extends Comment with LongKeyedMetaMapper[Comment]{
     c
   }
 
-  def getAllComments(postId : Long) = {
-    findAll(By(Comment.userPost,postId),OrderBy(Comment.commented,Descending))
+  def getAllAdminComments(postId : Long) = {
+    findAll(By(PrivateMessage.userPost,postId),OrderBy(PrivateMessage.commented,Descending))
   }
 
 }
-class Comment extends LongKeyedMapper[Comment] with IdPK{
+class PrivateMessage extends LongKeyedMapper[PrivateMessage] with IdPK{
 
-  def getSingleton = Comment
+  def getSingleton = PrivateMessage
 
   object userPost extends MappedLongForeignKey(this,UserPost)
   object commentUser extends MappedLongForeignKey(this,User)
-  object replyTo extends MappedLongForeignKey(this,Comment){
-    override def defaultValue: Long = 0
-  }
   object comment extends MappedText(this)
   object commented extends MappedDateTime(this){
     override def defaultValue = new Date()

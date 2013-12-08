@@ -1,4 +1,4 @@
-package models
+package jp.utokyo.babylon.db
 
 /**
  * Created with IntelliJ IDEA.

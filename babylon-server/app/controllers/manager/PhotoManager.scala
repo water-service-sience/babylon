@@ -3,8 +3,8 @@ package controllers.manager
 import play.api.mvc.{AnyContent, Request}
 import controllers.APIException
 import play.api.{Logger, Configuration}
-import util.{ImageUtil, EncryptUtil, FileUtil}
-import models.UploadedImage
+import jp.utokyo.babylon.db.UploadedImage
+import jp.utokyo.babylon.util.{ImageUtil, FileUtil, EncryptUtil}
 
 /**
  * Created with IntelliJ IDEA.

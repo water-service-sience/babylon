@@ -1,5 +1,6 @@
 import controllers.manager.PhotoManager
-import models._
+import jp.utokyo.babylon.db._
+import net.liftweb.common.Full
 import net.liftweb.common.{Full, Box}
 import net.liftweb.db.{ DefaultConnectionIdentifier, StandardDBVendor, ProtoDBVendor}
 import net.liftweb.mapper.DB

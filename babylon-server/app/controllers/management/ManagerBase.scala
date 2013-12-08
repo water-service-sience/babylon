@@ -2,7 +2,7 @@ package controllers.management
 
 import play.api.mvc._
 import play.api.Logger
-import models.User
+import jp.utokyo.babylon.db.User
 
 /**
  * Created with IntelliJ IDEA.
