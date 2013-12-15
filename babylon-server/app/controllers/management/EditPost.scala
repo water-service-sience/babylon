@@ -218,7 +218,7 @@ object EditPost extends ManagerBase {
         val to = (v \ "to").as[Long]
 
         def plabel(id : Long) = PostStatus.findByKey(id).map(_.label.get).getOrElse("None")
-        builder.append(s"担当を'${plabel(from)}'から'${plabel(to)}'へ変更")
+        builder.append(s"状態を'${plabel(from)}'から'${plabel(to)}'へ変更")
       })
 
       (detail \ "private_message").asOpt[String].foreach( v => {
