@@ -4,7 +4,7 @@ import net.liftweb.common.Full
 import play.api.data.Form
 import play.api.data.Forms._
 import net.liftweb.common.Full
-import jp.utokyo.babylon.db.{UserPost, User, Contact}
+import jp.utokyo.babylon.db.{ContactType, UserPost, User, Contact}
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,12 +46,7 @@ object UserPage  extends ManagerBase {
         val contacts = Contact.findAllFor(user)
         val addContactForm = this.addContactForm
 
-
-        val contactTypes = List(
-          "1" -> "固定電話",
-          "2" -> "携帯電話",
-          "3" -> "メールアドレス",
-          "4" -> "その他")
+        val contactTypes = ContactType.findAll().map(ct => ct.id.get.toString -> ct.label.get)
 
         Ok(views.html.user.user_menu(user,posts,
           contacts, addContactForm,contactTypes))

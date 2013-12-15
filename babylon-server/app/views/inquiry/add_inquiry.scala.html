@@ -1,4 +1,4 @@
-@(errorMessage : String, addPostForm : Form[_])
+@(errorMessage : String, addPostForm : Form[_], selections : controllers.management.EditPost.Selections)
 
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 @scripts = {
@@ -12,11 +12,19 @@
 
     @helper.form(action = management.routes.EditPost._addPost, 'class -> "form-horizontal"){
 
-        @helper.inputText(addPostForm("postUserId"))
-        @helper.inputText(addPostForm("category"))
-        @helper.textarea(addPostForm("comment"))
+@helper.select(addPostForm("category"),selections.categories,'class -> "form-control")
+@helper.select(addPostForm("postUserId"),selections.users,'class -> "form-control")
+@helper.textarea(addPostForm("comment"))
+        <hr />
 
-        @UIParts.submitButton("登録")
+@helper.select(addPostForm("inCharge"),selections.managers,'class -> "form-control")
+@helper.select(addPostForm("postStatus"),selections.postStatuses,'class -> "form-control")
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <input type="submit" value="登録"  class="btn btn-success"/>
+    </div>
+</div>
     }
 
 

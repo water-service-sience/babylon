@@ -42,7 +42,13 @@ object EditPost extends ManagerBase {
   def addPost(message : String = "") = AdminAuth(implicit req => {
     val form = addPostForm.bind(Map.empty[String,String])
 
-    Ok(views.html.inquiry.add_inquiry(message,form))
+    val selections = Selections(
+      PostCategory.findAll().map(pc => pc.id.is.toString -> pc.label.get),
+      User.findAllManagers().map(u => u.id.is.toString -> u.nickname.get),
+      PostStatus.findAll().map(ps => ps.id.is.toString -> ps.label.get),
+      User.findAll().map(u => u.id.is.toString -> u.nickname.get)
+    )
+    Ok(views.html.inquiry.add_inquiry(message,form,selections))
   })
 
   def _addPost() = AdminAuth(implicit req => {
@@ -71,7 +77,8 @@ object EditPost extends ManagerBase {
     val selections = Selections(
       PostCategory.findAll().map(pc => pc.id.is.toString -> pc.label.get),
       User.findAllManagers().map(u => u.id.is.toString -> u.nickname.get),
-      PostStatus.findAll().map(ps => ps.id.is.toString -> ps.label.get)
+      PostStatus.findAll().map(ps => ps.id.is.toString -> ps.label.get),
+      Nil
     )
 
     val privateMessages = PrivateMessage.getAllAdminComments(post.id.get)
@@ -227,7 +234,10 @@ object EditPost extends ManagerBase {
   case class UpdateHistory(editor : User,comment : String,action : String, updated : Date)
 
 
-  case class Selections(categories : Seq[(String,String)],managers : Seq[(String,String)],postStatuses : Seq[(String,String)])
+  case class Selections(categories : Seq[(String,String)],
+                        managers : Seq[(String,String)],
+                        postStatuses : Seq[(String,String)],
+                        users : Seq[(String,String)])
 }
 
 

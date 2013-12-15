@@ -17,7 +17,7 @@ object Contact extends Contact with LongKeyedMetaMapper[Contact]{
     findAll(By(Contact.user,user.id.get))
   }
 
-  def updateContacts(user : User, contacts : List[(String,String)]) = {
+  def updateContacts(user : User, contacts : List[(Long,String)]) = {
 
     Contact.bulkDelete_!!(By(Contact.user,user.id.get))
 
@@ -35,11 +35,11 @@ object Contact extends Contact with LongKeyedMetaMapper[Contact]{
     generated
   }
 
-  def createContact(userId : Long, contactType:Int,contact:  String) = {
+  def createContact(userId : Long, contactType: Long,contact:  String) = {
 
     val co = Contact.createInstance
     co.user := userId
-    co.contactType := contactType.toString
+    co.contactType := contactType
     co.contact := contact
     co.save()
 
@@ -54,6 +54,24 @@ class Contact extends LongKeyedMapper[Contact] with IdPK{
   def getSingleton = Contact
 
   object user extends MappedLongForeignKey(this,User)
-  object contactType extends MappedString(this,128)
+  object contactType extends MappedLongForeignKey(this,ContactType)
   object contact extends MappedString(this,128)
+}
+
+object ContactType extends ContactType with LongKeyedMetaMapper[ContactType]{
+
+  def createNewContactType(label : String) = {
+    val i = createInstance
+    i.label := label
+    i.save()
+    i
+  }
+
+}
+class ContactType extends LongKeyedMapper[ContactType] with IdPK{
+
+  def getSingleton = ContactType
+
+  object label extends MappedString(this,128)
+
 }

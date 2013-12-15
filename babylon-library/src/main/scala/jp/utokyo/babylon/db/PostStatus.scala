@@ -12,6 +12,12 @@ import java.util.Date
 
 object PostStatus extends PostStatus with LongKeyedMetaMapper[PostStatus]{
 
+  def createNewStatus(label : String) = {
+    val i = createInstance
+    i.label := label
+    i.save()
+    i
+  }
 
 }
 class PostStatus extends LongKeyedMapper[PostStatus] with IdPK{

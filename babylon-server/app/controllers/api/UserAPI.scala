@@ -52,7 +52,7 @@ object UserAPI extends MyController {
     val body = req.body.asJson.get
 
     val contacts = (body \\ "contacts").map( e => {
-      (e \ "contactType").as[String] ->
+      (e \ "contactType").as[Long] ->
         (e \ "contact").as[String]
     }).toList
 

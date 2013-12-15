@@ -41,6 +41,11 @@ POST    /management/user/add_contact/:userId controllers.management.UserPage.add
 
 GET     /management/category/list   controllers.management.EditCategory.list(id : Long ?= 0)
 POST    /management/category/update controllers.management.EditCategory.update
+GET     /management/post_status/list   controllers.management.EditPostStatus.list(id : Long ?= 0)
+POST    /management/post_status/update controllers.management.EditPostStatus.update
+GET     /management/contact_type/list   controllers.management.EditContactType.list(id : Long ?= 0)
+POST    /management/contact_type/update controllers.management.EditContactType.update
+
 
 GET     /event/post/near            controllers.PostList.nearPosts(categoryIds : String,longitude : Double,latitude : Double,range : Double ?= 1.0,start : Int ?= 0)
 GET     /event/map                  controllers.PostList.map

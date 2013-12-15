@@ -52,7 +52,6 @@
     @helper.form(action = management.routes.UserPage.addContact(user.id.get), 'class -> "form-inline"){
         @helper.select(addContact("contactType"),contactTypes,'class -> "form-control")
         @helper.inputText(addContact("contact"))
-
         <input type="submit" class="btn btn-success" value="追加"/>
 
     }
