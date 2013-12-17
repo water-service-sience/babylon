@@ -1,4 +1,4 @@
-@()
+@(posts : List[UserPost])
 
 @scripts = {
 
@@ -8,7 +8,11 @@
 @main("Home",scripts) {
 
     <div>
-        <h3>最新の投稿</h3>
+        <h3>直近の悪い評価の投稿</h3>
+
+
+        @views.html.ui.inquiry_table("mytable",posts,Some("top"))
+
 
 
 

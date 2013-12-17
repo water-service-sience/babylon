@@ -4,6 +4,7 @@ import play.api.mvc.{AnyContent, Request, Action, Controller}
 import controllers.manager.PostManager
 import play.api.libs.json.Json
 import play.api.libs.json.Json.JsValueWrapper
+import jp.utokyo.babylon.db.UserPost
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +16,10 @@ import play.api.libs.json.Json.JsValueWrapper
 object TopPage extends ManagerBase {
 
   def topPage = AdminAuth(implicit req => {
-    Ok(views.html.index())
+
+    val warningPosts = UserPost.getRecentBadPosts()
+
+    Ok(views.html.index(warningPosts))
   })
 
   def getParam(key : String)(implicit req : Request[AnyContent]) = {

@@ -91,11 +91,23 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
   }
 
   def findLatest(categoryId : Long, index : Int) = {
-
     find(By(UserPost.category,categoryId),
       OrderBy(UserPost.posted,Descending),
       StartAt(index),MaxRows(1)).headOption
   }
+
+  def getRecentBadPosts() : List[UserPost] = {
+    val d = new Date(new Date().getTime - 3 * 24 * 60 * 60 * 1000)
+    getRecentBadPosts(d,40)
+  }
+
+  def getRecentBadPosts( after : Date, goodness : Int) : List[UserPost] = {
+    findAll(
+      By_>(UserPost.posted,after),
+      By_<=(UserPost.goodness,goodness)
+    )
+  }
+
 }
 class UserPost extends LongKeyedMapper[UserPost] with IdPK{
 
