@@ -5,7 +5,7 @@ import controllers.manager.{Jsonize, PostManager, PhotoManager}
 import play.api.libs.json.Json
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.Logger
-import jp.utokyo.babylon.db.{UserPost, User, PostCategory}
+import jp.utokyo.babylon.db.{PrivateMessage, UserPost, User, PostCategory}
 
 /**
  * Created with IntelliJ IDEA.
@@ -61,7 +61,7 @@ object PostAPI extends MyController{
     val u = User.findByKey(userId).get
     val r = if(u.admin.get){
       Jsonize.includeManageInfo(post)
-    }else if(post.postUser.is == postId){
+    }else if(post.postUser.get == userId){
       Jsonize.allInfo(post)
     }else{
       Jsonize.restrictInfo(post)
@@ -123,6 +123,14 @@ object PostAPI extends MyController{
       v
     }) :_*))
 
+  })
+
+  def sendMessageTo(postId : Long) = Authenticated(implicit req => {
+    val json = req.body.asJson.get
+    val post = PostManager.getPost(postId)
+    val message = (json \ "message").as[String]
+    val c = PostManager.sendMessageTo(me.id.get,postId,message)
+    Ok(Jsonize.allInfo(post))
   })
 
 

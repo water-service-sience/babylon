@@ -6,7 +6,7 @@
     </thead>
     <tbody>
     @for( post <- posts){
-    <tr >
+    <tr>
         <td>@{post.id.get}</td>
         <td>@post.postUser.obj.get.nickname.get</td>
         <td>@post.inCharge.obj.map(_.nickname.get).getOrElse("non")</td>

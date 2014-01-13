@@ -16,6 +16,7 @@ GET     /post/own                   controllers.api.PostAPI.getOwnPost(year : In
 GET     /post/own/all               controllers.api.PostAPI.getAllOwnPost
 GET     /post/detail/:postId        controllers.api.PostAPI.getPostDetail(postId : Long)
 POST    /post/comment/:postId       controllers.api.PostAPI.commentTo(postId : Long)
+POST    /post/message/:postId       controllers.api.PostAPI.sendMessageTo(postId : Long)
 GET     /post/category/all          controllers.api.PostAPI.getCategoryAll
 POST    /land/update                controllers.api.UserAPI.updateLand
 GET     /land/list                  controllers.api.UserAPI.ownLands

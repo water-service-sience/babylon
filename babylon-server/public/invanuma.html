@@ -31,11 +31,11 @@
             if(today.getHours() < 14){
                 today.setDate(today.getDate() - 1);
             }
-            var ts = "" + (today.getYear() + 1900) + (today.getMonth() + 1) + today.getDate();
+            var ts = "" + (today.getYear() + 1900) + "0" + (today.getMonth() + 1) + "0" + today.getDate();
             $("#image-imbanuma1").attr("src",
         "http://data01.x-ability.jp/FieldRouter/vbox0115/image/image0-webcam0-" + ts + "1215.jpg");
             $("#image-imbanuma2").attr("src",
-        "http://data01.x-ability.jp/FieldRouter/vbox0116/image/image0-webcam0-" + ts + "1213.jpg");
+        "http://data01.x-ability.jp/FieldRouter/vbox0116/image/image0-webcam0-" + ts + "1215.jpg");
             $("#image-aichi").attr("src",
         "http://x-ability.jp/FieldRouter/vbox0094/image/image0-webcam0-" + ts +"1216.jpg");
         }

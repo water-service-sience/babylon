@@ -9,7 +9,7 @@ import java.util.Calendar
 import net.liftweb.mapper._
 import play.api.libs.json.JsSuccess
 import scala.Some
-import jp.utokyo.babylon.db.{UserPost, Comment}
+import jp.utokyo.babylon.db.{UserPost, Comment,PrivateMessage}
 
 /**
  * Created with IntelliJ IDEA.
@@ -96,6 +96,15 @@ object PostManager {
 
     c
   }
+
+  def sendMessageTo(userId : Long, postId : Long, message : String) = {
+    val p = UserPost.findByKey(postId).get
+
+    val c = PrivateMessage.create(p,userId,message)
+
+    c
+  }
+
 
   def findNearPosts( lon : Double,lat : Double) = {
 
