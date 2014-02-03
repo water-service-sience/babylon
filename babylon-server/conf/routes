@@ -37,7 +37,10 @@ POST    /management/inquiry/add     controllers.management.EditPost._addPost()
 GET     /management/inquiry/list    controllers.management.TopPage.searchInquiry
 GET     /management/user/search     controllers.management.UserPage.searchUser(q ?= "")
 GET     /management/user/:userId    controllers.management.UserPage.userMenu(userId : Long)
+GET     /management/user/detail/:userId controllers.management.UserPage.detail(userId : Long)
+GET     /management/user/contact/:userId controllers.management.UserPage.userContact(userId : Long)
 POST    /management/user/add_contact/:userId controllers.management.UserPage.addContact(userId : Long)
+POST    /management/user/update/:userId controllers.management.UserPage.updateUser(userId : Long)
 
 
 GET     /management/category/list   controllers.management.EditCategory.list(id : Long ?= 0)

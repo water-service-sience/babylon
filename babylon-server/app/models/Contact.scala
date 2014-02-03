@@ -17,5 +17,6 @@ object Contact{
 case class Contact(dbModel : jp.utokyo.babylon.db.Contact) {
 
   def contactType = dbModel.contactType.obj.map(_.label).getOrElse("None")
+  def contactTypeValue = dbModel.contactType.get
 
 }

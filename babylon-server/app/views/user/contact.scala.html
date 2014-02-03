@@ -1,0 +1,61 @@
+@(user : User,
+  contacts : List[Contact],
+  addContact : Form[_],
+  contactTypes : List[(String,String)]
+
+)
+
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@scripts = {
+        $(function(){
+
+
+        });
+
+        function updateMode(id , type,args ){
+            $("#updateButton").val("更新");
+
+            $("#contactId").val(id);
+            $("#contactType").val(type);
+            $("#contact").val(args);
+        }
+
+}
+
+@main("連絡先",scripts) {
+
+<a href="@management.routes.UserPage.userMenu(user.id.get)"><div class="glyphicon glyphicon-chevron-left"></div>戻る</a>
+<hr/>
+
+
+    <h3>連絡先</h3>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>種類</th><th></th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(c <- contacts){
+            <tr>
+                <td>@c.contactType</td><td>@c.contact.get</td>
+                <td><button onclick="updateMode(@c.id.get,@c.contactTypeValue,'@c.contact.get')" class="btn btn-success">編集</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+    @helper.form(action = management.routes.UserPage.addContact(user.id.get), 'class -> "form-horizontal"){
+        <input id="contactId" name="contactId" type="hidden" value="-1" name="id" />
+        @helper.select(addContact("contactType"),contactTypes,'class -> "form-control")
+        @helper.inputText(addContact("contact"),'class -> "form-control")
+        <input id="updateButton" type="submit" class="btn btn-success col-xs-offset-2" value="更新"/>
+
+    }
+
+
+
+}

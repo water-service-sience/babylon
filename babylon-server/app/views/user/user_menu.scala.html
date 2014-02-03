@@ -36,30 +36,19 @@
         </div>
     </div>
 
-    <h3>連絡先</h3>
-
-    <div class="list-group">
-        @for(contact <- contacts){
-        <div class="list-item row">
-
-            <div class="col-sm-3">@contact.contactType</div>
-            <div class="col-sm-6">@contact.contact.get</div>
-            <div class="col-sm-3">編集</div>
-        </div>
-        }
-    </div>
-
-    @helper.form(action = management.routes.UserPage.addContact(user.id.get), 'class -> "form-inline"){
-        @helper.select(addContact("contactType"),contactTypes,'class -> "form-control")
-        @helper.inputText(addContact("contact"))
-        <input type="submit" class="btn btn-success" value="追加"/>
-
-    }
-
 
     <h3>過去の問い合わせ</h3>
 
     @views.html.ui.inquiry_table("postTable",posts)
+
+    <h3>登録情報</h3>
+<div class="btn-group btn-group-lg">
+
+    <a class="btn btn-default" href="@management.routes.UserPage.detail(user.id.get)">プロフィール</a>
+    <a class="btn btn-default" href="@management.routes.UserPage.userContact(user.id.get)">連絡先</a>
+
+
+</div>
 
 
 

@@ -1,0 +1,30 @@
+@(user : User,
+updateUserInfo : Form[_])
+
+
+@implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
+@scripts = {
+
+
+}
+
+@main("UserMenu",scripts) {
+
+<a href="@management.routes.UserPage.userMenu(user.id.get)"><div class="glyphicon glyphicon-chevron-left"></div>戻る</a>
+<hr/>
+
+
+@helper.form(action = management.routes.UserPage.updateUser(user.id.get), 'class -> "form-horizontal"){
+
+@helper.inputText(updateUserInfo("username"),'class -> "form-control")
+@helper.inputText(updateUserInfo("nickname"),'class -> "form-control")
+@helper.checkbox(updateUserInfo("admin"),'class -> "form-control")
+@helper.checkbox(updateUserInfo("manager"),'class -> "form-control")
+
+<input id="updateButton" type="submit" class="btn btn-success col-xs-offset-2" value="更新"/>
+
+}
+
+
+
+}
