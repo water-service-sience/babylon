@@ -3,6 +3,7 @@ package jp.utokyo.babylon.db
 import net.liftweb.mapper._
 import jp.utokyo.babylon.util.EncryptUtil
 import java.util.Date
+import jp.utokyo.babylon.annotations.JsonFieldLevel
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,16 +59,23 @@ class User extends LongKeyedMapper[User] with IdPK{
   def getSingleton = User
 
   object username extends MappedString(this,128)
+
+  @JsonFieldLevel(1000)
   object password extends MappedString(this,128)
   object nickname extends MappedString(this,128)
+  @JsonFieldLevel(100)
   object accessKey extends MappedString(this,128)
   object lastLogin extends MappedDateTime(this)
 
+  @JsonFieldLevel(1000)
   object admin extends MappedBoolean(this)
+
+  @JsonFieldLevel(1000)
   object manager extends MappedBoolean(this){
     override def dbIndexed_? : Boolean = true
   }
 
+  @JsonFieldLevel(1000)
   object role extends MappedString(this,128)
 
 }
