@@ -1,6 +1,7 @@
 package controllers
 
 import play.api._
+import controllers.manager.FieldRouterManager
 import controllers.manager.PhotoManager
 import play.api.mvc._
 import java.util.Date
@@ -8,6 +9,8 @@ import java.text.SimpleDateFormat
 import controllers.management.EditPost
 import jp.utokyo.babylon.util.FileUtil
 import jp.utokyo.babylon.db._
+import web.MizoLabFieldRouter
+import play.api.templates.Html
 
 object Application extends Controller {
 
@@ -64,6 +67,15 @@ object Application extends Controller {
       "Last-Modified" -> format.format(lastModified),
       "Expires" -> format.format(expireTime),
       "Cache-Control" -> ("private, max-age=" + expireSecs))
+  }
+
+  def csvs = Action{
+    FieldRouterManager.updateData
+    val data = FieldRouterManager.getLatestData("vbox0094")
+
+
+    Ok(Html(data.mkString("\n")))
+
   }
 
 }

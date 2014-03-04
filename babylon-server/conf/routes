@@ -7,6 +7,8 @@
 # Home page
 GET     /                           controllers.management.TopPage.topPage
 
+GET     /csv                        controllers.Application.csvs
+
 POST    /create/account             controllers.api.AuthAPI.createAccount
 POST    /photo/upload               controllers.api.PostAPI.uploadPhoto
 POST    /post                       controllers.api.PostAPI.post

@@ -20,7 +20,8 @@ object Global extends GlobalSettings {
 
   def models = List(User,UploadedImage,UserPost,Comment,
     Land,
-    Contact,ContactType,PostCategory,PostStatus,PostUpdate,PrivateMessage)
+    Contact,ContactType,PostCategory,PostStatus,PostUpdate,PrivateMessage,
+    FieldRouter,FieldData,DisplayFieldData)
 
 
   override def onStart(app: api.Application) {
