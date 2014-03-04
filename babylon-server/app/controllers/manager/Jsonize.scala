@@ -1,9 +1,10 @@
 package controllers.manager
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsString, JsObject, JsValue, Json}
 import play.api.libs.json.Json.JsValueWrapper
 import jp.utokyo.babylon.db._
 import net.liftweb.mapper.Mapper
+import net.liftweb.http.js.JE.JsArray
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +37,10 @@ object Jsonize {
       "category" -> {
         val j : JsValue = p.category.map(category(_)).openOr( Json.obj("id" -> 0,"label" -> "None"))
         j
+      },
+      "fieldData" -> {
+        val data = FieldRouterManager.getNearestFieldData(p.latitude.get,p.longitude.get)
+        JsObject(data.map(d => d._1 -> JsString(d._2)))
       }
     )
   }
