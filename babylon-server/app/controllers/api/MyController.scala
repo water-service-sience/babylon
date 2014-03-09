@@ -24,7 +24,7 @@ trait MyController extends Controller {
   def userId = me.id.is
 
 
-  def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(implicit request => {
+  def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(parse.maxLength(20 * 1024 * 1024))(implicit request => {
     val accessKey = request.headers.get(AccessKeyHeader).getOrElse({
       User.findByKey(1).get.accessKey.get
     })
