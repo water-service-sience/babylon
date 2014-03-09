@@ -34,9 +34,7 @@ object User extends User with LongKeyedMetaMapper[User]{
   }
 
   def findByAccessKey(ak : String) = {
-
     User.find(By(User.accessKey,ak))
-
   }
 
   def findAllManagers() = {
@@ -51,6 +49,20 @@ object User extends User with LongKeyedMetaMapper[User]{
     User.findAll(Like(User.username,"%" + query + "%")) :::
     User.findAll(Like(User.nickname,"%" + query + "%")) distinct
   }
+
+  def setPassword(user : User,rawPassword : String) = {
+    // 2度SHA256ハッシュをかける
+    user.password := EncryptUtil.sha256(EncryptUtil.sha256(rawPassword))
+    user.save()
+  }
+  def setPasswordFromClient(user : User, clientPassword : String) = {
+    // クライアントから送られるパスワード１度ハッシュ済みなので、
+    // 1度だけハッシュをかける
+    user.password := EncryptUtil.sha256(clientPassword)
+    user.save()
+  }
+
+
 
 
 }
@@ -77,5 +89,18 @@ class User extends LongKeyedMapper[User] with IdPK{
 
   @JsonFieldLevel(1000)
   object role extends MappedString(this,128)
+
+
+  def correctPassword_?( passwordFromClient : String ) = {
+    //クライアントからは、1度だけsha256ハッシュがかけられたパスワードが送られるので、
+    //もう一度だけsh256ハッシュをかけて比較
+    val sha256 = EncryptUtil.sha256(passwordFromClient)
+
+    password.get.size > 0 && (
+      password.get == sha256 ||
+      password.get == EncryptUtil.sha256(sha256) ||
+      password.get == passwordFromClient
+    )
+  }
 
 }

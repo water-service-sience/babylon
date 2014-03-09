@@ -40,6 +40,13 @@ object UserPage  extends ManagerBase {
       "manager" -> boolean
     )
   )
+  def resetPasswordForm = Form(
+    tuple(
+      "oldPassword" -> text,
+      "newPassword" -> text,
+      "confirmPassword" -> text
+    )
+  )
 
   def searchUser(q : String) = AdminAuth(implicit req => {
 
@@ -161,5 +168,33 @@ object UserPage  extends ManagerBase {
     }
 
   })
+
+
+  def resetPassword(userId : Long) = AdminAuth(implicit req => {
+    val form = this.resetPasswordForm.bindFromRequest()
+
+
+    User.findByKey(userId) match{
+      case Full(user) => {
+        val (oldPassword,newPassword,confirm ) = form.get
+
+        if(newPassword != confirm){
+          Redirect(routes.UserPage.searchUser(""))
+        }else if(user.password.get.size == 0 || user.correctPassword_?(oldPassword)){
+          User.setPassword(user,newPassword)
+          Redirect(routes.UserPage.detail(userId))
+        }else{
+          Redirect(routes.UserPage.searchUser(""))
+
+        }
+      }
+      case _ => {
+        Redirect(routes.UserPage.searchUser(""))
+      }
+
+    }
+
+  })
+
 
 }

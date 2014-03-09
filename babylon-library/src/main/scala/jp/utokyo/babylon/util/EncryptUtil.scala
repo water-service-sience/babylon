@@ -20,9 +20,20 @@ import java.security.MessageDigest
 object EncryptUtil {
 
 
+  def sha1( v : String) = {
+    sha1Digest(v.getBytes("utf-8"))
+  }
+  def sha256(v : String) = {
+    val data = v.getBytes("utf-8")
+
+    val md = MessageDigest.getInstance("SHA-256");
+    md.digest(data).map( b => "%02x".format(b)).mkString
+
+  }
+
   def sha1Digest(data : Array[Byte]) = {
     val md = MessageDigest.getInstance("SHA-1");
-    md.digest(data).map( b => "%x".format(b)).mkString
+    md.digest(data).map( b => "%02x".format(b)).mkString
   }
 
 

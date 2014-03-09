@@ -37,7 +37,7 @@ object LoginPage extends ManagerBase {
       val user = User.findByUsername(username)
       if(!user.isDefined){
         Ok(views.html.login("User not found or wrong password.",form))
-      }else if(user.get.password.get != password){
+      }else if(!user.get.correctPassword_?(password)){
         Ok(views.html.login("User not found or wrong password..",form))
       }else{
         Redirect(routes.TopPage.topPage).withSession(SessionUserId -> user.get.id.get.toString)

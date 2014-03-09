@@ -1,9 +1,9 @@
 package controllers.api
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import controllers.manager.Jsonize
 import play.api.libs.json.Json.JsValueWrapper
-import jp.utokyo.babylon.db.{Land, Contact}
+import jp.utokyo.babylon.db.{User, Land, Contact}
 
 /**
  * Created with IntelliJ IDEA.
@@ -63,5 +63,40 @@ object UserAPI extends MyController {
 
 
   })
+
+  def resetPassword = Authenticated(implicit req => {
+    val json = req.body.asJson.get
+    val JsString(newPassword) = (json \ "newPassword")
+    val JsString(confirmPassword) = (json \ "confirmPassword")
+    val JsString(oldPassword) = (json \ "oldPassword")
+    val u = me
+
+    if(newPassword.size < 4){
+      InternalServerError(Json.obj(
+        "result" -> 2,
+        "message" -> "Password is too short"
+      ))
+    }else if(newPassword != confirmPassword){
+      InternalServerError(Json.obj(
+        "result" -> 3,
+        "message" -> "Not match confirm password"
+      ))
+    }else if(u.correctPassword_?(oldPassword)){
+      User.setPasswordFromClient(u,newPassword)
+      Ok(Json.obj(
+        "result" -> 1
+      ))
+    }else{
+      InternalServerError(Json.obj(
+        "result" -> 4,
+        "message" -> "Wrong password"
+      ))
+    }
+
+  })
+
+
+
+
 
 }
