@@ -16,7 +16,7 @@ import jp.utokyo.babylon.db.{PrivateMessage, UserPost, User, PostCategory}
  */
 object PostAPI extends MyController{
 
-  def uploadPhoto = Authenticated(implicit req => {
+  def uploadPhoto = AuthenticatedIMG(implicit req => {
 
     Logger.debug("Upload photo")
     val uploadedImage = PhotoManager.saveUploadedFile(userId)

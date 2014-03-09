@@ -1,10 +1,11 @@
 package controllers.manager
 
-import play.api.mvc.{AnyContent, Request}
+import play.api.mvc.{RawBuffer, AnyContent, Request}
 import controllers.APIException
 import play.api.{Logger, Configuration}
 import jp.utokyo.babylon.db.UploadedImage
 import jp.utokyo.babylon.util.{ImageUtil, FileUtil, EncryptUtil}
+import java.io.FileInputStream
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,23 +18,18 @@ object PhotoManager {
 
   var imageDir = "./images/"
 
-  def saveUploadedFile(userId : Long)(implicit req : Request[AnyContent]) = {
-    req.body.asRaw match{
-      case Some(buffer) => {
-        Logger.debug("User:%s uploaded image.Size = %s".format(userId,buffer.size))
-        val b = buffer.asBytes(buffer.size.toInt).get
-        val filename = "u" + userId + "/" + EncryptUtil.sha1Digest(b)
-        FileUtil.saveTo(imageDir + filename,b)
-        val thumb = ImageUtil.resizeTo(b,"JPG",240,-1)
-        FileUtil.saveTo(imageDir + filename + "_s",thumb)
+  def saveUploadedFile(userId : Long)(implicit req : Request[RawBuffer]) = {
 
-        UploadedImage.create(userId,filename)
-      }
-      case None => {
-        throw new APIException("Fail to get photo")
-      }
-    }
+    val buffer = getBytesFromRawBuffer(req.body)
 
+    Logger.debug("User:%s uploaded image.Size = %s".format(userId,buffer.size))
+    val b = buffer
+    val filename = "u" + userId + "/" + EncryptUtil.sha1Digest(b)
+    FileUtil.saveTo(imageDir + filename,b)
+    val thumb = ImageUtil.resizeTo(b,"JPG",240,-1)
+    FileUtil.saveTo(imageDir + filename + "_s",thumb)
+
+    UploadedImage.create(userId,filename)
   }
 
   def getThumbnailData(fileKey : String) = {
@@ -48,6 +44,23 @@ object PhotoManager {
 
     val b = FileUtil.readFrom(imageDir + fileKey)
     b.get
+  }
+
+  def getBytesFromRawBuffer( buffer : RawBuffer) = {
+    buffer.asBytes() match{
+      case Some(bytes) => bytes
+      case None => {
+        val f = buffer.asFile
+        val in = new FileInputStream(f)
+        try{
+          val d = new Array[Byte](buffer.size.toInt)
+          in.read(d)
+          d
+        }finally{
+          in.close()
+        }
+      }
+    }
   }
 
 

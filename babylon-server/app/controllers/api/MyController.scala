@@ -23,8 +23,25 @@ trait MyController extends Controller {
   def me = meVar.value
   def userId = me.id.is
 
+  def AuthenticatedIMG( func : (Request[RawBuffer]) => Result) : Action[RawBuffer] = Action(parse.raw(10 * 1024 * 1024))(implicit request => {
+    val accessKey = request.headers.get(AccessKeyHeader).getOrElse({
+      User.findByKey(1).get.accessKey.get
+    })
+    User.findByAccessKey(accessKey) match{
+      case Full(me) => {
+        this.meVar.withValue(me){
+          func(request)
+        }
+      }
+      case _ => {
+        Logger.warn("Wrong access key : " + accessKey)
+        Unauthorized("No user")
+      }
+    }
+  })
 
-  def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(parse.maxLength(20 * 1024 * 1024))(implicit request => {
+
+  def Authenticated( func : (Request[AnyContent]) => Result) : Action[AnyContent] = Action(implicit request => {
     val accessKey = request.headers.get(AccessKeyHeader).getOrElse({
       User.findByKey(1).get.accessKey.get
     })
