@@ -63,7 +63,11 @@ class MizoLabFieldRouter( id : String) {
       val lines = res.body.lines
       lines.next()
       val labels = lines.next().split(",").map(_.trim)
-      var line = lines.next()
+      var line : String = lines.next()
+      while(lines.hasNext){
+        line = lines.next()
+      }
+
       labels.zip(line.split(",").map(_.trim)).toList
 
     })
