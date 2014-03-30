@@ -40,9 +40,13 @@ object FieldRouterManager {
   }
 
   def getLatestData(fieldRouter : FieldRouter) : List[(String,String)] = {
+    val baseData = List(
+      "場所" -> fieldRouter.displayName.get,
+      "同期日時" -> fieldRouter.lastSyncTime.get.toString
+    )
     val data = FieldData.getDataListFor(fieldRouter.id.get).map(d => d.fieldDataType.get.trim.toLowerCase -> d).toMap
     val displays = DisplayFieldData.getDataListFor(fieldRouter.id.get)
-    displays.map(d => {
+    baseData ++ displays.map(d => {
       data.get(d.fieldDataType.get.toLowerCase) match{
         case Some(v) => d.displayLabel.get -> v.value.get
         case None => d.displayLabel.get -> ""
@@ -63,7 +67,10 @@ object FieldRouterManager {
       }
       case None => {
         logger.warn("There are no field router.")
-        List[(String,String)]("FieldRouter" -> "NotFound")
+        val baseData = List(
+          "場所" -> "NotFound"
+        )
+        baseData
       }
     }
 
