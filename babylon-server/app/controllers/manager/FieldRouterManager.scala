@@ -13,7 +13,7 @@ object FieldRouterManager {
   val updateSpan = 60 * 60 * 1000 // １時間ごとに更新
   val logger = LoggerFactory.getLogger(getClass)
 
-  def updateData = {
+  def updateData() = {
     logger.debug("Begin update field router data")
     FieldRouter.findAll().foreach(fieldRouter => try{
       if(new Date().getTime - fieldRouter.lastSyncTime.get.getTime > updateSpan){

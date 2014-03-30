@@ -1,4 +1,4 @@
-import controllers.manager.PhotoManager
+import controllers.manager.{FieldRouterManager, PhotoManager}
 import jp.utokyo.babylon.db._
 import net.liftweb.common.Full
 import net.liftweb.common.{Full, Box}
@@ -6,6 +6,7 @@ import net.liftweb.db.{ DefaultConnectionIdentifier, StandardDBVendor, ProtoDBVe
 import net.liftweb.mapper.DB
 import net.liftweb.mapper.Schemifier
 import play.api.GlobalSettings
+import play.libs.Akka
 import play.{api, Logger}
 
 /**
@@ -33,9 +34,16 @@ object Global extends GlobalSettings {
     Logger.info("Image dir = " + imageDir)
     PhotoManager.imageDir = imageDir
 
+    scheduleFieldRouterDataUpdate()
 
 
-
+  }
+  def scheduleFieldRouterDataUpdate() = {
+    import play.api.libs.concurrent.Execution.Implicits._
+    import scala.concurrent.duration._
+    Akka.system.scheduler.schedule(0 seconds, 4.hours)({
+      FieldRouterManager.updateData()
+    })
   }
 
 
