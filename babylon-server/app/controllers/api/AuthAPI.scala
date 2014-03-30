@@ -34,6 +34,7 @@ object AuthAPI extends Controller {
     val json = req.body.asJson.get
     val JsString(username) = (json \ "username")
     val JsString(password) = (json \ "password")
+    println(username + ":" + password)
     User.findByUsername(username) match{
       case Full(u) => {
         if(u.correctPassword_?(password)){
@@ -44,7 +45,7 @@ object AuthAPI extends Controller {
           ))
         }else{
 
-          InternalServerError(Json.obj(
+          Ok(Json.obj(
             "result" -> 2,
             "message" -> "Wrong password or username"
           ))
@@ -53,7 +54,7 @@ object AuthAPI extends Controller {
       case _ => {
 
 
-        InternalServerError(Json.obj(
+        Ok(Json.obj(
           "result" -> 2,
           "message" -> "Wrong password or username"
         ))

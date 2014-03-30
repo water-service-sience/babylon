@@ -21,7 +21,7 @@ object User extends User with LongKeyedMetaMapper[User]{
     u.nickname := nickname
     u.accessKey := EncryptUtil.randomString(20)
     u.username := EncryptUtil.randomString(3)
-    u.password := EncryptUtil.randomString(8)
+    u.password := ""
     u.lastLogin := new Date
     u.save()
 
@@ -91,6 +91,9 @@ class User extends LongKeyedMapper[User] with IdPK{
   object role extends MappedString(this,128)
 
 
+  def emptyPassword_? = {
+    password.get.size == 0
+  }
   def correctPassword_?( passwordFromClient : String ) = {
     //クライアントからは、1度だけsha256ハッシュがかけられたパスワードが送られるので、
     //もう一度だけsh256ハッシュをかけて比較

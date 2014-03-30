@@ -4,6 +4,7 @@ import play.api.libs.json.{JsString, Json}
 import controllers.manager.Jsonize
 import play.api.libs.json.Json.JsValueWrapper
 import jp.utokyo.babylon.db.{User, Land, Contact}
+import org.slf4j.LoggerFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,7 @@ import jp.utokyo.babylon.db.{User, Land, Contact}
  */
 object UserAPI extends MyController {
 
+  val logger = LoggerFactory.getLogger(getClass)
 
   def updateLand = Authenticated(implicit req => {
 
@@ -66,30 +68,42 @@ object UserAPI extends MyController {
 
   def resetPassword = Authenticated(implicit req => {
     val json = req.body.asJson.get
+    val JsString(username) = (json \ "username")
     val JsString(newPassword) = (json \ "newPassword")
-    val JsString(confirmPassword) = (json \ "confirmPassword")
     val JsString(oldPassword) = (json \ "oldPassword")
     val u = me
 
-    if(newPassword.size < 4){
-      InternalServerError(Json.obj(
+
+    if(newPassword.size < 4) {
+      logger.info("Password is too short")
+      Ok(Json.obj(
         "result" -> 2,
-        "message" -> "Password is too short"
+        "message" -> "パスワードが短すぎます"
       ))
-    }else if(newPassword != confirmPassword){
-      InternalServerError(Json.obj(
+    }else if(username.length > 0 && u.username.get != username &&
+      User.findByUsername(username).isDefined){
+      logger.info("Duplicate nickname")
+      Ok(Json.obj(
         "result" -> 3,
-        "message" -> "Not match confirm password"
+        "message" -> "既に存在するユーザー名です。"
       ))
-    }else if(u.correctPassword_?(oldPassword)){
+    }else if(u.emptyPassword_? || u.correctPassword_?(oldPassword)){
+      logger.debug("Change password")
       User.setPasswordFromClient(u,newPassword)
+      if(username.length > 0) {
+        logger.debug("Change username")
+        u.username := username
+        u.save()
+      }
+
       Ok(Json.obj(
         "result" -> 1
       ))
     }else{
-      InternalServerError(Json.obj(
+      logger.info("Wrong password")
+      Ok(Json.obj(
         "result" -> 4,
-        "message" -> "Wrong password"
+        "message" -> "パスワードが間違っています。"
       ))
     }
 
