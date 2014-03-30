@@ -26,6 +26,7 @@ object AuthAPI extends Controller {
     Ok(Json.obj(
       "userId" -> u.id.is,
       "nickname" -> u.nickname.is,
+      "username" -> u.username.is,
       "accessKey" -> u.accessKey.is
     ))
   })
@@ -40,6 +41,7 @@ object AuthAPI extends Controller {
         if(u.correctPassword_?(password)){
           Ok(Json.obj(
             "userId" -> u.id.is,
+            "username" -> u.username.is,
             "nickname" -> u.nickname.is,
             "accessKey" -> u.accessKey.is
           ))
