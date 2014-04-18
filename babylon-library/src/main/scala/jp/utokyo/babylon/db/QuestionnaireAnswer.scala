@@ -19,6 +19,7 @@ object QuestionnaireAnswer extends QuestionnaireAnswer with LongKeyedMetaMapper[
 
     q.evaluation := evaluation
     q.note := note
+    q.save()
 
     q
   }
