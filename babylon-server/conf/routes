@@ -24,7 +24,7 @@ GET     /post/category/all          controllers.api.PostAPI.getCategoryAll
 POST    /land/update                controllers.api.UserAPI.updateLand
 GET     /land/list                  controllers.api.UserAPI.ownLands
 POST    /reset/password             controllers.api.UserAPI.resetPassword
-
+POST    /questionnaire/answer       controllers.api.QuestionnaireAPI.answer
 
 GET     /management/login           controllers.management.LoginPage.login
 POST    /management/login           controllers.management.LoginPage.p_login

@@ -100,14 +100,12 @@ object Jsonize {
   }
 
   def privateMessage( am : PrivateMessage) = {
-
     Json.obj(
       "privateMessageId" -> am.id.get,
       "sender" -> user(am.commentUser.obj.get),
       "message" -> am.comment.get,
       "sent" -> am.commented.get
     )
-
   }
 
   def postUpdate( pu : PostUpdate) = {
@@ -145,6 +143,13 @@ object Jsonize {
       "id" -> c.id.get,
       "contact" -> c.contact.get,
       "contactType" -> c.contactType.get
+    )
+  }
+
+  def withMessage(m : String) = {
+    Json.obj(
+      "result" -> 1,
+      "message" -> m
     )
   }
 
