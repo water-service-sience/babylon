@@ -48,13 +48,15 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
 
   def findNear(lon : Double,lat : Double, range : Double) : List[UserPost] = {
 
-    findAll(By(UserPost.hasGpsInfo,true),
+    findAll(
+      By(UserPost.isPublic,true),
+      By(UserPost.hasGpsInfo,true),
       By_<(UserPost.longitude,lon + range),
       By_>(UserPost.longitude,lon - range),
       By_<(UserPost.latitude,lat + range),
       By_>(UserPost.latitude,lat - range),
       OrderBy(UserPost.posted,Descending),
-      MaxRows(10)
+      MaxRows(20)
     )
 
   }
@@ -131,16 +133,24 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
   object comment extends MappedText(this){
     override def defaultValue: String = ""
   }
-  object image extends MappedLongForeignKey(this,UploadedImage)
-  object goodness extends MappedInt(this)
+  object image extends MappedLongForeignKey(this,UploadedImage){
+    override def defaultValue = 0L
+  }
+  object goodness extends MappedInt(this){
+    override def defaultValue = 0
+  }
   object posted extends MappedDateTime(this)
   {
     override def defaultValue = new Date
   }
 
-  object isPublic extends MappedBoolean(this)
+  object isPublic extends MappedBoolean(this){
+    override def defaultValue = false
+  }
 
-  object isInquiry extends MappedBoolean(this)
+  object isInquiry extends MappedBoolean(this){
+    override def defaultValue = false
+  }
 
   object category extends MappedLongForeignKey(this,PostCategory){
     override def defaultValue: Long = 1

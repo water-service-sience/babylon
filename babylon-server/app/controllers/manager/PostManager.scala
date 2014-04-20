@@ -31,7 +31,8 @@ object PostManager {
 
   def postNew(userId : Long, json : JsValue) = {
 
-    val goodness = (json \ "goodness").as[Int]
+    logger.debug(json.toString())
+    val goodness = (json \ "goodness").asOpt[Int].getOrElse(0)
     val post = (json \ "isInquiry").asOpt[Boolean] match{
       case Some(true) => {
         (json \ "imageId").asOpt[Long] match{

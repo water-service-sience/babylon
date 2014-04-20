@@ -27,7 +27,7 @@ object Jsonize {
       "posted" -> p.posted.is,
       "comments" -> comments(p),
       "goodness" -> p.goodness.get,
-      "imageFile" -> p.image.obj.get.fileKey.is,
+      "imageFile" -> p.image.obj.map( _.fileKey.is).getOrElse[String](""),
       "hasGps" -> p.hasGpsInfo.is,
       "longitude" -> p.longitude.is,
       "latitude" -> p.latitude.is,
