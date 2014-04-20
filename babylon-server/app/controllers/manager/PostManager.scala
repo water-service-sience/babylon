@@ -5,11 +5,13 @@ import controllers.APIException
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import net.liftweb.http.js.JE.JsFalse
-import java.util.Calendar
+import java.util.{Date, Calendar}
 import net.liftweb.mapper._
 import play.api.libs.json.JsSuccess
 import scala.Some
 import jp.utokyo.babylon.db.{UserPost, Comment,PrivateMessage}
+import net.liftweb.common.Full
+import org.slf4j.LoggerFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +22,8 @@ import jp.utokyo.babylon.db.{UserPost, Comment,PrivateMessage}
  */
 object PostManager {
 
+  val logger = LoggerFactory.getLogger(getClass)
+
   val readLonLat : Reads[(Double,Double)] = {
     (JsPath \ "longitude").read[Double] and
     (JsPath \ "latitude").read[Double] tupled
@@ -27,16 +31,41 @@ object PostManager {
 
   def postNew(userId : Long, json : JsValue) = {
 
-    val imageId = (json \ "imageId").as[Long]
     val goodness = (json \ "goodness").as[Int]
+    val post = (json \ "isInquiry").asOpt[Boolean] match{
+      case Some(true) => {
+        (json \ "imageId").asOpt[Long] match{
+          case Some(imageId) => {
+            UserPost.create(userId,imageId,goodness)
+          }
+          case None => {
+            UserPost.create(userId,0,goodness)
+          }
+        }
+      }
+      case _ => {
+        (json \ "imageId").asOpt[Long] match{
+          case Some(imageId) if imageId > 0 => {
+            UserPost.create(userId,imageId,goodness)
 
-    val post = UserPost.create(userId,imageId,goodness)
+          }
+          case _ => {
+            throw new Exception("Must attach image")
+          }
+
+        }
+      }
+    }
+
 
     (json \ "comment").asOpt[String].foreach( comment => {
       post.comment := comment
     })
     (json \ "category").asOpt[Int].foreach(category => {
       post.category := category
+    })
+    (json \ "isPublic").asOpt[Boolean].foreach(isPublic => {
+      post.isPublic := isPublic
     })
     post.save()
 
@@ -66,15 +95,40 @@ object PostManager {
     }
   }
 
+  val ignoreFields = Set("id","updated","posted")
+  val classToReads = Map[Class[_],Reads[_]](
+    classOf[Int] -> Reads.IntReads,
+    classOf[Long] -> Reads.LongReads,
+    classOf[String] -> Reads.StringReads,
+    classOf[Date] -> Reads.DefaultDateReads,
+    classOf[Boolean] -> Reads.BooleanReads,
+    classOf[Double] -> Reads.DoubleReads,
+    classOf[Float] -> Reads.FloatReads
+  )
 
   def updateParams(post : UserPost, updateInfo : JsValue) {
-    val updateInfoRead = (JsPath \ "comment").read[String] and
-      (JsPath \ "category").read[Int] tupled
 
-    (updateInfo \ "comment").asOpt[String].foreach(c => post.comment := c)
-    (updateInfo \ "category").asOpt[Long].foreach(c => post.category := c)
-    (updateInfo \ "goodness").asOpt[Int].foreach(c => post.goodness  := c)
-    (updateInfo \ "title").asOpt[String].foreach(c => post.title := c)
+    (updateInfo.asInstanceOf[JsObject]).fields.foreach(p => {
+      post.fieldByName(p._1) match{
+        case Full(field) => {
+          if(!ignoreFields.contains(field.name)) {
+            val c = field.dbFieldClass
+            classToReads.get(c) match{
+              case Some(reads) => {
+                (field.asInstanceOf[MappedField[Any,UserPost]]).set(
+                  p._2.as[Any](reads.asInstanceOf[Reads[Any]]))
+              }
+              case None => {
+                logger.debug(s"Unknown type for field:${field.name} @@ ${c.getName}")
+              }
+            }
+          }
+        }
+        case _ => {
+          logger.info(s"Unknown field for update:${p._1}")
+        }
+      }
+    })
     readLonLat.reads(updateInfo) match{
       case JsSuccess( (lon,lat) ,_ ) => {
         post.hasGpsInfo := true

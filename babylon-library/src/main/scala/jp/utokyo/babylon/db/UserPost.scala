@@ -108,6 +108,17 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
     )
   }
 
+  override def dbIndexes: List[BaseIndex[UserPost]] = {
+    List(
+      Index(isInquiry,updated),
+      Index(postUser,isPublic,posted),
+      Index(postUser,updated)
+    )
+
+  }
+
+
+
 }
 class UserPost extends LongKeyedMapper[UserPost] with IdPK{
 
@@ -126,6 +137,11 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
   {
     override def defaultValue = new Date
   }
+
+  object isPublic extends MappedBoolean(this)
+
+  object isInquiry extends MappedBoolean(this)
+
   object category extends MappedLongForeignKey(this,PostCategory){
     override def defaultValue: Long = 1
 
