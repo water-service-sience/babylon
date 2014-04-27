@@ -55,8 +55,6 @@ GET     /management/contact_type/list   controllers.management.EditContactType.l
 POST    /management/contact_type/update controllers.management.EditContactType.update
 
 
-GET     /event/post/near            controllers.PostList.nearPosts(categoryIds : String,longitude : Double,latitude : Double,range : Double ?= 1.0,start : Int ?= 0)
-GET     /event/map                  controllers.PostList.map
 
 
 # Map static resources from the /public folder to the /assets URL path

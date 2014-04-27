@@ -15,10 +15,9 @@ import jp.utokyo.babylon.db.UserPost
 object PostList extends Controller{
 
 
-  def nearPosts(categoryIds : String,longitude : Double, latitude : Double,range : Double,start : Int) = Action({
+  def nearPosts(longitude : Double, latitude : Double,range : Double,start : Int) = Action({
 
-    val catIds = categoryIds.split(",").map(_.toLong).toList
-    val posts = UserPost.findNear(catIds,longitude,latitude,range,start)
+    val posts = UserPost.findNear(longitude,latitude,range,start)
 
     Ok(JsArray(posts.map(Jsonize.allInfo(_))))
 
