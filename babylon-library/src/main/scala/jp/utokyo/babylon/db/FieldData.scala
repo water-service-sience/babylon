@@ -16,6 +16,8 @@ class FieldData extends LongKeyedMapper[FieldData] with IdPK{
   object fieldDataType extends MappedString(this,128)
   object value extends MappedString(this,256)
   object updatedTime extends MappedDateTime(this)
+
+
 }
 
 

@@ -48,7 +48,9 @@ object FieldRouterManager {
     val displays = DisplayFieldData.getDataListFor(fieldRouter.id.get)
     baseData ++ displays.map(d => {
       data.get(d.fieldDataType.get.toLowerCase) match{
-        case Some(v) => d.displayLabel.get -> v.value.get
+        case Some(v) => {
+          d.displayLabel.get -> d.asString(v)
+        }
         case None => d.displayLabel.get -> ""
       }
     })
