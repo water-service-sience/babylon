@@ -23,6 +23,7 @@ console.log(JSON.stringify(r));
 
 @for(ri <- routerInfo){
 var ctx = $("#@ri.sensor").get(0).getContext("2d");
+ctx.canvas.width = window.innerWidth - 40;
 var chart = new Chart(ctx);
 
 var data = r["@ri.sensor"];
@@ -51,7 +52,7 @@ chart.Line(data);
     </div>
     <div class="panel-body">
         <div>水位[cm]</div>
-        <canvas id="@r.sensor" width="600" height="300"></canvas>
+        <canvas id="@r.sensor" width="300" height="300"></canvas>
     </div>
 </div>
 }
