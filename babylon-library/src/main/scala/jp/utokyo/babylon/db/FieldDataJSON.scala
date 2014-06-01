@@ -11,7 +11,7 @@ object FieldDataJSON extends FieldDataJSON with LongKeyedMetaMapper[FieldDataJSO
 
 class FieldDataJSON extends LongKeyedMapper[FieldDataJSON] with IdPK{
 
-  def getSingleton = FieldData
+  def getSingleton = FieldDataJSON
 
   object fieldRouterId extends MappedLong(this)
   object jsonData extends MappedText(this)

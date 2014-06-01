@@ -1,9 +1,10 @@
 package controllers.manager
 
-import jp.utokyo.babylon.db.{DisplayFieldData, FieldData, FieldRouter}
+import jp.utokyo.babylon.db._
 import web.MizoLabFieldRouter
 import java.util.Date
 import org.slf4j.LoggerFactory
+import scala.Some
 
 /**
  * Created by takezoux2 on 2014/03/04.
@@ -18,9 +19,13 @@ object FieldRouterManager {
     FieldRouter.findAll().foreach(fieldRouter => try{
       if(new Date().getTime - fieldRouter.lastSyncTime.get.getTime > updateSpan){
         logger.debug("Update " + fieldRouter.routerName.get)
-        val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
+        updateWaterLevel();
+        /*val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
         val data = v.getLatestData()
-        FieldRouter.updateData(fieldRouter,data)
+        FieldRouter.updateData(fieldRouter,data)*/
+
+        fieldRouter.lastSyncTime := new Date()
+        fieldRouter.save()
       }
     }catch
     {
@@ -33,8 +38,22 @@ object FieldRouterManager {
 
   }
 
-  def getLatestData(fieldRouterName : String) : List[(String,String)] = {
+  def updateWaterLevel() = {
+    val waterLevelFields = WaterLevelField.findAll()
+    logger.debug(waterLevelFields.size + " fields to update")
+    waterLevelFields.foreach( f => {
+      logger.debug("Update " + f.sensorColumnName.get)
+      val fieldRouter = f.fieldRouter.obj.get
+      val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
+      val values = v.getWaterLevels(f)
 
+      WaterLevel.replaceDate(f,values)
+
+    })
+
+  }
+
+  def getLatestData(fieldRouterName : String) : List[(String,String)] = {
 
     getLatestData(FieldRouter.findByName(fieldRouterName).get)
   }

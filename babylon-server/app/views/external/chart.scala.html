@@ -1,0 +1,60 @@
+@(span : String,routerInfo : List[RouterInfo])
+
+@scripts = {
+　　 $(function(){
+        $("#@span").addClass("active");
+        update("../../json/@span/1");
+    })
+
+    function threeHours(){
+        update("../../json/three_hours/1");
+    }
+    function oneDay(){
+        update("../../json/one_day/1");
+    }
+    function threeDays(){
+        update("../../json/three_days/1");
+    }
+
+    function update( url ) {
+
+        $.get(url,function(r){
+            console.log(JSON.stringify(r));
+
+            @for(ri <- routerInfo){
+                var ctx = $("#@ri.sensor").get(0).getContext("2d");
+                var chart = new Chart(ctx);
+
+                var data = r["@ri.sensor"];
+                chart.Line(data);
+            }
+
+        });
+    }
+
+}
+
+@main_phone("水位情報",scripts) {
+
+<ul id="tab" class="nav nav-tabs">
+    <li id="three_hours" ><a href="three_hours">3時間</a></li>
+    <li id="one_day"><a href="one_day">1日</a></li>
+    <li id="three_days"><a href="three_days">3日</a></li>
+
+</ul>
+    @for(r <- routerInfo){
+        <div class="panel panel-success">
+            <div class="panel-heading">
+            @{r.name}(@r.sensor)
+            </div>
+            <div class="panel-body">
+                <div>水位[cm]</div>
+                <canvas id="@r.sensor" width="600" height="300"></canvas>
+            </div>
+        </div>
+    }
+
+
+
+
+}

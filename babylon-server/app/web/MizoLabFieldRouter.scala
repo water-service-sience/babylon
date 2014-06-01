@@ -4,7 +4,9 @@ import play.api.libs.ws.WS
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import org.slf4j.LoggerFactory
-import jp.utokyo.babylon.db.FieldRouter
+import jp.utokyo.babylon.db.{WaterLevelField, FieldRouter}
+import java.util.Date
+import java.text.SimpleDateFormat
 
 /**
  * Created by takezoux2 on 14/03/01.
@@ -16,28 +18,70 @@ class MizoLabFieldRouter( id : String) {
   val logger = LoggerFactory.getLogger(classOf[MizoLabFieldRouter])
 
 
+  def getWaterLevels(info : WaterLevelField) : List[(Date,Double)] = {
+    val csvs = getCsvNames
+    val csv = selectLatestCsv(csvs,info.sensorName)
+    val access = WS.url(urlForCsv(csv)).get().map(res => {
+      val lines = res.body.lines
+      // コメント行が入っているのをスキップ
+      lines.next()
+      // カラム名を取得
+      val labels = lines.next().split(",").map(_.trim)
+      val indexForSensor = labels.indexOf(info.sensorColumnName.get)
+      val indexForTimestamp = labels.indexOf(info.timestampColumnName.get)
+
+      if(indexForSensor < 0){
+        logger.warn("Column for sensor not found|" + info.sensorColumnName.get +  " :" + labels.toList)
+      }
+      if(indexForTimestamp < 0){
+        logger.warn("Column for timestamp not found|" + info.timestampColumnName.get + " :" + labels.toList)
+      }
+      // データ部分取得
+      var data : List[(Date,Double)] = Nil
+      val dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm")
+      while(lines.hasNext){
+        val line = lines.next().split(",").map(_.trim)
+        if(line.length > 0) {
+          val sensorValue = (line(indexForSensor).toInt * info.valueFactor.get) + info.valueOffset.get
+          data = (dateFormat.parse(line(indexForTimestamp)), sensorValue) :: data
+        }
+      }
+
+      data
+
+    })
+
+    Await.result(access,1 minutes)
+
+
+  }
+
+
   def getLatestData() = {
     val csvs = getCsvNames
     val csv = selectLatestCsv(csvs)
     getTopDataOfCSV(urlForCsv(csv))
   }
 
-  def selectLatestCsv(csvNames : List[String]) = {
-    FieldRouter.findByName(id).toOption match{
+  def selectLatestCsv(csvNames : List[String]) : String = {
+    FieldRouter.findByName(id).toOption match {
       case Some(router) => {
         val sensorName = router.targetSensorName.get
-        if(sensorName != null &&
-          sensorName.length > 0){
-          csvNames.find(_.contains(sensorName)).getOrElse(csvNames(0))
-        }else{
-          csvNames(0)
-        }
+        selectLatestCsv(csvNames, sensorName)
       }
       case None => {
         csvNames(0)
       }
     }
+  }
+  def selectLatestCsv( csvNames : List[String],sensorName : String) : String = {
 
+    if(sensorName != null &&
+      sensorName.length > 0){
+      csvNames.find(_.contains(sensorName)).getOrElse(csvNames(0))
+    }else{
+      csvNames(0)
+    }
   }
 
   val csvNamesRegex = """\<a href='([^']+?\.csv)'>""".r

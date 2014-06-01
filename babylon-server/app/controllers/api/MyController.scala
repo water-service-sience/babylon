@@ -2,7 +2,6 @@ package controllers.api
 
 import play.api.mvc._
 import scala.util.DynamicVariable
-import scala.Some
 import net.liftweb.common.Full
 import play.api.Logger
 import jp.utokyo.babylon.db.User
