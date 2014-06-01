@@ -1,7 +1,7 @@
 package controllers.external
 
 import play.api.mvc._
-import jp.utokyo.babylon.db.{WaterLevelField, WaterLevel}
+import jp.utokyo.babylon.db.{FieldRouter, WaterLevelField, WaterLevel}
 import play.api.libs.json.{JsObject, Json, JsArray}
 import java.text.SimpleDateFormat
 import models.RouterInfo
@@ -12,7 +12,10 @@ import play.api.libs.json.Json.JsValueWrapper
  */
 object WaterLevelController extends Controller {
 
-
+  def image(routerId : Long) = Action{
+    val r = FieldRouter.findByKey(routerId).get
+    Ok(views.html.external.image(r.displayName,r.routerName))
+  }
   def chart(span : String,routerId : Long) = Action{
     var index = 0
     val routers = WaterLevelField.findOfRouter(routerId).map(r => {
@@ -69,7 +72,7 @@ object WaterLevelController extends Controller {
   val baseJson = Json.parse(
     """
       |{
-      |    "fillColor" : "rgba(220,220,220,0.5)",
+      |    "fillColor" : "#afeeee",
       |    "strokeColor" : "rgba(220,220,220,1)",
       |    "pointColor" : "rgba(220,220,220,1)",
       |    "pointStrokeColor" : "#fff"
