@@ -65,8 +65,8 @@ object WaterLevelController extends Controller {
   def oneWeek(routerId : Long) = {
 
     fromDataList(routerId, f => {
-      WaterLevel.getDataListInXDays(f,8).grouped(24).map(_(0)).toList
-    },"MM/dd HH")
+      WaterLevel.getDataListInXDays(f,8).grouped(12).map(_(0)).toList
+    },"MM/dd H時")
   }
 
   val baseJson = Json.parse(

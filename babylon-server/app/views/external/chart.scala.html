@@ -27,7 +27,13 @@ ctx.canvas.width = window.innerWidth - 40;
 var chart = new Chart(ctx);
 
 var data = r["@ri.sensor"];
-chart.Line(data);
+chart.Line(data,{
+scaleOverride : true,
+scaleStartValue : 0,
+scaleSteps : 3,
+scaleStepWidth : 5,
+scaleFontSize : 20
+});
 }
 
 });

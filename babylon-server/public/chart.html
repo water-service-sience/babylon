@@ -33,7 +33,11 @@
                    ]
                };
                myNewChart.Line(data,{
-                   scaleStartValue : 0
+                   scaleOverride : true,
+                   scaleStartValue : 0,
+                   scaleSteps : 10,
+                   scaleStepWidth : 10,
+                   scaleFontSize : 20
                });
            })
 
