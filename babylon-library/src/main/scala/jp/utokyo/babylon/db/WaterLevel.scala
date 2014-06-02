@@ -13,7 +13,8 @@ object WaterLevel extends WaterLevel with LongKeyedMetaMapper[WaterLevel]{
     val oldest = new Date(values.map(_._1.getTime).min)
     bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_>=(recordTime,oldest))
     // 10日以上前のデータも消す
-    bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_<(recordTime,new Date(new Date().getTime - 10 * 60 * 60 * 1000)))
+    bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_<(recordTime,
+      new Date(new Date().getTime - 10 * 24 * 60 * 60 * 1000)))
     values.foreach(v => {
       val wl = createInstance
       wl.waterLevelFieldId := f.id.get
