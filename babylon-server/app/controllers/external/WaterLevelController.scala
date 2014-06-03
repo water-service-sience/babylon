@@ -14,7 +14,7 @@ object WaterLevelController extends Controller {
 
   def image(routerId : Long) = Action{
     val r = FieldRouter.findByKey(routerId).get
-    Ok(views.html.external.image(r.displayName,r.routerName))
+    Ok(views.html.external.image(r.displayName.get,r.routerName.get))
   }
   def chart(span : String,routerId : Long) = Action{
     var index = 0
@@ -48,25 +48,25 @@ object WaterLevelController extends Controller {
 
   def threeHours(routerId : Long) =
     fromDataList(routerId, f => {
-      WaterLevel.getDataListInXHours(f,3)
+      WaterLevel.getDataListInXHours(f,3,6)
     },"H:mm")
 
   def oneDay(routerId : Long) =
     fromDataList(routerId, f => {
-      WaterLevel.getDataListInXDays(f,1)
+      WaterLevel.getDataListInXDays(f,1,12)
     },"H:mm")
   def threeDays(routerId : Long) = {
 
     fromDataList(routerId, f => {
-      WaterLevel.getDataListInXDays(f,3).grouped(6).map(_(0)).toList
-    },"MM/dd H時")
+      WaterLevel.getDataListInXDays(f,3,12)
+    },"M/dd H時")
   }
 
   def oneWeek(routerId : Long) = {
 
     fromDataList(routerId, f => {
-      WaterLevel.getDataListInXDays(f,8).grouped(12).map(_(0)).toList
-    },"MM/dd H時")
+      WaterLevel.getDataListInXDays(f,8,16)
+    },"M/dd H時")
   }
 
   val baseJson = Json.parse(

@@ -2,6 +2,8 @@ package jp.utokyo.babylon.db
 
 import java.util.Date
 import net.liftweb.mapper._
+import jp.utokyo.babylon.util.TimeUtil
+
 /**
   * Created by takezoux2 on 2014/06/01.
  */
@@ -28,21 +30,44 @@ object WaterLevel extends WaterLevel with LongKeyedMetaMapper[WaterLevel]{
     findAll(By(waterLevelFieldId,f.id.get),OrderBy(recordTime,Descending))
   }
 
-  def getDataListInXHours(f : WaterLevelField,hours : Int) = {
-    findAll(
+  def getLatestRecord(f : WaterLevelField) = {
+    find(
       By(waterLevelFieldId,f.id.get),
-      OrderBy(recordTime,Descending),
-      MaxRows(hours * 6)).reverse
-
-  }
-  def getDataListInXDays(f : WaterLevelField,days : Int) = {
-    findAll(
-      By(waterLevelFieldId,f.id.get),
-      OrderBy(recordTime,Descending),
-      MaxRows(days * 6 * 24)).grouped(6).map(_(0)).toList.reverse
-
+      OrderBy(recordTime,Descending),MaxRows(1)).toOption
   }
 
+  def getDataListInXHours(f : WaterLevelField,hours : Int,maxRecords : Int) = {
+    getLatestRecord(f) match{
+      case Some(r) => {
+        val d = TimeUtil.beforeXHours(r.recordTime,hours)
+        getDataListAfter(f,d,maxRecords)
+      }
+      case None => Nil
+    }
+  }
+  def getDataListInXDays(f : WaterLevelField,days : Int,maxRecords : Int) = {
+    getLatestRecord(f) match {
+      case Some(r) => {
+        val d = TimeUtil.beforeXDays(r.recordTime, days)
+        getDataListAfter(f, d, maxRecords)
+      }
+      case None => Nil
+    }
+  }
+  def getDataListAfter(f : WaterLevelField,pivot : Date,maxRecords : Int) = {
+    val l = findAll(
+      By(waterLevelFieldId,f.id.get),
+      By_>=(recordTime,pivot),
+      OrderBy(recordTime,Descending)).reverse
+
+    val g = l.size / maxRecords
+    if(g <= 1) l
+    else {
+      l.grouped(g).map(_.head).toList
+    }
+  }
+
+  override def dbIndexes: List[BaseIndex[WaterLevel]] = Index(waterLevelFieldId,recordTime) :: Nil
 }
 class WaterLevel extends LongKeyedMapper[WaterLevel] with IdPK{
 
