@@ -45,20 +45,20 @@ class QuestionnaireAnswer extends LongKeyedMapper[QuestionnaireAnswer] with IdPK
     }
   }
   object easiness extends MappedInt(this){
-    override def defaultValue: Int = 1
+    override def defaultValue: Int = 0
   }
   object useForImagePost extends MappedInt(this){
-    override def defaultValue: Int = 1
+    override def defaultValue: Int = 0
   }
   object useForInquiry extends MappedInt(this){
-    override def defaultValue: Int = 1
+    override def defaultValue: Int = 0
   }
   object useForFieldMonitoring extends MappedInt(this){
-    override def defaultValue: Int = 1
+    override def defaultValue: Int = 0
   }
 
   object willUse extends MappedInt(this){
-    override def defaultValue: Int = 1
+    override def defaultValue: Int = 0
   }
 
   object costForUse extends MappedInt(this){

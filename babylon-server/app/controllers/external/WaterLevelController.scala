@@ -82,4 +82,8 @@ object WaterLevelController extends Controller {
   def waterLevel(routerId : Long) = {
 
   }
+
+  def calendar = Action{
+    Ok(views.html.external.calendar())
+  }
 }

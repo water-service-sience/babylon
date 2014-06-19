@@ -1,0 +1,28 @@
+@(title : String,span : String,scripts : Html)(content : Html)
+
+@main_phone(title,scripts) {
+
+<script type="text/javascript">
+    $(function(){
+        $("#@span").addClass("active");
+    })
+</script>
+
+<ul id="tab" class="nav nav-tabs">
+    <li id="image"><a href="@controllers.external.routes.WaterLevelController.image(1)">当日画像</a></li>
+    <li id="three_hours" ><a href="@controllers.external.routes.WaterLevelController.chart("three_hours",1)">3時間</a></li>
+    <li id="one_day"><a href="@controllers.external.routes.WaterLevelController.chart("one_day",1)">1日</a></li>
+    <li id="three_days"><a href="@controllers.external.routes.WaterLevelController.chart("three_days",1)">3日</a></li>
+    <li id="one_week"><a href="@controllers.external.routes.WaterLevelController.chart("one_week",1)">１週間</a></li>
+    <li id="calendar"><a href="@controllers.external.routes.WaterLevelController.calendar">画像カレンダー</a></li>
+    <li><a href="http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbo
+x0094&device=HandaMet">気象データ</a></li>
+
+</ul>
+
+
+@content
+
+
+
+}

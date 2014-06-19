@@ -3,12 +3,12 @@ html,body {
 
 }
 
-#mapContainer : {
+#mapContainer {
     height : 100%;
     min-height : 100%;
     background-color : red;
 }
 
-#image-title : {
+#image-title {
     height : 80px;
 }

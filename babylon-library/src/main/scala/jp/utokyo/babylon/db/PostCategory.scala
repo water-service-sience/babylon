@@ -16,14 +16,6 @@ object PostCategory extends PostCategory with LongKeyedMetaMapper[PostCategory]{
     findByKey(id).map(_.label.get).getOrElse("None")
   }
 
-  def NoneCategory = {
-    PostCategory.findByKey(1).get
-  }
-
-  def InquiryCategory = {
-    PostCategory.findByKey(2).get
-  }
-
   def createNewCategory(label : String) = {
     val c = createInstance
     c.label := label

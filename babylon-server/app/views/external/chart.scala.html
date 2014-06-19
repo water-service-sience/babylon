@@ -1,8 +1,8 @@
 @(span : String,routerInfo : List[RouterInfo])
 
+
 @scripts = {
 　　 $(function(){
-$("#@span").addClass("active");
 update("../../json/@span/1");
 })
 
@@ -33,7 +33,7 @@ scaleStartValue : 0,
 scaleSteps : 3,
 scaleStepWidth : 5,
 scaleFontSize : 25,
-        animation : false
+animation : false
 });
 }
 
@@ -42,16 +42,9 @@ scaleFontSize : 25,
 
 }
 
-@main_phone("水位情報",scripts) {
 
-<ul id="tab" class="nav nav-tabs">
-    <li ><a href="@controllers.external.routes.WaterLevelController.image(1)">画像</a></li>
-    <li id="three_hours" ><a href="three_hours">3時間</a></li>
-    <li id="one_day"><a href="one_day">1日</a></li>
-    <li id="three_days"><a href="three_days">3日</a></li>
-    <li id="one_week"><a href="@controllers.external.routes.WaterLevelController.chart("one_week",1)">１週間</a></li>
+@chart_base("水位情報",span,scripts) {
 
-</ul>
 @for(r <- routerInfo){
 <div class="panel panel-success">
     <div class="panel-heading">

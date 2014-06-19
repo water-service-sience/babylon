@@ -1,7 +1,7 @@
 
 
 .background{
-    background-color:#99FFFF;
+    background-color:#ccFFFF;
     padding : 0% 2% 0% 2%;
 }
 .border {
@@ -110,6 +110,11 @@ th {
 
 
 
+iframe {
+    width : 100%;
+    height : auto;
+    background-color:#FFFFFF;
+}
 
 
 

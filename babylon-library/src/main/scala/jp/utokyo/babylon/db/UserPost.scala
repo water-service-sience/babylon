@@ -80,7 +80,7 @@ object UserPost extends UserPost with LongKeyedMetaMapper[UserPost]{
   def findRecentInquiries(start : Int, count : Int, q : String) = {
     if(q.length > 0){
       findAll(
-        By(UserPost.category,PostCategory.InquiryCategory.id.get),
+        By(UserPost.isInquiry,true),
         Like(UserPost.title,s"%${q}%"),
         OrderBy(UserPost.updated,Descending))
 
