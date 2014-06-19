@@ -86,4 +86,7 @@ object WaterLevelController extends Controller {
   def calendar = Action{
     Ok(views.html.external.calendar())
   }
+  def weatherData = Action{
+    Ok(views.html.external.weather_data())
+  }
 }

@@ -1,0 +1,21 @@
+@()
+
+@script = {
+    $(function(){
+       var pageHeight = $(document).height();
+       $("iframe",parent.document).css({height : (pageHeight)});
+
+    });
+
+}
+
+@chart_base("水位情報","weather_data",script) {
+
+
+<iframe src="http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbo
+x0094&device=HandaMet"></iframe>
+
+
+
+
+}

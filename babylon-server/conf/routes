@@ -57,6 +57,7 @@ POST    /management/contact_type/update controllers.management.EditContactType.u
 GET     /field_router/image/:routerId   controllers.external.WaterLevelController.image(routerId : Long)
 GET     /field_router/water_level/:routerId/:span   controllers.external.WaterLevelController.chart(span:String,routerId : Long)
 GET     /field_router/calendar   controllers.external.WaterLevelController.calendar
+GET     /field_router/weather_data   controllers.external.WaterLevelController.weatherData
 GET     /field_router/json/three_hours/:routerId   controllers.external.WaterLevelController.threeHours(routerId : Long)
 GET     /field_router/json/one_day/:routerId   controllers.external.WaterLevelController.oneDay(routerId : Long)
 GET     /field_router/json/three_days/:routerId   controllers.external.WaterLevelController.threeDays(routerId : Long)
