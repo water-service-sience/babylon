@@ -6,6 +6,7 @@ import play.api.libs.json.{JsObject, Json, JsArray}
 import java.text.SimpleDateFormat
 import models.RouterInfo
 import play.api.libs.json.Json.JsValueWrapper
+import net.liftweb.common.Full
 
 /**
  * Created by takezoux2 on 2014/06/01.
@@ -14,7 +15,7 @@ object WaterLevelController extends Controller {
 
   def image(routerId : Long) = Action{
     val r = FieldRouter.findByKey(routerId).get
-    Ok(views.html.external.image(r.displayName.get,r.routerName.get))
+    Ok(views.html.external.image(routerId, r.displayName.get,r.routerName.get))
   }
   def chart(span : String,routerId : Long) = Action{
     var index = 0
@@ -22,7 +23,7 @@ object WaterLevelController extends Controller {
       index += 1
       RouterInfo(r.fieldRouter.obj.get.displayName.get + index,r.sensorName.get)
     })
-    Ok(views.html.external.chart(span,routers))
+    Ok(views.html.external.chart(routerId,span,routers))
   }
 
   def fromDataList(routerId : Long,getDataList : (WaterLevelField => List[WaterLevel]),_dateFormat : String) = Action{
@@ -83,10 +84,28 @@ object WaterLevelController extends Controller {
 
   }
 
-  def calendar = Action{
-    Ok(views.html.external.calendar())
+  def calendar(routerId : Long) = Action{
+
+    FieldRouter.findByKey(routerId) match{
+      case Full(router) => {
+        val url = s"http://x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/${router.routerName.get}&device=image0&addr=webcam0"
+
+        Ok(views.html.external.calendar(routerId,url))
+      }
+      case _ => NotFound
+    }
+
   }
-  def weatherData = Action{
-    Ok(views.html.external.weather_data())
+  def weatherData(routerId : Long) = Action{
+    FieldRouter.findByKey(routerId) match{
+      case Full(router) => {
+
+        val url = s"http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/${router.routerName.get}&device=${router.targetSensorName.get}"
+
+        Ok(views.html.external.weather_data(routerId,url))
+      }
+      case _ => NotFound
+    }
+
   }
 }

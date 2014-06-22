@@ -1,4 +1,4 @@
-@()
+@(routerId : Long,url : String)
 
 @script = {
     $(function(){
@@ -9,11 +9,10 @@
 
 }
 
-@chart_base("水位情報","calendar",script) {
+@chart_base("水位情報","calendar",routerId,script) {
 
 
-<iframe src="http://x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/vbox
-0094&device=image0&addr=webcam0"></iframe>
+<iframe src="@{url}"></iframe>
 
 
 

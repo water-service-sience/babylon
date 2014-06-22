@@ -1,4 +1,4 @@
-@(span : String,routerInfo : List[RouterInfo])
+@(routerId : Long,span : String,routerInfo : List[RouterInfo])
 
 
 @scripts = {
@@ -43,7 +43,7 @@ animation : false
 }
 
 
-@chart_base("水位情報",span,scripts) {
+@chart_base("水位情報",span,routerId,scripts) {
 
 @for(r <- routerInfo){
 <div class="panel panel-success">

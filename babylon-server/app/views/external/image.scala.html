@@ -1,10 +1,10 @@
-@(displayName : String,routerName : String)
+@(routerId : Long,displayName : String,routerName : String)
 
 @scripts = {
 
 }
 
-@chart_base("画像","image",scripts) {
+@chart_base("画像","image",routerId,scripts) {
 
     <div class="panel panel-success">
         <div class="panel-heading">

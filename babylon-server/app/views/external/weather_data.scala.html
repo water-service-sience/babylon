@@ -1,4 +1,4 @@
-@()
+@(routerId : Long,url : String)
 
 @script = {
     $(function(){
@@ -9,11 +9,10 @@
 
 }
 
-@chart_base("水位情報","weather_data",script) {
+@chart_base("水位情報","weather_data",routerId,script) {
 
 
-<iframe src="http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/vbo
-x0094&device=HandaMet"></iframe>
+<iframe src="@url"></iframe>
 
 
 
