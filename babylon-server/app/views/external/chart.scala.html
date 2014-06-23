@@ -1,19 +1,19 @@
-@(routerId : Long,span : String,routerInfo : List[RouterInfo])
+@(routerId : Long,span : String,routerInfo : List[RouterInfo],routers : List[(Long,String)])
 
 
 @scripts = {
 　　 $(function(){
-update("../../json/@span/1");
+update("../../json/@span/@routerId");
 })
 
 function threeHours(){
-update("../../json/three_hours/1");
+update("../../json/three_hours/@routerId");
 }
 function oneDay(){
-update("../../json/one_day/1");
+update("../../json/one_day/@routerId");
 }
 function threeDays(){
-update("../../json/three_days/1");
+update("../../json/three_days/@routerId");
 }
 
 function update( url ) {
@@ -43,7 +43,7 @@ animation : false
 }
 
 
-@chart_base("水位情報",span,routerId,scripts) {
+@chart_base("水位情報",span,routerId,scripts,routers) {
 
 @for(r <- routerInfo){
 <div class="panel panel-success">

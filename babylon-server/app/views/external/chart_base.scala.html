@@ -1,4 +1,4 @@
-@(title : String,span : String,routerId : Long,scripts : Html)(content : Html)
+@(title : String,span : String,routerId : Long,scripts : Html,routers : List[(Long,String)])(content : Html)
 
 @main_phone(title,scripts) {
 
@@ -16,7 +16,19 @@
     <li id="one_week"><a href="@controllers.external.routes.WaterLevelController.chart("one_week",routerId)">１週間</a></li>
     <li id="calendar"><a href="@controllers.external.routes.WaterLevelController.calendar(routerId)">画像カレンダー</a></li>
     <li id="weather_data"><a href="@controllers.external.routes.WaterLevelController.weatherData(routerId)">気象データ</a></li>
-
+    <li>
+        <div class="btn-group well-sm">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                ルーター一覧
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                @for(r <- routers){
+                  <li><a href="@controllers.external.routes.WaterLevelController.chart("three_hours",r._1)">@{r._2}</a></li>
+                }
+            </ul>
+        </div>
+    </li>
 </ul>
 
 

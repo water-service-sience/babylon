@@ -13,17 +13,17 @@ import net.liftweb.common.Full
  */
 object WaterLevelController extends Controller {
 
-  def image(routerId : Long) = Action{
-    val r = FieldRouter.findByKey(routerId).get
-    Ok(views.html.external.image(routerId, r.displayName.get,r.routerName.get))
-  }
+  def routers = FieldRouter.findAll.map(r => {
+    r.id.get -> r.displayName.get
+  })
+
   def chart(span : String,routerId : Long) = Action{
     var index = 0
     val routers = WaterLevelField.findOfRouter(routerId).map(r => {
       index += 1
-      RouterInfo(r.fieldRouter.obj.get.displayName.get + index,r.sensorName.get)
+      RouterInfo(r.fieldRouter.obj.get.displayName.get + "_" + index,r.sensorName.get)
     })
-    Ok(views.html.external.chart(routerId,span,routers))
+    Ok(views.html.external.chart(routerId,span,routers,this.routers))
   }
 
   def fromDataList(routerId : Long,getDataList : (WaterLevelField => List[WaterLevel]),_dateFormat : String) = Action{
@@ -56,15 +56,14 @@ object WaterLevelController extends Controller {
     fromDataList(routerId, f => {
       WaterLevel.getDataListInXDays(f,1,6)
     },"H:mm")
-  def threeDays(routerId : Long) = {
 
+  def threeDays(routerId : Long) = {
     fromDataList(routerId, f => {
       WaterLevel.getDataListInXDays(f,3,6)
     },"d日H時")
   }
 
   def oneWeek(routerId : Long) = {
-
     fromDataList(routerId, f => {
       WaterLevel.getDataListInXDays(f,8,16)
     },"d日H時")
@@ -84,13 +83,31 @@ object WaterLevelController extends Controller {
 
   }
 
+  def getDomain(routerName : String) = {
+
+    def getId = if(routerName.toLowerCase.startsWith("vbox")){
+      routerName.substring("vbox".length).stripPrefix("0").toInt
+    }else 0
+
+    if(getId > 100){
+      "data01.x-ability.jp"
+    }else{
+      "x-ability.jp"
+    }
+  }
+  def image(routerId : Long) = Action{
+    val r = FieldRouter.findByKey(routerId).get
+    val url = s"http://${getDomain(r.routerName.get)}/cgi-bin/FieldRouter/latest.cgi?dir=/FieldRouter/${r.routerName.get}&target=image0"
+    Ok(views.html.external.image(routerId, r.displayName.get,url,routers))
+  }
+
   def calendar(routerId : Long) = Action{
 
     FieldRouter.findByKey(routerId) match{
       case Full(router) => {
-        val url = s"http://x-ability.jp/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/${router.routerName.get}&device=image0&addr=webcam0"
+        val url = s"http://${getDomain(router.routerName.get)}/cgi-bin/FieldRouter/imageIndex.cgi?dir=/FieldRouter/${router.routerName.get}&device=image0&addr=webcam0"
 
-        Ok(views.html.external.calendar(routerId,url))
+        Ok(views.html.external.calendar(routerId,url,routers))
       }
       case _ => NotFound
     }
@@ -100,9 +117,9 @@ object WaterLevelController extends Controller {
     FieldRouter.findByKey(routerId) match{
       case Full(router) => {
 
-        val url = s"http://x-ability.jp/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/${router.routerName.get}&device=${router.targetSensorName.get}"
+        val url = s"http://${getDomain(router.routerName.get)}/cgi-bin/FieldRouter/showDecagon.cgi?dir=/FieldRouter/${router.routerName.get}&device=${router.targetSensorName.get}"
 
-        Ok(views.html.external.weather_data(routerId,url))
+        Ok(views.html.external.weather_data(routerId,url,routers))
       }
       case _ => NotFound
     }

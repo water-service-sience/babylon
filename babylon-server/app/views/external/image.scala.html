@@ -1,17 +1,17 @@
-@(routerId : Long,displayName : String,routerName : String)
+@(routerId : Long,displayName : String,imageUrl : String,routers : List[(Long,String)])
 
 @scripts = {
 
 }
 
-@chart_base("画像","image",routerId,scripts) {
+@chart_base("画像","image",routerId,scripts,routers) {
 
     <div class="panel panel-success">
         <div class="panel-heading">
             @displayName
         </div>
         <div class="panel-body">
-            <img style="width:100%;" src="http://x-ability.jp/cgi-bin/FieldRouter/latest.cgi?dir=/FieldRouter/@{routerName}&target=image0" />
+            <img style="width:100%;" src="@{imageUrl}" />
         </div>
     </div>
 

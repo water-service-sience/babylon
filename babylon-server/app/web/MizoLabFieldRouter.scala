@@ -97,8 +97,20 @@ class MizoLabFieldRouter( id : String) {
     Await.result(access,1 minutes)
   }
 
+  def getDomain(routerName : String) = {
+
+    def getId = if(routerName.toLowerCase.startsWith("vbox")){
+      routerName.substring("vbox".length).stripPrefix("0").toInt
+    }else 0
+
+    if(getId > 100){
+      "data01.x-ability.jp"
+    }else{
+      "x-ability.jp"
+    }
+  }
   def urlForDataList = {
-    s"http://x-ability.jp/cgi-bin/FieldRouter/dirIndex.cgi?dir=/FieldRouter/${id}/data"
+    s"http://${getDomain(id)}/cgi-bin/FieldRouter/dirIndex.cgi?dir=/FieldRouter/${id}/data"
   }
 
 
@@ -120,7 +132,7 @@ class MizoLabFieldRouter( id : String) {
   }
   def urlForCsv(csvName : String) = {
     if(csvName.startsWith("http")) csvName
-    else s"http://x-ability.jp${csvName}"
+    else s"http://${getDomain(id)}${csvName}"
   }
 
 

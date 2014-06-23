@@ -1,4 +1,4 @@
-@(routerId : Long,url : String)
+@(routerId : Long,url : String,routers : List[(Long,String)])
 
 @script = {
     $(function(){
@@ -9,7 +9,7 @@
 
 }
 
-@chart_base("水位情報","weather_data",routerId,script) {
+@chart_base("水位情報","weather_data",routerId,script,routers) {
 
 
 <iframe src="@url"></iframe>
