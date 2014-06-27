@@ -68,7 +68,8 @@ object UserAPI extends MyController {
 
   def resetPassword = Authenticated(implicit req => {
     val json = req.body.asJson.get
-    val JsString(username) = (json \ "username")
+    val nickname = (json \ "nickname").asOpt[String]
+    val username = (json \ "username").asOpt[String]
     val JsString(newPassword) = (json \ "newPassword")
     val JsString(oldPassword) = (json \ "oldPassword")
     val u = me
@@ -80,8 +81,8 @@ object UserAPI extends MyController {
         "result" -> 2,
         "message" -> "パスワードが短すぎます"
       ))
-    }else if(username.length > 0 && u.username.get != username &&
-      User.findByUsername(username).isDefined){
+    }else if(username.map(_.length > 0).getOrElse(false) && u.username.get != username.get &&
+      User.findByUsername(username.get).isDefined){
       logger.info("Duplicate nickname")
       Ok(Json.obj(
         "result" -> 3,
@@ -90,12 +91,12 @@ object UserAPI extends MyController {
     }else if(u.emptyPassword_? || u.correctPassword_?(oldPassword)){
       logger.debug("Change password")
       User.setPasswordFromClient(u,newPassword)
-      if(username.length > 0) {
+      if(username.map(_.length > 0).getOrElse(false)) {
         logger.debug("Change username")
-        u.username := username
-        u.save()
+        u.username := username.get
       }
-
+      nickname.map(u.nickname := _)
+      u.save()
       Ok(Json.obj(
         "result" -> 1
       ))

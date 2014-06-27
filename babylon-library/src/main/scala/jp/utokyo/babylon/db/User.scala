@@ -15,19 +15,24 @@ import jp.utokyo.babylon.annotations.JsonFieldLevel
 
 object User extends User with LongKeyedMetaMapper[User]{
 
-  def create( nickname : String) = {
+  def create(username : String, nickname : String) = {
+
+    if(User.findByUsername(username).isDefined){
+      throw new Exception("User:" + nickname + " already exists")
+    }
+
     val u = User.createInstance
 
     u.nickname := nickname
+    u.username := username
     u.accessKey := EncryptUtil.randomString(20)
-    u.username := EncryptUtil.randomString(3)
     u.password := ""
     u.lastLogin := new Date
     u.save()
 
 
-    u.username := "user" + u.id.is + EncryptUtil.randomString(3)
-    u.save()
+    //u.username := "user" + u.id.is + EncryptUtil.randomString(3)
+    //u.save()
 
     u
 
@@ -94,9 +99,13 @@ class User extends LongKeyedMapper[User] with IdPK{
   def emptyPassword_? = {
     password.get.size == 0
   }
-  def correctPassword_?( passwordFromClient : String ) = {
+  def correctPassword_?( passwordFromClient : String ) : Boolean = {
     //クライアントからは、1度だけsha256ハッシュがかけられたパスワードが送られるので、
     //もう一度だけsh256ハッシュをかけて比較
+    if(this.password.get.length == 0){
+      return true
+    }
+
     val sha256 = EncryptUtil.sha256(passwordFromClient)
 
     password.get.size > 0 && (

@@ -1,4 +1,6 @@
 import controllers.manager.{FieldRouterManager, PhotoManager}
+import java.text.SimpleDateFormat
+import java.util.Date
 import jp.utokyo.babylon.db._
 import net.liftweb.common.Full
 import net.liftweb.common.{Full, Box}
@@ -8,6 +10,10 @@ import net.liftweb.mapper.Schemifier
 import play.api.GlobalSettings
 import play.libs.Akka
 import play.{api, Logger}
+import play.api.mvc._
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,4 +58,21 @@ object Global extends GlobalSettings {
 
 }
 
+object LoggingFilter extends Filter {
+  def apply(next: (RequestHeader) => Result)(rh: RequestHeader) = {
+    val dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss")
+    val start = System.currentTimeMillis
+
+    def logTime(result: PlainResult): Result = {
+      val time = dateFormat.format(new Date)
+      Logger.info(s"${rh.method} ${rh.uri} took ${time}ms and returned ${result.header.status}")
+      result.withHeaders("Request-Time" -> time.toString)
+    }
+
+    next(rh) match {
+      case plain: PlainResult => logTime(plain)
+      case async: AsyncResult => async.transform(logTime)
+    }
+  }
+}
 

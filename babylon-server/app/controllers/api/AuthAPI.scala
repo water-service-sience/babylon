@@ -17,11 +17,11 @@ object AuthAPI extends Controller {
 
   def createAccount = Action(implicit req => {
     val json = req.body.asJson.get
-    //val username = (json \ "username").as[String]
+    val username = (json \ "username").as[String]
     val nickname = (json \ "nickname").as[String]
     //val password = (json \ "password").as[String]
 
-    val u = User.create(nickname)
+    val u = User.create(username,nickname)
 
     Ok(Json.obj(
       "userId" -> u.id.is,
@@ -34,7 +34,7 @@ object AuthAPI extends Controller {
   def login = Action(implicit req => {
     val json = req.body.asJson.get
     val JsString(username) = (json \ "username")
-    val JsString(password) = (json \ "password")
+    val password = (json \ "password").asOpt[String].getOrElse("")
     println(username + ":" + password)
     User.findByUsername(username) match{
       case Full(u) => {

@@ -44,7 +44,7 @@ object RegisterPage extends ManagerBase {
 
         }else{
 
-          val u = User.create(username)
+          val u = User.create(username,username)
 
           u.manager := true
           u.username := username

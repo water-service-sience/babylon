@@ -168,7 +168,6 @@ object PostManager {
 
   def getRecentInquiries(start : Int, count : Int, q : String) = {
     UserPost.findRecentInquiries(start ,count , q)
-
   }
 
   def getOwnPost(userId : Long,_year : Int,_month : Int) = {
@@ -184,8 +183,6 @@ object PostManager {
       By_>=(UserPost.posted,start.getTime),
       By_<=(UserPost.posted,end.getTime),
       OrderBy(UserPost.posted,Descending))
-
-
   }
 
   def getAllOwnPosts(userId : Long) = {
