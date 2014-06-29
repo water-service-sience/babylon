@@ -33,15 +33,25 @@ object WaterLevelController extends Controller {
     val allData = WaterLevelField.findOfRouter(routerId).map(f => {
 
       val dataList = getDataList(f)
+      val waterLevel = Json.toJson(dataList.map(d => {
+        0
+      }))
       val data = Json.toJson(dataList.map(d => {
         d.level.get
+      }))
+      val groundData = Json.toJson(dataList.map(d => {
+        d.level.get.min(0)
       }))
       val labels = Json.toJson(dataList.map(d => {
         dateFormat.format(d.recordTime.get)
       }))
       f.sensorName.get ->Json.obj(
         "labels" -> labels,
-        "datasets" -> JsArray(List(baseJson + ("data" -> data)))
+        "datasets" -> JsArray(List(
+          dryGroundConfig + ("data" -> waterLevel),
+          baseJson + ("data" -> data),
+          groundDataConfig + ("data" -> groundData)
+        ))
       )
     })
     Ok(JsObject(allData))
@@ -68,11 +78,35 @@ object WaterLevelController extends Controller {
       WaterLevel.getDataListInXDays(f,8,16)
     },"d日H時")
   }
+  def oneMonth(routerId : Long) = {
+    fromDataList(routerId, f => {
+      WaterLevel.getDataListInXDays(f,30,10)
+    },"M月d日")
+  }
 
+  val dryGroundConfig = Json.parse(
+    """
+      |{
+      |    "fillColor" : "#f5deb3",
+      |    "strokeColor" : "rgba(220,220,220,1)",
+      |    "pointColor" : "rgba(220,220,220,1)",
+      |    "pointStrokeColor" : "#fff",
+      |    "pointDot" : false
+      |}
+    """.stripMargin).asInstanceOf[JsObject]
   val baseJson = Json.parse(
     """
       |{
       |    "fillColor" : "#afeeee",
+      |    "strokeColor" : "rgba(220,220,220,1)",
+      |    "pointColor" : "rgba(220,220,220,1)",
+      |    "pointStrokeColor" : "#fff"
+      |}
+    """.stripMargin).asInstanceOf[JsObject]
+  val groundDataConfig = Json.parse(
+    """
+      |{
+      |    "fillColor" : "#b8860b",
       |    "strokeColor" : "rgba(220,220,220,1)",
       |    "pointColor" : "rgba(220,220,220,1)",
       |    "pointStrokeColor" : "#fff"

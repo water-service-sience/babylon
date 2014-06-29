@@ -63,6 +63,7 @@ GET     /field_router/json/three_hours/:routerId   controllers.external.WaterLev
 GET     /field_router/json/one_day/:routerId   controllers.external.WaterLevelController.oneDay(routerId : Long)
 GET     /field_router/json/three_days/:routerId   controllers.external.WaterLevelController.threeDays(routerId : Long)
 GET     /field_router/json/one_week/:routerId   controllers.external.WaterLevelController.oneWeek(routerId : Long)
+GET     /field_router/json/one_month/:routerId   controllers.external.WaterLevelController.oneMonth(routerId : Long)
 
 
 

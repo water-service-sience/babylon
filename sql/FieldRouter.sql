@@ -4,9 +4,9 @@ insert into FieldRouter (id , longitude , latitude  , routername , lastsynctime 
 (1,136.8725,34.907167,"vbox0094","2014-01-01","半田","HandaMet");
 
 insert into waterlevelfield ( id , sensorcolumnname , timestampcolumnname , fieldrouter , valuefactor ,valueoffset , sensorname ) values
-(1,"Port2","Timestamp",1,-0.0318 ,49.682, "HandaW2"),
-(2,"Port5","Timestamp",1,-0.0317 ,49.705, "HandaMet"),
-(3,"Port2","Timestamp",1,-0.0343 ,51.787, "HandaW1");
+(1,"Port5","Timestamp",1,-0.0317 ,49.705, "HandaMet"),
+(2,"Port2","Timestamp",1,-0.0343 ,51.787, "HandaW1"),
+(3,"Port2","Timestamp",1,-0.0318 ,49.682, "HandaW2");
 
 
 insert into fieldrouter (id , longitude , latitude  , routername , lastsynctime , displayname , targetsensorname) values

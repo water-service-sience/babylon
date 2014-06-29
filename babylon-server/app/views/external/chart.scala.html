@@ -24,13 +24,14 @@ console.log(JSON.stringify(r));
 @for(ri <- routerInfo){
 var ctx = $("#@ri.sensor").get(0).getContext("2d");
 ctx.canvas.width = window.innerWidth - 40;
+ctx.canvas.height = window.innerHeight * 0.6;
 var chart = new Chart(ctx);
 
 var data = r["@ri.sensor"];
 chart.Line(data,{
 scaleOverride : true,
-scaleStartValue : 0,
-scaleSteps : 3,
+scaleStartValue : -5,
+scaleSteps : 4,
 scaleStepWidth : 5,
 scaleFontSize : 25,
 animation : false
