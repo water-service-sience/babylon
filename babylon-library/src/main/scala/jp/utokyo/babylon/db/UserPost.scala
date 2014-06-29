@@ -153,7 +153,7 @@ class UserPost extends LongKeyedMapper[UserPost] with IdPK{
   }
 
   object category extends MappedLongForeignKey(this,PostCategory){
-    override def defaultValue: Long = 1
+    override def defaultValue: Long = 0
 
   }
   object postStatus extends MappedLongForeignKey(this,PostStatus) {

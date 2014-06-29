@@ -1,6 +1,6 @@
 package controllers.api
 
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json.{JsArray, JsString, Json}
 import controllers.manager.Jsonize
 import play.api.libs.json.Json.JsValueWrapper
 import jp.utokyo.babylon.db.{User, Land, Contact}
@@ -52,16 +52,23 @@ object UserAPI extends MyController {
 
   def updateContacts = Authenticated(implicit req => {
     val body = req.body.asJson.get
+    println(body)
+    println( (body \\ "contacts"))
 
-    val contacts = (body \\ "contacts").map( e => {
+    val JsArray(contactList) = body \ "contacts"
+
+    val contacts = contactList.map( e => {
       (e \ "contactType").as[Long] ->
         (e \ "contact").as[String]
     }).toList
 
 
+    println( (body \\ "contacts"))
+
     val c = Contact.updateContacts(me,contacts).toList
 
-    Ok(Json.arr(c.map(Jsonize.contact(_) : JsValueWrapper) :_* ))
+    println( "####")
+    Ok(JsArray(c.map(Jsonize.contact(_))))
 
 
   })
