@@ -70,8 +70,8 @@ object UserAPI extends MyController {
     val json = req.body.asJson.get
     val nickname = (json \ "nickname").asOpt[String]
     val username = (json \ "username").asOpt[String]
-    val JsString(newPassword) = (json \ "newPassword")
-    val JsString(oldPassword) = (json \ "oldPassword")
+    val JsString(newPassword) = (json \ "password")
+    //val JsString(oldPassword) = (json \ "oldPassword")
     val u = me
 
 
@@ -88,7 +88,7 @@ object UserAPI extends MyController {
         "result" -> 3,
         "message" -> "既に存在するユーザー名です。"
       ))
-    }else if(u.emptyPassword_? || u.correctPassword_?(oldPassword)){
+    }else{//} if(u.emptyPassword_? || u.correctPassword_?(oldPassword)){
       logger.debug("Change password")
       User.setPasswordFromClient(u,newPassword)
       if(username.map(_.length > 0).getOrElse(false)) {
@@ -100,13 +100,13 @@ object UserAPI extends MyController {
       Ok(Json.obj(
         "result" -> 1
       ))
-    }else{
+    }/*else{
       logger.info("Wrong password")
       Ok(Json.obj(
         "result" -> 4,
         "message" -> "パスワードが間違っています。"
       ))
-    }
+    }*/
 
   })
 
