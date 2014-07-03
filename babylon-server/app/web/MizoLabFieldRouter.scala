@@ -20,7 +20,7 @@ class MizoLabFieldRouter( id : String) {
 
   def getWaterLevels(info : WaterLevelField) : List[(Date,Double)] = {
     val csvs = getCsvNames
-    val csv = selectLatestCsv(csvs,info.sensorName)
+    val csv = selectLatestCsv(csvs,info.sensorName.get)
     val access = WS.url(urlForCsv(csv)).get().map(res => {
       val lines = res.body.lines
       // コメント行が入っているのをスキップ

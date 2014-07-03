@@ -2,7 +2,7 @@ package controllers.api
 
 import play.api.mvc.Action
 import controllers.manager.{Jsonize, PostManager, PhotoManager}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, Json}
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.Logger
 import jp.utokyo.babylon.db.{PrivateMessage, UserPost, User, PostCategory}
@@ -85,6 +85,34 @@ object PostAPI extends MyController{
 
 
   })
+
+  def getNearGroupedPosts(lon : Double,lat : Double,scale : Double) = Action(implicit req => {
+
+    Logger.debug("Get near by " + lon + " : " + lat + " : scale = " + scale)
+
+    val posts = PostManager.findNearPosts(lon,lat)
+
+    val grouped = posts.groupBy(g => {
+      val lat = (g.latitude.get / scale).toInt
+      val lon = (g.longitude.get / scale).toInt
+      println(lat + " : " + lon)
+      lat -> lon
+    })
+
+
+    Ok( JsArray( grouped.map({
+      case ( (sLat,sLon),posts) => {
+        Json.obj(
+          ("latitude" -> (sLat * scale + scale * 0.5)),
+          ("longitude" -> (sLon * scale + scale * 0.5)),
+          ("posts" -> JsArray(posts.map(Jsonize.restrictInfo(_))))
+        )
+      }
+    }).toList))
+
+
+  })
+
 
   def getOwnPost(year : Int = 0,month : Int = 0) = Authenticated(implicit req => {
     Logger.debug("Get own posts")

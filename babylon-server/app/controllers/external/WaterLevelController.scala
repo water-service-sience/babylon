@@ -48,8 +48,8 @@ object WaterLevelController extends Controller {
       f.sensorName.get ->Json.obj(
         "labels" -> labels,
         "datasets" -> JsArray(List(
+          waterConfig + ("data" -> data),
           dryGroundConfig + ("data" -> waterLevel),
-          baseJson + ("data" -> data),
           groundDataConfig + ("data" -> groundData)
         ))
       )
@@ -94,7 +94,7 @@ object WaterLevelController extends Controller {
       |    "pointDot" : false
       |}
     """.stripMargin).asInstanceOf[JsObject]
-  val baseJson = Json.parse(
+  val waterConfig = Json.parse(
     """
       |{
       |    "fillColor" : "#afeeee",

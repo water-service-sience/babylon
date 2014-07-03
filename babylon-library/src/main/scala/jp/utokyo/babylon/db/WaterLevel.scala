@@ -10,8 +10,8 @@ import jp.utokyo.babylon.util.TimeUtil
 
 object WaterLevel extends WaterLevel with LongKeyedMetaMapper[WaterLevel]{
 
-  def replaceDate(f : WaterLevelField,values : List[(Date,Double)]) = {
-
+  def replaceDate(f : WaterLevelField,values : List[(Date,Double)]) : Unit = {
+    if(values.size == 0) return
     val oldest = new Date(values.map(_._1.getTime).min)
     bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_>=(recordTime,oldest))
     // 10日以上前のデータも消す
