@@ -1,0 +1,42 @@
+<configuration>
+    <conversionRule conversionWord="coloredLevel" converterClass="play.api.Logger$ColoredLevel" />
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/log/error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{15} - %message%n%xException</pattern>
+        </encoder>
+    </appender>
+    <appender name="ACCESS" class="ch.qos.logback.core.FileAppender">
+        <file>${application.home}/logs/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/log/access.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %message%n%xException</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+          <pattern>%coloredLevel %logger{15} - %message%n%xException{50}</pattern>
+      </encoder>
+    </appender>
+    <logger name="play" level="INFO" />
+    <logger name="application" level="INFO" />
+    <logger name="net.rubyeye.xmemcached.impl" level="INFO" />
+    <logger name="com.google.code.yanf4j.core.impl.AbstractSession" level="INFO" />
+    <logger name="scala.slick.compiler" level="INFO" />
+    <logger name="scala.slick.session.BaseSession" level="INFO" />
+    <logger name="org.apache.http" level="INFO" />
+    <logger name="javax.management" level="INFO" />
+    <logger name="accessLog" level="INFO">
+        <appender-ref ref="ACCESS" />
+    </logger>
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

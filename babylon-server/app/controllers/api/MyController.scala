@@ -5,6 +5,8 @@ import scala.util.DynamicVariable
 import net.liftweb.common.Full
 import play.api.Logger
 import jp.utokyo.babylon.db.User
+import org.slf4j.LoggerFactory
+import java.util.Date
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +20,8 @@ trait MyController extends Controller {
   val AccessKeyHeader = "BBLN-ACCESS-KEY"
 
   var meVar = new DynamicVariable[User](null)
+
+  val accessLogger = LoggerFactory.getLogger("accessLog")
 
   def me = meVar.value
   def userId = me.id.is
@@ -47,6 +51,7 @@ trait MyController extends Controller {
     User.findByAccessKey(accessKey) match{
       case Full(me) => {
         this.meVar.withValue(me){
+          accessLogger.info(s"""{"timestamp" : ${new Date().getTime} "userId" : ${me.id.get},"method" : "${request.method}", "url" : "${request.uri}"}""")
           func(request)
         }
       }

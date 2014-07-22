@@ -86,7 +86,7 @@ object PostAPI extends MyController{
 
   })
 
-  def getNearGroupedPosts(lon : Double,lat : Double,scale : Double) = Action(implicit req => {
+  def getNearGroupedPosts(lon : Double,lat : Double,scale : Double) = Authenticated(implicit req => {
 
     Logger.debug("Get near by " + lon + " : " + lat + " : scale = " + scale)
 
@@ -95,7 +95,7 @@ object PostAPI extends MyController{
     val grouped = posts.groupBy(g => {
       val lat = (g.latitude.get / scale).toInt
       val lon = (g.longitude.get / scale).toInt
-      println(lat + " : " + lon)
+      //println(lat + " : " + lon)
       lat -> lon
     })
 

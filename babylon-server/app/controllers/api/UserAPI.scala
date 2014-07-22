@@ -52,8 +52,8 @@ object UserAPI extends MyController {
 
   def updateContacts = Authenticated(implicit req => {
     val body = req.body.asJson.get
-    println(body)
-    println( (body \\ "contacts"))
+    //println(body)
+    //println( (body \\ "contacts"))
 
     val JsArray(contactList) = body \ "contacts"
 
@@ -63,11 +63,11 @@ object UserAPI extends MyController {
     }).toList
 
 
-    println( (body \\ "contacts"))
+    //println( (body \\ "contacts"))
 
     val c = Contact.updateContacts(me,contacts).toList
 
-    println( "####")
+    //println( "####")
     Ok(JsArray(c.map(Jsonize.contact(_))))
 
 
