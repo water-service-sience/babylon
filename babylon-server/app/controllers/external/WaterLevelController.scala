@@ -21,7 +21,7 @@ object WaterLevelController extends Controller {
     var index = 0
     val routers = WaterLevelField.findOfRouter(routerId).map(r => {
       index += 1
-      RouterInfo(r.fieldRouter.obj.get.displayName.get,r.displayName.get)
+      RouterInfo(r.fieldRouter.obj.get.displayName.get,r.sensorName.get,r.displayName.get)
     })
     Ok(views.html.external.chart(routerId,span,routers,this.routers))
   }
