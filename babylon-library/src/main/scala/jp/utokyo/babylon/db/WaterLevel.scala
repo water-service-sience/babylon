@@ -3,6 +3,7 @@ package jp.utokyo.babylon.db
 import java.util.Date
 import net.liftweb.mapper._
 import jp.utokyo.babylon.util.TimeUtil
+import java.util.concurrent.TimeUnit
 
 /**
   * Created by takezoux2 on 2014/06/01.
@@ -14,9 +15,9 @@ object WaterLevel extends WaterLevel with LongKeyedMetaMapper[WaterLevel]{
     if(values.size == 0) return
     val oldest = new Date(values.map(_._1.getTime).min)
     bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_>=(recordTime,oldest))
-    // 10日以上前のデータも消す
+    // 45日以上前のデータも消す
     bulkDelete_!!(By(waterLevelFieldId,f.id.get),By_<(recordTime,
-      new Date(new Date().getTime - 10 * 24 * 60 * 60 * 1000)))
+      new Date(new Date().getTime - TimeUnit.DAYS.toMillis(45))))
     values.foreach(v => {
       val wl = createInstance
       wl.waterLevelFieldId := f.id.get

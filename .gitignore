@@ -15,4 +15,6 @@ dist
 /RUNNING_PID
 /.settings
 
+babylon-server/log/*
+
 images/*

@@ -5,21 +5,31 @@ import web.MizoLabFieldRouter
 import java.util.Date
 import org.slf4j.LoggerFactory
 import scala.Some
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by takezoux2 on 2014/03/04.
  */
 object FieldRouterManager {
 
-  val updateSpan = 60 * 60 * 1000 // １時間ごとに更新
+  val updateSpan = TimeUnit.HOURS.toMillis(1) // １時間ごとに更新
   val logger = LoggerFactory.getLogger(getClass)
 
   def updateData() = {
     logger.debug("Begin update field router data")
     FieldRouter.findAll().foreach(fieldRouter => try{
-      if(new Date().getTime - fieldRouter.lastSyncTime.get.getTime > updateSpan){
+      val timeDiff = new Date().getTime - fieldRouter.lastSyncTime.get.getTime
+      if(timeDiff > updateSpan){
         logger.debug("Update " + fieldRouter.routerName.get)
-        updateWaterLevel();
+
+        // 一週間程度以内の場合は、軽量な更新
+        if(timeDiff < TimeUnit.DAYS.toMillis(7)){
+          updateWaterLevel();
+
+        }else{
+          //1週間以上空いている場合は、フルに更新する
+          updateWaterLevelIn30Days()
+        }
         /*val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
         val data = v.getLatestData()
         FieldRouter.updateData(fieldRouter,data)*/
@@ -38,7 +48,12 @@ object FieldRouterManager {
 
   }
 
+  /**
+   * 直近のデータだけを取得し、更新を行う
+   * 比較的軽量
+   */
   def updateWaterLevel() = {
+    logger.debug("Light update")
     val waterLevelFields = WaterLevelField.findAll()
     logger.debug(waterLevelFields.size + " fields to update")
     waterLevelFields.foreach( f => {
@@ -47,6 +62,25 @@ object FieldRouterManager {
       val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
       val values = v.getWaterLevels(f)
 
+      WaterLevel.replaceDate(f,values)
+
+    })
+
+  }
+
+  /**
+   * 全てのCSVデータを取得して来て、そのうちの３０日以内のデータを更新する
+   * 全データをダウンロードしてくるため、やや重い
+   */
+  def updateWaterLevelIn30Days() = {
+    logger.info("Full update")
+    val waterLevelFields = WaterLevelField.findAll()
+    logger.debug(waterLevelFields.size + " fields to update")
+    waterLevelFields.foreach( f => {
+      logger.debug("Update " + f.sensorColumnName.get)
+      val fieldRouter = f.fieldRouter.obj.get
+      val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
+      val values = v.getWaterLevelsIn30Days(f)
       WaterLevel.replaceDate(f,values)
 
     })
