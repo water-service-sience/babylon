@@ -16,7 +16,7 @@ object FieldRouterManager {
   val logger = LoggerFactory.getLogger(getClass)
 
   def updateData() = {
-    logger.debug("Begin update field router data")
+    logger.info("Begin update field router data")
     FieldRouter.findAll().foreach(fieldRouter => try{
       val timeDiff = new Date().getTime - fieldRouter.lastSyncTime.get.getTime
       if(timeDiff > updateSpan){
@@ -80,7 +80,8 @@ object FieldRouterManager {
       logger.debug("Update " + f.sensorColumnName.get)
       val fieldRouter = f.fieldRouter.obj.get
       val v = new MizoLabFieldRouter(fieldRouter.routerName.get)
-      val values = v.getWaterLevelsIn30Days(f)
+      val values = v.getWaterLevelsInSummer(f)
+      //val values = v.getWaterLevelsIn30Days(f)
       WaterLevel.replaceDate(f,values)
 
     })

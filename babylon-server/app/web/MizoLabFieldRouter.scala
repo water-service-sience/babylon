@@ -27,6 +27,14 @@ class MizoLabFieldRouter( id : String) {
     )
     d
   }
+  def getWaterLevelsInSummer(info : WaterLevelField) : List[(Date,Double)] = {
+    val d = getDataFromCsvAfter(
+      info,
+      urlForFullCsv(info.sensorName.get),
+      new SimpleDateFormat("yyyyMMdd").parse("20140601")
+    )
+    d
+  }
 
   def getWaterLevels(info : WaterLevelField) : List[(Date,Double)] = {
     val csvs = getCsvNames
@@ -154,11 +162,14 @@ class MizoLabFieldRouter( id : String) {
       val lines = res.body.lines
       // カラム名を取得
       val labels = lines.next().split(",").map(_.trim)
-      val indexForSensor = labels.indexOf(info.dataCsvColumnName.get)
+      var indexForSensor = labels.indexOf(info.dataCsvColumnName.get)
       val indexForTimestamp = labels.indexOf(info.timestampColumnName.get)
 
       if(indexForSensor < 0){
-        logger.warn("Column for sensor not found|" + info.sensorColumnName.get +  " :" + labels.toList)
+        indexForSensor = labels.indexOf("Millivolt[mV]")
+        if(indexForSensor < 0) {
+          logger.warn("Column for sensor not found|" + info.sensorColumnName.get + " :" + labels.toList)
+        }
       }
       if(indexForTimestamp < 0){
         logger.warn("Column for timestamp not found|" + info.timestampColumnName.get + " :" + labels.toList)

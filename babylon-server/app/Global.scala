@@ -34,6 +34,7 @@ object Global extends GlobalSettings {
 
 
   override def onStart(app: api.Application) {
+    println("##Application start")
     Logger.info("Application has started")
     DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     Schemifier.schemify(true, Schemifier.infoF _, models :_*)
@@ -49,9 +50,12 @@ object Global extends GlobalSettings {
   def scheduleFieldRouterDataUpdate() = {
     import play.api.libs.concurrent.Execution.Implicits._
     import scala.concurrent.duration._
-    Akka.system.scheduler.schedule(0 seconds, 4.hours)({
+
+    //FieldRouterManager.updateData()
+    /*Akka.system.scheduler.schedule(0 seconds, 4.hours)({
       FieldRouterManager.updateData()
-    })
+    })*/
+    1
   }
 
 
