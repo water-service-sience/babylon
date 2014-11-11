@@ -48,9 +48,9 @@ object WaterLevelController extends Controller {
       f.sensorName.get ->Json.obj(
         "labels" -> labels,
         "datasets" -> JsArray(List(
-          waterConfig + ("data" -> data),
           dryGroundConfig + ("data" -> waterLevel),
-          groundDataConfig + ("data" -> groundData)
+            waterConfig + ("data" -> data)
+          //groundDataConfig + ("data" -> groundData)
         ))
       )
     })
@@ -87,8 +87,8 @@ object WaterLevelController extends Controller {
   val dryGroundConfig = Json.parse(
     """
       |{
-      |    "fillColor" : "#f5deb3",
-      |    "strokeColor" : "rgba(220,220,220,1)",
+      |    "fillColor" : "#daa520",
+      |    "strokeColor" : "rgba(220,220,220,0.5)",
       |    "pointColor" : "rgba(220,220,220,1)",
       |    "pointStrokeColor" : "#fff",
       |    "pointDot" : false
@@ -97,7 +97,7 @@ object WaterLevelController extends Controller {
   val waterConfig = Json.parse(
     """
       |{
-      |    "fillColor" : "#afeeee",
+      |    "fillColor" : "rgba(135,206,235,0.5)",
       |    "strokeColor" : "rgba(220,220,220,1)",
       |    "pointColor" : "rgba(220,220,220,1)",
       |    "pointStrokeColor" : "#fff"
@@ -106,7 +106,7 @@ object WaterLevelController extends Controller {
   val groundDataConfig = Json.parse(
     """
       |{
-      |    "fillColor" : "#b8860b",
+      |    "fillColor" : "rgba(255,0,0,0.5)",
       |    "strokeColor" : "rgba(220,220,220,1)",
       |    "pointColor" : "rgba(220,220,220,1)",
       |    "pointStrokeColor" : "#fff"

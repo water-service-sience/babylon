@@ -29,6 +29,7 @@ var chart = new Chart(ctx);
 
 var data = r["@ri.sensor"];
 chart.Line(data,{
+bezierCurve : false,
 scaleOverride : true,
 scaleStartValue : -5,
 scaleSteps : 4,
