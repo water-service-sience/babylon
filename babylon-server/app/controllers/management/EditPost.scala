@@ -8,6 +8,9 @@ import java.util.Date
 import play.api.Logger
 import jp.utokyo.babylon.db._
 import play.api.libs.json.{JsValue, Json}
+import play.api.i18n.Lang
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 /**
  * Created with IntelliJ IDEA.
@@ -146,12 +149,12 @@ object EditPost extends ManagerBase {
       post.save()
 
       logger.debug("Update post status")
-      Redirect(routes.EditPost.editPost(id)).withSession(session +
-        ("message" -> "Update post status") +
+      Redirect(routes.EditPost.editPost(id)).addingToSession(
+        ("message" -> "Update post status"),
         ("selectedTab" -> "info"))
     }else{
-      Redirect(routes.EditPost.editPost(id)).withSession(session +
-        ("message" -> "No updates") +
+      Redirect(routes.EditPost.editPost(id)).addingToSession(
+        ("message" -> "No updates"),
         ("selectedTab" -> "info"))
     }
 

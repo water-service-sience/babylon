@@ -1,6 +1,6 @@
 package web
 
-import play.api.libs.ws.WS
+import play.api.libs.ws._
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import org.slf4j.LoggerFactory
@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit
  * Created by takezoux2 on 14/03/01.
  */
 class MizoLabFieldRouter( id : String) {
+  import play.api.Play.current
+  val WS = play.api.libs.ws.WS.client
 
   implicit val executionContext = ExecutionContext.global
 

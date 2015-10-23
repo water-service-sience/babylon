@@ -10,7 +10,7 @@ import controllers.management.EditPost
 import jp.utokyo.babylon.util.FileUtil
 import jp.utokyo.babylon.db._
 import web.MizoLabFieldRouter
-import play.api.templates.Html
+import play.twirl.api.Html
 
 object Application extends Controller {
 
@@ -55,7 +55,7 @@ object Application extends Controller {
   }
 
 
-  def withCacheHeader( status : PlainResult) = {
+  def withCacheHeader( status : Result) = {
 
     val format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz")
     val expireSecs = 60 * 60 * 24 * 30 //キャッシュはおよそ１ヶ月

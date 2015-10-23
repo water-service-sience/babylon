@@ -33,7 +33,7 @@ object AuthAPI extends Controller {
 
   def login = Action(implicit req => {
     val json = req.body.asJson.get
-    val JsString(username) = (json \ "username")
+    val JsString(username) = (json \ "username").get
     val password = (json \ "password").asOpt[String].getOrElse("")
     println(username + ":" + password)
     User.findByUsername(username) match{

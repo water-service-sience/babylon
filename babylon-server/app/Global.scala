@@ -14,6 +14,7 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 
+import scala.concurrent.Future
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +40,7 @@ object Global extends GlobalSettings {
     DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     Schemifier.schemify(true, Schemifier.infoF _, models :_*)
 
-    val imageDir = play.Play.application().configuration().getString("image-directory")
+    val imageDir = app.configuration.getString("image-directory").get
     Logger.info("Image dir = " + imageDir)
     PhotoManager.imageDir = imageDir
 
@@ -63,20 +64,16 @@ object Global extends GlobalSettings {
 }
 
 object LoggingFilter extends Filter {
-  def apply(next: (RequestHeader) => Result)(rh: RequestHeader) = {
+  def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader) = {
     val dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss")
     val start = System.currentTimeMillis
 
-    def logTime(result: PlainResult): Result = {
+
+    next(rh).map( result => {
       val time = dateFormat.format(new Date)
       Logger.info(s"${rh.method} ${rh.uri} took ${time}ms and returned ${result.header.status}")
       result.withHeaders("Request-Time" -> time.toString)
-    }
-
-    next(rh) match {
-      case plain: PlainResult => logTime(plain)
-      case async: AsyncResult => async.transform(logTime)
-    }
+    })
   }
 }
 

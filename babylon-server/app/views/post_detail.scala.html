@@ -4,7 +4,7 @@
   form : Form[_],postUpdateForm : Form[_],sendPrivateMessageForm : Form[_],
   statusMessage : String,
   selectedTab : String,
-  selections : controllers.management.EditPost.Selections)
+  selections : controllers.management.EditPost.Selections)(implicit _messages: play.api.i18n.Messages)
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 
 @scripts = {

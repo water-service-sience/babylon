@@ -55,7 +55,7 @@ object UserAPI extends MyController {
     //println(body)
     //println( (body \\ "contacts"))
 
-    val JsArray(contactList) = body \ "contacts"
+    val JsArray(contactList) = (body \ "contacts").get
 
     val contacts = contactList.map( e => {
       (e \ "contactType").as[Long] ->
@@ -77,7 +77,7 @@ object UserAPI extends MyController {
     val json = req.body.asJson.get
     val nickname = (json \ "nickname").asOpt[String]
     val username = (json \ "username").asOpt[String]
-    val JsString(newPassword) = (json \ "password")
+    val JsString(newPassword) = (json \ "password").get
     //val JsString(oldPassword) = (json \ "oldPassword")
     val u = me
 

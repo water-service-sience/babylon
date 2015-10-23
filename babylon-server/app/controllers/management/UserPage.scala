@@ -5,6 +5,9 @@ import play.api.data.Form
 import play.api.data.Forms._
 import net.liftweb.common.Full
 import jp.utokyo.babylon.db.{ContactType, UserPost, User, Contact}
+import play.api.i18n.Lang
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +17,7 @@ import jp.utokyo.babylon.db.{ContactType, UserPost, User, Contact}
  * To change this template use File | Settings | File Templates.
  */
 object UserPage  extends ManagerBase {
+
 
 
   def addContactForm = Form(

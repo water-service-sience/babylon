@@ -1,21 +1,24 @@
+
+import play.PlayImport.PlayKeys
+import sbt.Keys._
 import sbt._
-import Keys._
-import play.Project._
+import play.sbt.PlayImport._
+
 
 object ApplicationBuild extends Build {
 
   val appVersion      = "1.0-SNAPSHOT"
-  val projectScalaVersion = "2.10.0"
+  val projectScalaVersion = "2.11.7"
 
   val libraryDeps = Seq(
     // Add your project dependencies here,
-    "net.liftweb" %% "lift-mapper" % "2.5",
+    "net.liftweb" %% "lift-mapper" % "2.6.2",
     "mysql" % "mysql-connector-java" % "5.1.23",
-    "org.json4s" %% "json4s-native" % "3.2.6"
+    "org.json4s" %% "json4s-native" % "3.3.0"
   )
 
   val appDependencies = Seq(
-    anorm
+    ws
   )
   def runChildPlayServer = Command.command("run")( state => {
     val subState = Command.process("project babylon-server",state)
@@ -23,19 +26,13 @@ object ApplicationBuild extends Build {
     state
   })
 
-  lazy val commonSettings = Defaults.defaultSettings ++ ideaPluginSettings ++ Seq(
+  lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "jp.utokyo",
     scalaVersion := projectScalaVersion,
     version := appVersion,
     libraryDependencies ++= Seq()
   )
-  def ideaPluginSettings = {
-    import org.sbtidea.SbtIdeaPlugin
-    SbtIdeaPlugin.settings/* ++ Seq(        
-      SbtIdeaPlugin.commandName := "idea",
-      SbtIdeaPlugin.includeScalaFacet := true
-    )*/
-  }
+
 
 
   lazy val main = Project(id = "babylon",base=file("."), settings = commonSettings ++ Seq(
@@ -46,9 +43,9 @@ object ApplicationBuild extends Build {
     libraryDependencies ++= libraryDeps
   ))
 
-  lazy val server = play.Project("babylon-server",appVersion,path = file("./babylon-server")).settings(
+  lazy val server = Project("babylon-server",file("babylon-server")).settings(
     organization := "jp.utokyo",
     scalaVersion := projectScalaVersion,
     libraryDependencies ++= appDependencies
-  ).dependsOn(library)
+  ).enablePlugins(play.sbt.PlayScala).dependsOn(library)
 }

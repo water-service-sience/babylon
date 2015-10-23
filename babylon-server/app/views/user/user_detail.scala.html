@@ -1,5 +1,5 @@
 @(user : User,
-updateUserInfo : Form[_])
+updateUserInfo : Form[_])(implicit messages: play.api.i18n.Messages)
 
 
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }

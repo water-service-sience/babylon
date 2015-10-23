@@ -5,6 +5,9 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import jp.utokyo.babylon.db.User
+import play.api.i18n.Lang
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 /**
  * Created with IntelliJ IDEA.

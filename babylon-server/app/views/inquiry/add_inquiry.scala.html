@@ -1,4 +1,4 @@
-@(errorMessage : String, addPostForm : Form[_], selections : controllers.management.EditPost.Selections)
+@(errorMessage : String, addPostForm : Form[_], selections : controllers.management.EditPost.Selections)(implicit messages: play.api.i18n.Messages)
 
 @implicitFieldConstructor = @{ helper.FieldConstructor(views.html.twitterBootstrapInput.f) }
 @scripts = {
