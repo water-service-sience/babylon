@@ -1,8 +1,47 @@
-This is your new Play 2.1 application
-=====================================
+
+# 実行
+
+## 環境構築
+
+### Java
+
+OracleJDK Java8 以上と、
+
+### SBT
+
+最新の[SBT](http://www.scala-sbt.org/)を実行できるようにしておいてください。
+
+### データベース
+
+MySQL 5.5以上を入れてください。
+
+MySQLでは、
+
+    create database babylon;
+
+でデータベースを作り、ローカルホスト(サーバーとMySQLを同じサーバーで動かす場合)からユーザー名 babylon パスワードbabylonでアクセスできるように権限を追加してください。
+
+## ビルド+実行
+
+環境構築が完了したら、
+
+    sbt run
+
+を実行してください。これだけでビルド、起動、データベースへのテーブル作成が行われます。
+
+
+## 本番系での実行
+
+現在は、サーバーで
+
+   sbt start
+
+で実行しています。
+
 
 
 ### CentOSでlocalhostが解決できない場合
+
 
 ```
 ip address show
